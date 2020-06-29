@@ -4,7 +4,7 @@ body {
 }
 
 body > div {
-  background-color: blue;
+  background-color: rgb(200, 0, 0);
   display: flex;
   align-items: stretch;
 }
