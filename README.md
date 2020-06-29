@@ -21,10 +21,18 @@ Usage
 import { emulateKey } from 'emulate-key-in-browser';
 
 emulateKey.tab();
-emulateKey.arrow.up();
-emulateKey.shiftArrow.up();
+emulateKey.shiftTab();
 emulateKey.backspace();
-...
+emaulteKey.delete();
+emulateKey.arrow.up();
+emulateKey.arrow.right();
+emulateKey.arrow.down();
+emulateKey.arrow.left();
+emulateKey.shiftArrow.up();
+emulateKey.shiftArrow.right();
+emulateKey.shiftArrow.down();
+emulateKey.shiftArrow.left();
+emulateKey.writeText('content');
 ```
 [-> complete angular material example project](test/in-angular-material/src/app/app.component.ts)
 

@@ -1,6 +1,6 @@
 {
   "name": "emulate-key-in-browser",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "emulate browsers reactions on special keys",
   "scripts": {
     "test": "node test.js",
