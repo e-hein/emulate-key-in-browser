@@ -1,0 +1,52 @@
+<link href="assets/base.css" rel="stylesheet" />
+<link href="styles/event-check.css" rel="stylesheet" />
+
+<div id="controls">
+  <h2>emulate key</h2>
+  <p>
+    hover to trigger<br />
+    <i><small>(click would change focus)</small></i>
+  </p>
+  <div id="control-shift">shift</div>
+  <div id="control-tab">tab</div>
+  <div id="control-shift-tab">shift-tab</div>
+  <div id="control-backspace">backspace</div>
+  <div id="control-delete">delete</div>
+  <div id="control-arrow-up" class="arrow vertical">up</div>
+  <div id="control-arrow-left" class="arrow horizontal">left</div>
+  <div id="control-arrow-right" class="arrow horizontal">right</div>
+  <div id="control-arrow-down" class="arrow vertical">down</div>
+  <div id="control-key-a" class="letter">"a"</div>
+  <div id="control-key-b" class="letter">"b"</div>
+  <div id="control-key-c" class="letter">"c"</div>
+  <div id="control-key-leeroy" class="word">"Leeroy"</div>
+  <div id="control-key-jenkins" class="word">"Jenkins"</div>
+  <div id="control-key-lorem-ipsum">lorem ipsum</div>
+</div>
+<h2>demo form</h2>
+</div>
+<div id="parent-of-first-input">
+  <label for="first-input">first input</label>
+  <input id="first-input" tabindex="1" />
+</div>
+<div id="parent-of-second-input">
+  <label for="second-input">second input</label>
+  <input id="second-input" tabindex="1" />
+</div>
+<div id="parent-of-textarea">
+  <label for="textarea">textarea</label>
+  <textarea id="textarea"></textarea>
+</div>
+<div id="parent-of-disabled-input">
+  <label for="disabled-input">second input</label>
+  <input id="disabled-input" disabled="disabled" />
+</div>
+<div id="parent-of-button">
+  <label for="button">button</label>
+  <button id="button">emulate tab</button>
+</div>
+<div>
+  <h2>event log</h2>
+  <pre id="event-log"></pre>
+</div>
+<script src="scripts/event-check.js"></script>

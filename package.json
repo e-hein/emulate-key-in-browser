@@ -1,0 +1,57 @@
+{
+  "name": "emulate-key-in-browser",
+  "version": "0.0.0",
+  "description": "emulate browsers reactions on special keys",
+  "scripts": {
+    "test": "node test.js",
+    "build": "tsc",
+    "prebuild:all": "rm -rf dist; rm -rf tmp",
+    "build:all": "node build.js",
+    "postbuild:all": "npm run pack",
+    "pack": "node pack.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/e-hein/emulate-key-in-browser.git"
+  },
+  "keywords": [
+    "emulate",
+    "simulate",
+    "browser",
+    "user",
+    "tab",
+    "arrow-keys",
+    "backspace",
+    "font-end",
+    "keyboard",
+    "javascript",
+    "focus",
+    "tabindex",
+    "web"
+  ],
+  "author": "Emanuel Hein",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/e-hein/emulate-key-in-browser/issues"
+  },
+  "homepage": "https://emulate-key-in-browser.net-root.de/",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^8.1.0",
+    "chalk": "^4.1.0",
+    "markdown": "^0.5.0",
+    "rollup": "^2.18.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "shelljs": "^0.8.4",
+    "typescript": "^3.9.5",
+    "uglify-js": "^3.10.0"
+  },
+  "files": [
+    "dist/**/*.*"
+  ],
+  "main": "dist/emulate-key-in-browser.js",
+  "types": "dist/emulate-key-in-browser.d.ts",
+  "dependencies": {
+    "emulate-tab": "^1.1.2"
+  }
+}

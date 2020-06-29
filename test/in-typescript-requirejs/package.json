@@ -1,0 +1,62 @@
+{
+  "name": "emulate-key-in-browser-typescript-require-js",
+  "version": "0.0.0",
+  "description": "test emulate-key-in-browser in typescript with requirejs",
+  "main": "test.js",
+  "scripts": {
+    "build": "DEBUG=demo-build* node build.js",
+    "prestart": "npm run build",
+    "start": "node -r ts-node/register src/app.ts",
+    "start_watch": "npm-watch start",
+    "test": "karma start",
+    "install-emulate-key-in-browser": "npm i ../../tmp/emulate-key-in-browser.latest.tgz",
+    "uninstall-emulate-key-in-browser": "npm i ../../tmp/emulate-key-in-browser.latest.tgz",
+    "reinstall-emulate-key-in-browser": "npm run uninstall-emulate-key-in-browser",
+    "postreinstall-emulate-key-in-browser": "npm run install-emulate-key-in-browser",
+    "precoverage": "npm run reinstall-emulate-key-in-browser",
+    "coverage": "karma start --browsers=ChromeHeadless,FirefoxHeadless --single-run"
+  },
+  "watch": {
+    "start": {
+      "patterns": [
+        "src/**.*",
+        "../../dist/bundles",
+        "build.js",
+        "../assets"
+      ],
+      "extensions": "*",
+      "quiet": false,
+      "inherit": false,
+      "verbose": true
+    }
+  },
+  "author": "Emanuel Hein",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.6",
+    "debug": "^4.1.1",
+    "jasmine": "^3.5.0",
+    "karma": "^5.1.0",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-coverage-istanbul-reporter": "^3.0.3",
+    "karma-firefox-launcher": "^1.3.0",
+    "karma-html2js-preprocessor": "^1.1.0",
+    "karma-jasmine": "^3.3.1",
+    "karma-jasmine-html-reporter": "^1.5.4",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-typescript": "^5.0.3",
+    "npm-watch": "^0.6.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@types/jasmine": "^3.5.10",
+    "@types/karma-fixture": "^0.2.5",
+    "@types/node": "^14.0.13",
+    "emulate-key-in-browser": "file:../../tmp/emulate-key-in-browser.latest.tgz",
+    "express": "^4.17.1",
+    "karma-fixture": "^0.2.6",
+    "requirejs": "^2.3.6",
+    "tslib": "^2.0.0"
+  }
+}

@@ -1,0 +1,156 @@
+body {
+  max-width: 40em;
+  font-family: sans-serif;
+}
+
+label {
+  display: inline-block;
+  width: 15em;
+  padding-right: .5em;
+  text-align: right;
+}
+@media (max-width: 40em) {
+  label {
+    text-align: left;
+    display: block;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.collapsed {
+  visibility: collapse;
+}
+
+label + div {
+  display: inline-block;
+}
+
+#controls {
+  float: right;
+  width: 10em;
+}
+
+@media (max-width: 19em) {
+  #controls {
+    float: none;
+  }
+}
+
+#controls h2 {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+#controls > div {
+  margin: .5em 0 .5em 0;
+  padding: .5em .5em .5em 2.5em;
+  width: 7em;
+  font-weight: bold;
+  color: white;
+  transition: ease-in-out background;
+  background-color: rgb(200,0,0);
+  background-repeat: no-repeat;
+  background-position: .5em center;
+}
+
+#controls #control-shift {
+  background-image: url('./icon-shift-off.png');
+}
+#controls.shift #control-shift {
+  background-color: rgb(0, 0, 200);
+  background-image: url('./icon-shift-on.png');
+}
+
+#controls #control-tab {
+  background-image: url('./icon-tab.png');
+}
+#controls.shift #control-tab {
+  display: none;
+}
+
+#controls #control-shift-tab {
+  display: none;
+  background-image: url('./icon-shift-tab.png');
+}
+#controls.shift #control-shift-tab {
+  display: block;
+}
+
+#controls.shift #control-shift {
+  background-color: rgb(0, 0, 200);
+  background-image: url('./icon-shift-on.png');
+}
+
+#controls #control-backspace {
+  background-image: url('./icon-backspace.png');
+}
+#controls.shift #control-backspace {
+  display: none;
+}
+
+#controls #control-delete {
+  display: none;
+  background-image: url('./icon-delete.png');
+}
+#controls.shift #control-delete {
+  display: block;
+}
+
+#controls .arrow.horizontal {
+  max-width: 0;
+  overflow: hidden;
+  display: inline-block;
+  padding-left: 43px;
+  padding-right: 0;
+  margin-top: 0;
+}
+
+#controls .arrow.vertical {
+  margin-left: 2.25em;
+  margin-right: 2.25;
+  width: 2.5em;
+}
+
+#controls #control-arrow-up {
+  background-image: url('./icon-arrow-up.png');
+}
+
+#controls #control-arrow-left {
+  float: left;
+  background-image: url('./icon-arrow-left.png');
+}
+
+#controls #control-arrow-right {
+  float: right;
+  background-image: url('./icon-arrow-right.png');
+}
+
+#controls #control-arrow-down {
+  clear: both;
+  background-image: url('./icon-arrow-down.png');
+}
+
+#controls .letter {
+  padding-left: .5em;
+  width: 2em;
+  float: left;
+  margin-top: 0;
+  margin-right: .5em;
+  text-align: center;
+}
+#controls #control-key-c.letter {
+  margin-right: 0;
+}
+#controls .letter + div:not(.letter) {
+  clear: both;
+}
+#controls.shift .letter {
+  text-transform: uppercase;
+}
+
+#controls > div:hover {
+  background-color: rgb(0, 0, 200);
+}

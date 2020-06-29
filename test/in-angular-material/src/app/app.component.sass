@@ -1,0 +1,42 @@
+@import '../theme'
+@import '~@angular/material/button/button-theme'
+
+\:host
+  display: block
+  max-width: 1000px
+
+  > *
+    display: inline-block
+    padding: 12px
+
+  > header
+    display: flex
+    justify-content: space-between
+
+  #emulate-key-in-browser-bar
+    margin: 0px 0px 12px 12px
+    padding: 10px
+    line-height: 1.2em
+
+  .mat-raised-button.material-icons
+    background: mat-color($primary)
+    color: mat-color($primary, default-contrast)
+    font-family: 'Material Icons'
+    font-size: 24px
+
+    &:hover
+      background: mat-color($accent)
+
+  #emulate-shift-tab-button span
+    display: inline-block
+    pointer-events: none
+    transform: rotate(180deg)
+
+  .hidden
+    display: none
+
+  .collapsed
+    visibility: collapse
+
+  .mat-form-field
+    max-width: 250px

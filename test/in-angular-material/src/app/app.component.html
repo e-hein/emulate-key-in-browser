@@ -1,0 +1,14 @@
+<header>
+  <h1>Emulate keys in app with @angular/material components</h1>
+  <div tabindex="-1" id="emulate-key-in-browser-bar">
+    hover to emulate tab:<br />
+    <div color="primary" class="mat-raised-button material-icons" id="emulate-shift-tab-button" (mouseover)="emulateShiftTab()"><span>keyboard_tab</span></div><br />
+    <div color="primary" class="mat-raised-button material-icons" id="emulate-key-in-browser-button" (mouseover)="emulateTab()">keyboard_tab</div><br />
+  </div>
+</header>
+
+<mat-form-field><mat-label>first input</mat-label><input id="first-input" matInput tabindex="1" /></mat-form-field>
+<mat-form-field><mat-label>second input</mat-label><input id="second-input" matInput tabindex="1" /></mat-form-field>
+<mat-form-field><mat-label>textarea</mat-label><textarea id="textarea" matInput></textarea></mat-form-field>
+<mat-form-field><mat-label>disabled input</mat-label><input id="disabled-input" matInput disabled="disabled" /></mat-form-field>
+<button mat-raised-button id="button">button</button>
