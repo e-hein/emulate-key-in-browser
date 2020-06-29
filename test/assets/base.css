@@ -141,7 +141,7 @@ label + div {
   margin-right: .5em;
   text-align: center;
 }
-#controls #control-key-c.letter {
+#controls #control-write-c.letter {
   margin-right: 0;
 }
 #controls .letter + div:not(.letter) {

@@ -17,16 +17,16 @@
       <div id="control-shift-tab" onmouseover="emulateKey.tab.backwards()">shift-tab</div>
       <div id="control-backspace" onmouseover="emulateKey.backspace()">backspace</div>
       <div id="control-delete" onmouseover="emulateKey.delete()">delete</div>
-      <div id="control-arrow-up" class="arrow vertical" onmouseover="emulateKey.arrowUp()">up</div>
-      <div id="control-arrow-left" class="arrow horizontal" onmouseover="emulateKey.arrowLeft()">left</div>
-      <div id="control-arrow-right" class="arrow horizontal" onmouseover="emulateKey.arrowRight()">right</div>
-      <div id="control-arrow-down" class="arrow vertical" onmouseover="emulateKey.arrowDown()">down</div>
-      <div id="control-key-a" class="letter" onmouseover="emulateKey.write('a')">"a"</div>
-      <div id="control-key-b" class="letter" onmouseover="emulateKey.write('b')">"b"</div>
-      <div id="control-key-c" class="letter" onmouseover="emulateKey.write('c')">"c"</div>
-      <div id="control-key-leeroy" class="word" onmouseover="emulateKey.write('Leeroy')">"Leeroy"</div>
-      <div id="control-key-jenkins" class="word" onmouseover="emulateKey.write('Jenkins')">"Jenkins"</div>
-      <div id="control-key-lorem-ipsum" onmouseover="emulateKey.write(loremIpsum)">lorem ipsum</div>
+      <div id="control-arrow-up" class="arrow vertical" onmouseover="isShiftActive() ? emulateKey.shiftArrow.up() : emulateKey.arrow.up()">up</div>
+      <div id="control-arrow-left" class="arrow horizontal" onmouseover="isShiftActive() ? emulateKey.shiftArrow.left() : emulateKey.arrow.left()">left</div>
+      <div id="control-arrow-right" class="arrow horizontal" onmouseover="isShiftActive() ? emulateKey.shiftArrow.right() : emulateKey.arrow.right()">right</div>
+      <div id="control-arrow-down" class="arrow vertical" onmouseover="isShiftActive() ? emulateKey.shiftArrow.down() : emulateKey.arrow.down()">down</div>
+      <div id="control-write-a" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'A' : 'a')">"a"</div>
+      <div id="control-write-b" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'B' : 'b')">"b"</div>
+      <div id="control-write-c" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'C' : 'c')">"c"</div>
+      <div id="control-write-leeroy" class="word" onmouseover="emulateKey.writeText('Leeroy')">"Leeroy"</div>
+      <div id="control-write-jenkins" class="word" onmouseover="emulateKey.writeText('Jenkins')">"Jenkins"</div>
+      <div id="control-write-lorem-ipsum" onmouseover="emulateKey.writeText(loremIpsum)">lorem ipsum</div>
     </div>
     <div id="contents">
       <h2>demo form</h2>
@@ -43,8 +43,12 @@
         <textarea id="textarea"></textarea>
       </div>
       <div id="parent-of-disabled-input">
-        <label for="disabled-input">second input</label>
+        <label for="disabled-input">disabled input</label>
         <input id="disabled-input" disabled="disabled" />
+      </div>
+      <div id="parent-of-hidden-input">
+        <label for="hidden-input">hidden input</label>
+        <input id="hidden-input" class="hidden" />
       </div>
       <div id="parent-of-button">
         <label></label>

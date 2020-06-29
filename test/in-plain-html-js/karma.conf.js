@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: 'www',
+    basePath: '',
 
 
     // frameworks to use
@@ -14,16 +14,19 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: '**/*.css', included: false, served: true },
-      { pattern: '../../../dist/bundles/emulate-key-in-browser.js', included: true },
-      '**/*.html',
-      '**/*.@(spec).js',
+      { pattern: 'www/**/*.css', included: false, served: true },
+      { pattern: 'www/assets/**.*', included: false },
+      { pattern: '../../dist/bundles/emulate-key-in-browser.js', included: true },
+      'www/**/*.html',
+      'test/init-spec.js',
+      'test/**/*.@(spec).js',
+      { pattern: 'www/*.js', included: false },
     ],
 
     proxies: {
-      '/index.css': '/base/index.css',
-      '/assets': '../../assets',
-      '/libs': '/base/libs',
+      '/index.css': '/base/www/index.css',
+      '/assets': '/base/www/assets',
+      '/libs': '/base/www/libs',
     },
 
     // list of files / patterns to exclude

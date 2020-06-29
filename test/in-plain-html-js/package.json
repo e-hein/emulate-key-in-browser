@@ -4,9 +4,12 @@
   "description": "test emulate-key-in-browser in plain html",
   "scripts": {
     "test": "karma start",
+    "pretest:once": "npm run build",
     "test:once": "karma start --browsers=ChromeHeadless,FirefoxHeadless --single-run",
     "build": "DEBUG=demo-build* node build.js",
-    "build_watch": "npm-watch build"
+    "build_watch": "npm-watch build",
+    "prestart": "npm run build",
+    "start": "http-server www"
   },
   "watch": {
     "build": {

@@ -1,29 +1,5 @@
-function waitFor(description, test, retryLimit = 20, milliseconsBetweenRetries = 200) {
-  let currentTry = 1;
-  const waitLonger = (done) => {
-    const ready = test();
-    if (ready) return done();
-    if (currentTry > 3) {
-      console.log('css not ready (' + currentTry + ')');
-    }
-    if (++currentTry > retryLimit) {
-      throw new Error('failed to wait for ' + description);
-    }
-    setTimeout(() => waitLonger(done), milliseconsBetweenRetries);
-  }
-  return new Promise(resolve => waitLonger(resolve));
-}
-
-describe('sample form', () => {
-  const testContent = document.createElement('div');
-
-  beforeAll(() => {
-    document.body.appendChild(testContent);
-  });
-
-  beforeEach(() => {
-    testContent.innerHTML = __html__['index.html'];
-  }, 10000);
+describe('emulate tab', () => {
+  initIndexHtml();
 
   it('should find expected inputs (and not hidden/disabled...)', () => {
     const selectableElementIds = emulateKey.tab.findSelectableElements().map((e) => e.id || e.className);
