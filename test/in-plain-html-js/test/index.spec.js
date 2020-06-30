@@ -187,6 +187,15 @@ describe('interactive demo', () => {
     it('should *not* show control backspace', () => expect(testElement(id.control.backspace).offsetHeight).toBe(0));
     it('should show control delete', () => expect(testElement(id.control.delete).offsetHeight).toBeGreaterThan(0));
 
+    describe('twice', () => {
+      beforeEach(() => emulateKey.mouse.hover(testElement(id.control.shift)));
+  
+      it('should show control tab', () => expect(testElement(id.control.tab).offsetHeight).toBeGreaterThan(0));
+      it('should *not* show control shift-tab', () => expect(testElement(id.control.shiftTab).offsetHeight).toBe(0));
+      it('should show control backspace', () => expect(testElement(id.control.backspace).offsetHeight).toBeGreaterThan(0));
+      it('should *not* show control delete', () => expect(testElement(id.control.delete).offsetHeight).toBe(0));
+    });
+
     describe(', focus first input', () => {
       let firstInput;
 
