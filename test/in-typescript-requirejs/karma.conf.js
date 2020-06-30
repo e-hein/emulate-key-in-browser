@@ -1,8 +1,11 @@
 // Karma configuration
-// Generated on Thu Jun 18 2020 08:31:24 GMT+0200 (GMT+02:00)
+// Generated on Tue Jun 30 2020 12:52:45 GMT+0200 (GMT+02:00)
+
+const withCoverage = true && process.env.COVERAGE;
+const tsConfig = require('./tsconfig.json');
 
 module.exports = function(config) {
-  console.log('orig config', config);
+  tsConfig.compilerOptions.module = 'amd';
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -11,42 +14,28 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'fixture', 'karma-typescript'],
+    frameworks: ['jasmine', 'requirejs', 'fixture', 'karma-typescript'],
     karmaTypescriptConfig: {
-      ...require('./tsconfig.json'),
+      ...tsConfig,
       coverageOptions: {
-        instrumentation: false
+        instrumentation: withCoverage
       }
     },
 
-    plugins: [
-      'karma-fixture',
-      'karma-typescript',
-      'karma-jasmine',
-      'karma-chrome-launcher',
-      'karma-firefox-launcher',
-      'karma-jasmine-html-reporter',
-      'karma-mocha-reporter',
-      // require('karma-coverage-istanbul-reporter'),
-      'karma-html2js-preprocessor',
-    ],
-
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'node_modules/requirejs/require.js', included: false, watched: false },
-      { pattern: 'dist/assets/*.*', included: false },
+      { pattern: 'src/**/*.html', included: true },
+      { pattern: 'src/**/*.ts', included: false },
       { pattern: 'src/**/*.css', included: false },
-      'src/**/*.html',
-      'src/**/*.@(spec|model|controller).@(ts|js)',
+      { pattern: 'dist/assets/*.*', included: false },
+      { pattern: 'node_modules/emulate-key-in-browser/dist/bundles/emulate-key-in-browser.amd.js', included: false },
+      { pattern: 'node_modules/emulate-tab/dist/bundles/emulate-tab.amd.js', included: false },
+      { pattern: 'node_modules/tslib/tslib.js', included: false },
+      'karma-proxies.js',
+      'test-main.js',
     ],
 
-    proxies: {
-      '/assets/': '/base/dist/assets/',
-      '/scripts/require.js': '/base/node_modules/requirejs/require.js',
-      '/scripts/': '/base/src/',
-      '/styles/': '/base/src/',
-      '/app/': 'http://localhost:4300/',
-    },
+    proxies: require('./karma-proxies'),
 
     // list of files / patterns to exclude
     exclude: [
@@ -56,10 +45,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      ...config.preprocessors,
-      '**/*.js': [],
       '**/*.html': ['html2js'],
-      "**/*.ts": "karma-typescript" // *.tsx for React Jsx
+      "**/*.ts": "karma-typescript",
     },
 
     // test results reporter to use
@@ -81,7 +68,11 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_WARN,
+    
+    browserConsoleLogOptions: {
+      terminal: false,
+    },
 
 
     // enable / disable watching file and executing tests whenever any file changes

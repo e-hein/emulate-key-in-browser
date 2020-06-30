@@ -4,7 +4,7 @@ function waitFor(description, test, retryDelay = [0, 1, 5, 10, 20, 100, 200, 500
     const ready = test();
     if (ready) return done();
     if (currentTry > 3) {
-      console.log('css not ready (' + (currentTry + 1) + ')');
+      console.log(description + ' not ready (' + (currentTry + 1) + ')');
     }
     const delay = retryDelay[currentTry++];
     if (typeof delay !== 'number') {

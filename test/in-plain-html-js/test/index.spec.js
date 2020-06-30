@@ -110,7 +110,7 @@ describe('interactive demo', () => {
         it('should move cursor before "c"', () => {
           expect(firstInput.selectionStart).toBe(2, 'start');
           expect(firstInput.selectionEnd).toBe(2, 'end');
-          expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+          expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
         });
       });
 
@@ -121,7 +121,7 @@ describe('interactive demo', () => {
         it('should move cursor to the beginning', () => {
           expect(firstInput.selectionStart).toBe(0, 'start');
           expect(firstInput.selectionEnd).toBe(0, 'end');
-          expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+          expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
         });
       });
 
@@ -137,7 +137,7 @@ describe('interactive demo', () => {
           it('should move cursor behind "b"', () => {
             expect(firstInput.selectionStart).toBe(2, 'start');
             expect(firstInput.selectionEnd).toBe(2, 'end');
-            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
           });
         });
 
@@ -148,7 +148,7 @@ describe('interactive demo', () => {
           it('should move cursor to the end', () => {
             expect(firstInput.selectionStart).toBe(3, 'start');
             expect(firstInput.selectionEnd).toBe(3, 'end');
-            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
           });
         });
 
@@ -160,7 +160,7 @@ describe('interactive demo', () => {
             expect(firstInput.value).toBe('bc', 'value');
             expect(firstInput.selectionStart).toBe(0, 'start');
             expect(firstInput.selectionEnd).toBe(0, 'end');
-            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
           });
         });
 
@@ -172,7 +172,7 @@ describe('interactive demo', () => {
             expect(firstInput.value).toBe('ac', 'value');
             expect(firstInput.selectionStart).toBe(1, 'start');
             expect(firstInput.selectionEnd).toBe(1, 'end');
-            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
           });
         });
       });
@@ -186,6 +186,15 @@ describe('interactive demo', () => {
     it('should show control shift-tab', () => expect(testElement(id.control.shiftTab).offsetHeight).toBeGreaterThan(0));
     it('should *not* show control backspace', () => expect(testElement(id.control.backspace).offsetHeight).toBe(0));
     it('should show control delete', () => expect(testElement(id.control.delete).offsetHeight).toBeGreaterThan(0));
+
+    describe('twice', () => {
+      beforeEach(() => emulateKey.mouse.hover(testElement(id.control.shift)));
+  
+      it('should show control tab', () => expect(testElement(id.control.tab).offsetHeight).toBeGreaterThan(0));
+      it('should *not* show control shift-tab', () => expect(testElement(id.control.shiftTab).offsetHeight).toBe(0));
+      it('should show control backspace', () => expect(testElement(id.control.backspace).offsetHeight).toBeGreaterThan(0));
+      it('should *not* show control delete', () => expect(testElement(id.control.delete).offsetHeight).toBe(0));
+    });
 
     describe(', focus first input', () => {
       let firstInput;
