@@ -4,17 +4,14 @@
   "description": "test emulate-key-in-browser in typescript with requirejs",
   "main": "test.js",
   "scripts": {
+    "prebuild": "npm i ../../tmp/emulate-key-in-browser.latest.tgz",
     "build": "DEBUG=demo-build* node build.js",
     "prestart": "npm run build",
     "start": "node -r ts-node/register src/app.ts",
     "start_watch": "npm-watch start",
     "test": "karma start",
-    "install-emulate-key-in-browser": "npm i ../../tmp/emulate-key-in-browser.latest.tgz",
-    "uninstall-emulate-key-in-browser": "npm i ../../tmp/emulate-key-in-browser.latest.tgz",
-    "reinstall-emulate-key-in-browser": "npm run uninstall-emulate-key-in-browser",
-    "postreinstall-emulate-key-in-browser": "npm run install-emulate-key-in-browser",
-    "precoverage": "npm run reinstall-emulate-key-in-browser",
-    "coverage": "karma start --browsers=ChromeHeadless,FirefoxHeadless --single-run"
+    "precoverage": "npm run build",
+    "coverage": "COVERAGE=true karma start --browsers=ChromeHeadless,FirefoxHeadless --single-run"
   },
   "watch": {
     "start": {
@@ -44,6 +41,7 @@
     "karma-jasmine": "^3.3.1",
     "karma-jasmine-html-reporter": "^1.5.4",
     "karma-mocha-reporter": "^2.2.5",
+    "karma-requirejs": "^1.1.0",
     "karma-typescript": "^5.0.3",
     "npm-watch": "^0.6.0",
     "ts-node": "^8.10.2",
