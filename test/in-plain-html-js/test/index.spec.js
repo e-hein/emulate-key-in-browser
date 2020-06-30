@@ -110,7 +110,7 @@ describe('interactive demo', () => {
         it('should move cursor before "c"', () => {
           expect(firstInput.selectionStart).toBe(2, 'start');
           expect(firstInput.selectionEnd).toBe(2, 'end');
-          expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+          expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
         });
       });
 
@@ -121,7 +121,7 @@ describe('interactive demo', () => {
         it('should move cursor to the beginning', () => {
           expect(firstInput.selectionStart).toBe(0, 'start');
           expect(firstInput.selectionEnd).toBe(0, 'end');
-          expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+          expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
         });
       });
 
@@ -137,7 +137,7 @@ describe('interactive demo', () => {
           it('should move cursor behind "b"', () => {
             expect(firstInput.selectionStart).toBe(2, 'start');
             expect(firstInput.selectionEnd).toBe(2, 'end');
-            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
           });
         });
 
@@ -148,7 +148,7 @@ describe('interactive demo', () => {
           it('should move cursor to the end', () => {
             expect(firstInput.selectionStart).toBe(3, 'start');
             expect(firstInput.selectionEnd).toBe(3, 'end');
-            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
           });
         });
 
@@ -160,7 +160,7 @@ describe('interactive demo', () => {
             expect(firstInput.value).toBe('bc', 'value');
             expect(firstInput.selectionStart).toBe(0, 'start');
             expect(firstInput.selectionEnd).toBe(0, 'end');
-            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
           });
         });
 
@@ -172,7 +172,7 @@ describe('interactive demo', () => {
             expect(firstInput.value).toBe('ac', 'value');
             expect(firstInput.selectionStart).toBe(1, 'start');
             expect(firstInput.selectionEnd).toBe(1, 'end');
-            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/, 'direction'));
+            expect(firstInput.selectionDirection).toEqual(jasmine.stringMatching(/none|forward/), 'direction');
           });
         });
       });

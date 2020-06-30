@@ -2,8 +2,10 @@
 // Generated on Tue Jun 30 2020 12:52:45 GMT+0200 (GMT+02:00)
 
 const withCoverage = true && process.env.COVERAGE;
+const tsConfig = require('./tsconfig.json');
 
 module.exports = function(config) {
+  tsConfig.compilerOptions.module = 'amd';
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -14,7 +16,7 @@ module.exports = function(config) {
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine', 'requirejs', 'fixture', 'karma-typescript'],
     karmaTypescriptConfig: {
-      ...require('./tsconfig.json'),
+      ...tsConfig,
       coverageOptions: {
         instrumentation: withCoverage
       }

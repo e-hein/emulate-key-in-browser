@@ -1,5 +1,5 @@
 import { EventCheckController } from "./event-check.controller";
-import { waitFor } from './wait-for.model';
+import { waitFor } from './wait-for.controller';
 
 xdescribe('demo app', () => {
   let appFrame: HTMLIFrameElement;
@@ -19,7 +19,7 @@ xdescribe('demo app', () => {
     appFrame.style.height = '100vh';
     const loadedListener = () => {
       appFrame.removeEventListener('load', loadedListener);
-      waitFor('event check', () => !!(eventCheck = appFrame.contentWindow['eventCheck']), 100, 20).then(done);
+      waitFor('event check', () => !!(eventCheck = appFrame.contentWindow['eventCheck'])).then(done);
     };
     appFrame.addEventListener('load', loadedListener);
     fixture.el.appendChild(appFrame);

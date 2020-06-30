@@ -1,5 +1,5 @@
 import { emulateKey } from 'emulate-key-in-browser';
-import { waitFor } from './wait-for.model';
+import { waitFor } from './wait-for.controller';
 
 describe('sample form', () => {
   beforeAll(() => {
