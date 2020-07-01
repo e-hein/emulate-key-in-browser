@@ -3,8 +3,10 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { testApp } from 'src/testing/app.shared-specs';
 import { AppComponent } from './app.component';
@@ -20,8 +22,10 @@ describe('app component', () => {
       imports: [
         MatButtonModule,
         MatFormFieldModule,
+        MatIconModule,
         MatInputModule,
         MatSelectModule,
+        MatSidenavModule,
         NoopAnimationsModule,
       ],
       declarations: [AppComponent, StageComponent],

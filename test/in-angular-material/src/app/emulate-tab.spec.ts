@@ -1,19 +1,13 @@
-import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatInputHarness } from '@angular/material/input/testing';
-import { MatSelectModule } from '@angular/material/select';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { expectNotToHaveThrownAnything } from '@app/testing';
+import { AppControlsHarness, AppDemoFormHarness, AppHarness, expectNotToHaveThrownAnything } from '@app/testing';
 import { emulateKey } from 'emulate-key-in-browser';
 import { AppComponent } from './app.component';
+import { AppModule } from './app.module';
 
 describe('emulate tab', () => {
-  let loader: HarnessLoader;
-  let rootElement: HTMLElement;
+  let demoForm: AppDemoFormHarness;
+  let controls: AppControlsHarness;
 
   function findAllSelectableIdents() {
     const selectableElements = emulateKey.tab.findSelectableElements();
@@ -24,20 +18,14 @@ describe('emulate tab', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        BrowserAnimationsModule,
-      ],
-      declarations: [AppComponent],
+      imports: [AppModule],
     }).compileComponents();
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     await fixture.whenStable();
-    loader = TestbedHarnessEnvironment.loader(fixture);
-    rootElement = fixture.debugElement.nativeElement;
+    const app = await TestbedHarnessEnvironment.harnessForFixture(fixture, AppHarness);
+    demoForm = await app.getDemoFrom();
+    controls = await app.getControls();
   });
 
   it('should start', () => expectNotToHaveThrownAnything());
@@ -57,21 +45,21 @@ describe('emulate tab', () => {
 
   it('backwards', async () => {
     // given
-    const firstInput = await (await loader.getHarness(MatInputHarness.with({ selector: '#first-input' }))).host();
-    const secondInput = await (await loader.getHarness(MatInputHarness.with({ selector: '#second-input' }))).host();
+    const firstInput = await demoForm.getControl('first input');
+    const secondInput = await demoForm.getControl('second input');
     await secondInput.focus();
 
     // when
     await emulateKey.tab.backwards();
 
     // then
-    expect(await firstInput.isFocused()).toBe(true);
+    expect(await firstInput.isFocused()).toBeTrue();
   });
 
   it('forwards', async () => {
     // given
-    const firstInput = await (await loader.getHarness(MatInputHarness.with({ selector: '#first-input' }))).host();
-    const secondInput = await (await loader.getHarness(MatInputHarness.with({ selector: '#second-input' }))).host();
+    const firstInput = await demoForm.getControl('first input');
+    const secondInput = await demoForm.getControl('second input');
     await firstInput.focus();
 
     // when
@@ -83,9 +71,9 @@ describe('emulate tab', () => {
 
   it('tab into input with value should select everything', async () => {
     // given
-    const firstInput = await (await loader.getHarness(MatInputHarness.with({ selector: '#first-input' })));
-    const secondInput = await (await loader.getHarness(MatInputHarness.with({ selector: '#second-input' })));
-    await secondInput.setValue('something');
+    const firstInput =  await demoForm.getControl('first input');
+    const secondInput = await demoForm.getControl('second input');
+    await secondInput.sendKeys('something');
     await firstInput.focus();
 
     // when
@@ -96,7 +84,8 @@ describe('emulate tab', () => {
     if (!(activeElement.id === 'second-input' && activeElement instanceof HTMLInputElement)) {
       throw new Error('expected an HTMLInputElement with the id "second-input" to be focused');
     }
-    expect(activeElement.selectionStart).toBe(0, 'selection start');
-    expect(activeElement.selectionEnd).toBeGreaterThan(0, 'selection end');
+    expect(await secondInput.isFocused()).toBe(true, 'second input has focus');
+    expect(await secondInput.getProperty('selectionStart')).toBe(0, 'selection start');
+    expect(await secondInput.getProperty('selectionEnd')).toBeGreaterThan(0, 'selection end');
   });
 });

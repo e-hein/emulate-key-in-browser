@@ -49,6 +49,10 @@ emulateKey.writeText('content');
 ```
 [-> complete plain html example project](test/in-plain-html-js/www/sample-form.html)
 
+Limitations
+-----------
+- line navigation in multiline inputs will use character count, not character offset width and position like browsers
+
 Dependencies
 ------------
 none.

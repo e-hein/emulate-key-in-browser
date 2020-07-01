@@ -1,35 +1,99 @@
 @import '../theme'
 @import '~@angular/material/button/button-theme'
 
+$col-width: 10em
+$col-spacing: 2em
+$row-spacing: .5em
+$space-for-shadow: 2px
+$app-margin: .25em
+$title-height: 48px
+
 \:host
-  display: block
-  max-width: 1000px
+  display: flex
+  flex-direction: column
+  max-width: 50em
+  padding-left: $app-margin
+  height: 100%
 
-  > *
-    display: inline-block
-    padding: 12px
+  mat-sidenav-container
+    flex-grow: 1
 
-  > header
-    display: flex
-    justify-content: space-between
+  mat-sidenav
+    div[color=primary]
+      background: mat-color($primary)
+      color: mat-color($primary, default-contrast)
 
-  #emulate-key-in-browser-bar
-    margin: 0px 0px 12px 12px
-    padding: 10px
-    line-height: 1.2em
-
-  .mat-raised-button.material-icons
-    background: mat-color($primary)
-    color: mat-color($primary, default-contrast)
-    font-family: 'Material Icons'
-    font-size: 24px
-
-    &:hover
+    div[color=accent]
       background: mat-color($accent)
+      color: mat-color($primary, default-contrast)
 
-  #emulate-shift-tab-button span
-    display: inline-block
-    pointer-events: none
+    .mat-raised-button
+      display: flex
+      align-items: center
+      min-width: 10em
+      margin-top: $row-spacing
+
+      mat-icon, sapn
+        pointer-events: none
+
+      mat-icon
+        margin-right: .5em
+
+      mat-icon.outlined
+        font-family: 'Material Icons Outlined'
+
+    .mat-mini-fab
+      vertical-align: middle
+      line-height: 54px
+
+    .mat-raised-button, .mat-mini-fab
+        &:hover
+          background: mat-color($accent)
+
+
+    .arrows
+      $icon-size: 40px
+      $row-height: $icon-size
+      $pos-center: calc( 50% - #{$icon-size / 2})
+      $pos-right: calc ( 100% - #{$icon-size})
+      $width: 3 * $icon-size
+
+      position: relative
+      margin-top: $row-spacing
+      width: $width
+      height: 3 * $row-height
+      margin-left: calc( 50% - #{$width/2} )
+
+      div:nth-of-type(1)
+        position: absolute
+        left: $pos-center
+
+      div:nth-of-type(2)
+        position: absolute
+        left: 0px
+        top: 1 * $row-height
+
+      div:nth-of-type(3)
+        position: absolute
+        right: 0px
+        top: 1 * $row-height
+
+      div:nth-of-type(4)
+        position: absolute
+        left: $pos-center
+        top: 2 * $row-height
+
+    .letters
+      display: flex
+      justify-content: space-between
+
+      .mat-raised-button
+        min-width: 2.5em
+
+  .shift .letters .mat-raised-button
+    text-transform: uppercase
+
+  .rotate
     transform: rotate(180deg)
 
   .hidden
@@ -38,5 +102,34 @@
   .collapsed
     visibility: collapse
 
+  .demo-form-controls
+    margin-left: - $col-spacing
+
   .mat-form-field
-    max-width: 250px
+    display: inline-block
+    max-width: $col-width
+    margin-left: $col-spacing
+
+  section
+    margin-bottom: 2 * $col-spacing
+
+  button
+    float: right
+    margin-right: $space-for-shadow
+
+  mat-sidenav[position=end]
+    padding-left: 2 * $col-spacing
+    padding-right: .2em
+
+  @media (max-width: 610px)
+    .mat-form-field
+      max-width: unset
+      width: 100%
+
+    mat-sidenav[position=end]
+      padding-left: 1 * $col-spacing
+
+    button
+      float: none
+      display: block
+      margin-left: auto
