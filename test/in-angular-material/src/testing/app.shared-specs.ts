@@ -113,17 +113,17 @@ export function testApp(loaderProvider: () => HarnessLoader, getActiveElementId:
   }
 
   function itShouldShow(controlName: AppControlNames) {
-    it (`should show control "${controlName}"`, async () => expect(await controls.isShown(controlName)).toBeTrue());
+    it (`should show control "${controlName}"`, async () => expect(await controls.isShown(controlName)).toBe(true));
   }
 
   function itShouldNotShow(controlName: AppControlNames) {
-    it (`should *not* show control "${controlName}"`, async () => expect(await controls.isShown(controlName)).toBeFalse());
+    it (`should *not* show control "${controlName}"`, async () => expect(await controls.isShown(controlName)).toBe(false));
   }
 
   function itShouldHaveFocused(controlName: AppDemoFormInputNames) {
     it (`should have focused "${controlName}"`, async () => {
       const isFocused = await (await demoForm.getControl(controlName)).isFocused();
-      expect(isFocused).toBeTrue();
+      expect(isFocused).toBe(true);
     });
   }
 

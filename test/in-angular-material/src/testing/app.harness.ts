@@ -84,6 +84,8 @@ export class AppControlsHarness extends ComponentHarness {
   };
   // tslint:enable object-literal-key-quotes
 
+  private otherElement = this.documentRootLocatorFactory().locatorFor('h1');
+
   private async getTextButtonWithLabel(label: string | RegExp) {
     return (await this.locatorFor(AppControlHarness.with({ label }))()).host();
   }
@@ -116,7 +118,10 @@ export class AppControlsHarness extends ComponentHarness {
   }
 
   async hoverOver(controlName: AppControlNames) {
-    return (await this.get(controlName)).hover();
+    const otherElement = await this.otherElement();
+    await otherElement.hover();
+    await (await this.get(controlName)).hover();
+    await otherElement.hover();
   }
 }
 

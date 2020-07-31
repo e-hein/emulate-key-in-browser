@@ -27,12 +27,9 @@ export function testEmulateTab(
 
     it('should find selectable inputs', () => {
       const selectableElementIds = findAllSelectableIdents();
-      expect(selectableElementIds).toEqual([
+      expect(selectableElementIds.filter((id) => id !== 'jasmine-title')).toEqual([
         '#first-input',
         '#second-input',
-
-        'jasmine-title',
-
         '#textarea',
         '#button',
       ]);
@@ -48,7 +45,7 @@ export function testEmulateTab(
       await emulateKey.tab.backwards();
 
       // then
-      expect(await firstInput.isFocused()).toBeTrue();
+      expect(await firstInput.isFocused()).toBe(true);
     });
 
     it('forwards', async () => {
@@ -75,10 +72,6 @@ export function testEmulateTab(
       await emulateKey.tab();
 
       // then
-      const activeElement = document.activeElement as HTMLInputElement;
-      if (!(activeElement.id === 'second-input' && activeElement instanceof HTMLInputElement)) {
-        throw new Error('expected an HTMLInputElement with the id "second-input" to be focused');
-      }
       expect(await secondInput.isFocused()).toBe(true, 'second input has focus');
       expect(await secondInput.getProperty('selectionStart')).toBe(0, 'selection start');
       expect(await secondInput.getProperty('selectionEnd')).toBeGreaterThan(0, 'selection end');
