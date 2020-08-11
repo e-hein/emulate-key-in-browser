@@ -2,6 +2,8 @@ import type { emulateKey as origEmulateKey } from 'emulate-key-in-browser';
 import { AppControlsHarness, AppDemoFormHarness, AppHarness } from './app.harness';
 import { expectNotToHaveThrownAnything } from './expect.function';
 
+const envSpecificTabableElements = ['a.jasmine-title', 'body.mat-typography'];
+
 export function testEmulateTab(
   appProvider: () => AppHarness,
   emulateKey: typeof origEmulateKey,
@@ -12,8 +14,10 @@ export function testEmulateTab(
 
     function findAllSelectableIdents() {
       const selectableElements = emulateKey.tab.findSelectableElements();
-      const selectableElementIdents = selectableElements.map((e) => (e.id && '#' + e.id) || e.title || e.className);
-      // console.log('selectableElements', selectableElementIdents);
+      const selectableElementIdents = selectableElements.map((e) => (e.id && ('#' + e.id))
+        || e.title
+        || (e.tagName.toLowerCase() + '.' + e.className)
+      );
       return selectableElementIdents;
     }
 
@@ -27,7 +31,7 @@ export function testEmulateTab(
 
     it('should find selectable inputs', () => {
       const selectableElementIds = findAllSelectableIdents();
-      expect(selectableElementIds.filter((id) => id !== 'jasmine-title')).toEqual([
+      expect(selectableElementIds.filter((ident) => !envSpecificTabableElements.includes(ident))).toEqual([
         '#first-input',
         '#second-input',
         '#textarea',

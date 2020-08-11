@@ -8,30 +8,36 @@ function realTab() {
   return browser.switchTo().activeElement().sendKeys(Key.TAB);
 }
 
-const selectableElements = new Array<HTMLElement>(
-);
+const selectableElements = new Array<HTMLElement>();
+
 async function lookupSelectableElements() {
   await element(by.css('body')).click();
   realTab();
-  async function asHTMLElement(webElement: WebElement) {
-    const id = await webElement.getAttribute('id') || await webElement.getAttribute('class');
+  async function asSelectableElement(webElement: WebElement) {
+    const id = await webElement.getAttribute('id');
+    const tagName = await webElement.getTagName();
+    const className = await webElement.getAttribute('class');
     return {
+      ident: id || className,
       id,
-    } as HTMLElement;
+      tagName,
+      className,
+    } as HTMLElement & { ident: string };
   }
-  const firstElementPromise = browser.switchTo().activeElement();
-  const firstElement = await firstElementPromise;
-  const firstElementId = await firstElement.getId();
-  if (!firstElement) { return []; }
+  const firstElementFinder = await browser.switchTo().activeElement();
+  if (!firstElementFinder) { return []; }
 
-  selectableElements.push(await asHTMLElement(firstElement));
+  const firstElement = await asSelectableElement(firstElementFinder);
+  selectableElements.push(firstElement);
   const hardLimit = 100;
   async function getNextElement() {
     realTab();
-    const isFirstElement = await (await browser.switchTo().activeElement()).getId() === firstElementId;
-    return !isFirstElement && await browser.switchTo().activeElement();
+    const nextElementFinder = await browser.switchTo().activeElement();
+    const nextSelectableElement = await asSelectableElement(nextElementFinder);
+    const isFirstElement = nextSelectableElement.ident === firstElement.ident;
+    return isFirstElement ? false : nextSelectableElement;
   }
-  let nextElement: WebElement | false;
+  let nextElement: HTMLElement | false;
   let current = 0;
 
   // tslint:disable-next-line: no-conditional-assignment
@@ -40,7 +46,7 @@ async function lookupSelectableElements() {
     if (current > hardLimit) {
       throw new Error('too many elements!');
     }
-    selectableElements.push(await asHTMLElement(nextElement));
+    selectableElements.push(nextElement);
   }
   return selectableElements;
 }
@@ -65,7 +71,7 @@ describe('emulate-tab', () => {
 
   beforeAll(async () => {
     await browser.get('/');
-    lookupSelectableElements();
+    await lookupSelectableElements();
   });
 
   testEmulateTab(() => app, realKeys);
