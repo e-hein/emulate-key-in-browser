@@ -61,6 +61,17 @@ describe('event check', () => {
       it('should write "a" into first input', () => expect(view.firstInput.value).toBe('a'));
     });
 
+    describe('and write "abc"', () => {
+      shouldLog();
+      beforeEach(async () => {
+        await emulateKey.mouse.hover(control.writeA);
+        await emulateKey.mouse.hover(control.writeB);
+        await emulateKey.mouse.hover(control.writeC);
+      });
+  
+      it('should write "abc" into first input', () => expect(view.firstInput.value).toBe('abc'));
+    });
+
     describe('and hover write-b', () => {
       shouldLog();
       beforeEach(() => emulateKey.mouse.hover(control.writeB));
