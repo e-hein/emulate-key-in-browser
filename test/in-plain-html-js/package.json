@@ -7,7 +7,7 @@
     "pretest:once": "npm run build",
     "test:once": "karma start --browsers=ChromeHeadless,FirefoxHeadless --single-run",
     "build": "DEBUG=demo-build* node build.js",
-    "build_watch": "npm-watch build",
+    "build_watch": "watch-npm build",
     "prestart": "npm run build",
     "start": "http-server www"
   },
@@ -38,8 +38,8 @@
     "karma-jasmine": "^3.3.1",
     "karma-jasmine-html-reporter": "^1.5.4",
     "karma-mocha-reporter": "^2.2.5",
-    "npm-watch": "^0.6.0",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "watch-npm": "^1.0.1"
   },
   "dependencies": {}
 }
