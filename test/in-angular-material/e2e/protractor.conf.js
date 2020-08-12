@@ -2,7 +2,8 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
-const { SpecReporter } = require('jasmine-spec-reporter');
+const { SpecReporter, StacktraceOption } = require('jasmine-spec-reporter');
+const path = require('path');
 
 /**
  * @type { import("protractor").Config }
@@ -24,11 +25,17 @@ exports.config = {
     print: function() {}
   },
   onPrepare() {
-    const tsNode = require('ts-node')
-    require('tsconfig-paths/register');
-    tsNode.register({
-      project: require('path').join(__dirname, './tsconfig.json')
+    const tsNode = require('ts-node');
+    const tsConfigPaths = require('tsconfig-paths');
+    const tsConfigBasePath = require.resolve('../tsconfig.base.json');
+    const tsConfigBaseOptions = require(tsConfigBasePath).compilerOptions;
+    tsConfigPaths.register({
+      baseUrl: path.join(path.dirname(tsConfigBasePath), tsConfigBaseOptions.baseUrl),
+      paths: tsConfigBaseOptions.paths,
     });
-    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+    tsNode.register({
+      project: path.join(__dirname, './tsconfig.json')
+    });
+    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: StacktraceOption.RAW } }));
   }
 };
