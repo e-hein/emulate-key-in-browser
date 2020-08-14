@@ -10,9 +10,11 @@
     "version": "ng version",
     "coverage": "ng test --code-coverage --watch false --browsers 'ChromeHeadless,FirefoxHeadless' --reporters 'mocha,kjhtml,fail-fast'",
     "lint": "ng lint",
-    "e2e": "ng e2e --devServerTarget emulate-key-in-browser-in-angular-material:serve",
-    "protractor": "ng e2e --webdriver-update false --protractor-config e2e/protractor-headless.conf.js",
-    "protractor_watch": "npm-watch protractor"
+    "update-webdriver": "node node_modules/protractor/node_modules/webdriver-manager/bin/webdriver-manager update --standalone false --versions.firefox 79",
+    "pree2e": "npm run update-webdriver",
+    "e2e": "ng e2e --webdriver-update false --devServerTarget emulate-key-in-browser-in-angular-material:serve",
+    "protractor": "ng e2e --webdriver-update false --protractor-config e2e/protractor.conf.js",
+    "protractor_watch": "watch-npm protractor"
   },
   "watch": {
     "protractor": {
@@ -60,11 +62,13 @@
     "karma-jasmine": "~3.3.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "karma-mocha-reporter": "^2.2.5",
-    "npm-watch": "^0.6.0",
+    "karma-safari-launcher": "^1.0.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tsconfig-paths": "^3.9.0",
     "tslint": "~6.1.0",
-    "typescript": "~3.9.7"
+    "typescript": "~3.9.7",
+    "watch-npm": "^1.0.1",
+    "webdriverio": "^6.4.0"
   }
 }

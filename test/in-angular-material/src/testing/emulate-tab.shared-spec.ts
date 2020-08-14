@@ -1,6 +1,6 @@
-import type { emulateKey as origEmulateKey } from 'emulate-key-in-browser';
-import { AppControlsHarness, AppDemoFormHarness, AppHarness } from './app.harness';
+import { AppControlsHarness, AppDemoFormHarness } from './app.harness';
 import { expectNotToHaveThrownAnything } from './expect.function';
+import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
 
 const envSpecificTabableElements = [
   'a.jasmine-title',  // protractor tests real browser window, so it can't find jasmine frame border
@@ -9,33 +9,27 @@ const envSpecificTabableElements = [
 
 /** Todo: merge this spec into emulate tab and test only integration, here */
 export function testEmulateTab(
-  appProvider: () => AppHarness,
-  emulateKey: typeof origEmulateKey,
+  context: SharedSpecContext,
 ) {
   describe('emulate tab', () => {
     let demoForm: AppDemoFormHarness;
     let controls: AppControlsHarness;
-
-    function findAllSelectableIdents() {
-      const selectableElements = emulateKey.tab.findSelectableElements();
-      const selectableElementIdents = selectableElements.map((e) => (e.id && ('#' + e.id))
-        || e.title
-        || (e.tagName.toLowerCase() + '.' + e.className)
-      );
-      return selectableElementIdents;
-    }
+    let emulateKey: AsyncEmulateKey;
 
     beforeEach(async () => {
-      const app = appProvider();
+      emulateKey = context.emulateKey;
+      const app = context.app;
       demoForm = await app.getDemoFrom();
       controls = await app.getControls();
     });
 
     it('should start', () => expectNotToHaveThrownAnything());
 
-    it('should find selectable inputs', () => {
-      const selectableElementIds = findAllSelectableIdents();
-      expect(selectableElementIds.filter((ident) => !envSpecificTabableElements.includes(ident))).toEqual([
+    it('should find selectable inputs', async () => {
+      const selectableElementIds = await emulateKey.tab.findSelectableElements();
+      expect(selectableElementIds.map((e) => {
+        return (e.id && ('#' + e.id)) || (e.tagName.toLowerCase() + '.' + e.className);
+      }).filter((ident) => !envSpecificTabableElements.includes(ident))).toEqual([
         '#first-input',
         '#second-input',
         '#textarea',
@@ -77,7 +71,7 @@ export function testEmulateTab(
       await firstInput.focus();
 
       // when
-      await emulateKey.tab();
+      await emulateKey.tab.forwards();
 
       // then
       expect(await secondInput.isFocused()).toBe(true, 'second input has focus');

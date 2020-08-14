@@ -50,6 +50,6 @@
   "main": "dist/emulate-key-in-browser.js",
   "types": "dist/emulate-key-in-browser.d.ts",
   "dependencies": {
-    "emulate-tab": "^1.1.3"
+    "emulate-tab": "^1.2.0"
   }
 }

@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { testApp } from 'src/testing/app.shared-specs';
+import { testApp } from 'src/testing';
 import { AppComponent } from './app.component';
 
 @Component({ template: '<app-root></app-root>'})

@@ -1,41 +1,17 @@
-// @ts-check
-// Protractor configuration file, see link for more information
-// https://github.com/angular/protractor/blob/master/lib/config.ts
-
-const { SpecReporter, StacktraceOption } = require('jasmine-spec-reporter');
-const path = require('path');
-
-/**
- * @type { import("protractor").Config }
- */
-exports.config = {
-  allScriptsTimeout: 11000,
-  specs: [
-    './src/**/*.e2e-spec.ts'
-  ],
-  capabilities: {
-    browserName: 'chrome'
+const config = require('./protractor.base.conf').config;
+config.multiCapabilities = [
+  {
+    browserName: 'chrome',
+    chromeOptions: { args: [ "--headless", "--disable-gpu", "--window-size=1920,1080"] },
   },
-  directConnect: true,
-  baseUrl: 'http://localhost:4200/',
-  framework: 'jasmine',
-  jasmineNodeOpts: {
-    showColors: true,
-    defaultTimeoutInterval: 30000,
-    print: function() {}
+  {
+    browserName: 'firefox',
+    firefoxOptions: {
+      args: ['--headless'],
+    },
+    'moz:firefoxOptions': {
+      args: ['--headless'],
+    },
   },
-  onPrepare() {
-    const tsNode = require('ts-node');
-    const tsConfigPaths = require('tsconfig-paths');
-    const tsConfigBasePath = require.resolve('../tsconfig.base.json');
-    const tsConfigBaseOptions = require(tsConfigBasePath).compilerOptions;
-    tsConfigPaths.register({
-      baseUrl: path.join(path.dirname(tsConfigBasePath), tsConfigBaseOptions.baseUrl),
-      paths: tsConfigBaseOptions.paths,
-    });
-    tsNode.register({
-      project: path.join(__dirname, './tsconfig.json')
-    });
-    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: StacktraceOption.RAW } }));
-  }
-};
+];
+exports.config = config;

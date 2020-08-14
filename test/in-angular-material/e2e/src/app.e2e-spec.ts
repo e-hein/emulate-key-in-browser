@@ -1,6 +1,7 @@
 import { ProtractorHarnessEnvironment } from '@angular/cdk/testing/protractor';
-import { testApp } from '@app/testing/app.shared-specs';
-import { browser, logging } from 'protractor';
+import { testApp } from '@app/testing';
+import { browser } from 'protractor';
+import { expectNoErrorLogs } from './utils';
 
 describe('workspace-project App', () => {
   beforeEach(() => browser.get('/'));
@@ -10,10 +11,26 @@ describe('workspace-project App', () => {
   );
 
   afterEach(async () => {
-    // Assert that there are no errors emitted from the browser
-    const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(jasmine.objectContaining({
-      level: logging.Level.SEVERE,
-    } as logging.Entry));
+    expectNoErrorLogs();
   });
 });
+
+// fdescribe('app with webdriger', () => {
+//   let wd: WebdriverIO.BrowserObject;
+//   beforeEach(async () => {
+//     wd = await remote({ capabilities: {
+//       browserName: 'firefox',
+//       'moz:firefoxOptions': {
+//         binary: '/Applications/Firefox.app/Contents/MacOS/firefox-bin'
+//       },
+//     }});
+//     wd.navigateTo('http://localhost:4200');
+//   });
+//   it ('take screenshot', async () => {
+//     const result = await wd.takeScreenshot();
+//     expect(result).toBeTruthy();
+//   });
+//   afterEach(async () => {
+//     await wd.deleteSession();
+//   });
+// });
