@@ -85,32 +85,6 @@ describe('emulate tab', () => {
       firstInput.removeEventListener('keydown', keydownListener);
     });
 
-    it('tab to next element', async () => {
-      // given
-      firstInput.focus();
-      const keySpy = jasmine.createSpy('keydown');
-      const blurSpy = spyOn(firstInput, 'blur').and.callThrough();
-      const focusSpy = spyOn(secondInput, 'focus').and.callThrough();
-      const keydownListener = (ev) => {
-        expect(blurSpy).not.toHaveBeenCalled();
-        expect(focusSpy).not.toHaveBeenCalled();
-        keySpy(ev);
-      }
-      firstInput.addEventListener('keydown', keydownListener);
-
-      // when
-      await emulateKey.tab.toNextElement();
-
-      // then
-      expect(keySpy).toHaveBeenCalled();
-      expect(blurSpy).toHaveBeenCalled();
-      expect(focusSpy).toHaveBeenCalled();
-      expect(document.activeElement).toBe(secondInput);
-
-      // cleanup
-      firstInput.removeEventListener('keydown', keydownListener);
-    });
-
     it('tab to given element', async () => {
       // given
       firstInput.focus();
@@ -158,32 +132,6 @@ describe('emulate tab', () => {
       expect(blurSpy).toHaveBeenCalled();
       expect(focusSpy).toHaveBeenCalled();
       expect(document.activeElement).toBe(firstInput);
-
-      // cleanup
-      firstInput.removeEventListener('keydown', keydownListener);
-    });
-
-    it('tab previous element', async () => {
-      // given
-      secondInput.focus();
-      const keySpy = jasmine.createSpy('keydown');
-      const blurSpy = spyOn(secondInput, 'blur').and.callThrough();
-      const focusSpy = spyOn(firstInput, 'focus').and.callThrough();
-      const keydownListener = (ev) => {
-        expect(blurSpy).not.toHaveBeenCalled();
-        expect(focusSpy).not.toHaveBeenCalled();
-        keySpy(ev);
-      }
-      secondInput.addEventListener('keydown', keydownListener);
-
-      // when
-      await emulateKey.tab.toPreviousElement();
-
-      // then
-      expect(keySpy).toHaveBeenCalled();
-      expect(blurSpy).toHaveBeenCalled();
-      expect(document.activeElement).toBe(firstInput);
-      expect(focusSpy).toHaveBeenCalled();
 
       // cleanup
       firstInput.removeEventListener('keydown', keydownListener);
