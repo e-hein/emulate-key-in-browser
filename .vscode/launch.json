@@ -15,6 +15,18 @@
         "--webdriver-update", "false",
         "--protractor-config", "e2e/protractor.firefox.conf.js",
       ],
-    }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "ng e2e chrome",
+      "program": "${workspaceFolder}/test/in-angular-material/node_modules/.bin/ng",
+      "cwd": "${workspaceFolder}/test/in-angular-material",
+      "args": [
+        "e2e",
+        "--webdriver-update", "false",
+        "--protractor-config", "e2e/protractor.chrome.conf.js",
+      ],
+    },
   ]
 }

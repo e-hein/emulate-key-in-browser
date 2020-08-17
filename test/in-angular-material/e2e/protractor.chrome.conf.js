@@ -1,5 +1,5 @@
 const config = require('./protractor.base.conf').config;
 config.capabilities =  {
-  browserName: 'firefox',
+  browserName: 'chrome',
 };
 exports.config = config;

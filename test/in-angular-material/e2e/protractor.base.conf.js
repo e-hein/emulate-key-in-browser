@@ -4,6 +4,7 @@
 
 const { SpecReporter, StacktraceOption } = require('jasmine-spec-reporter');
 const path = require('path');
+const { browser } = require('protractor');
 
 /**
  * @type { import("protractor").Config }
@@ -34,5 +35,19 @@ exports.config = {
       project: path.join(__dirname, './tsconfig.json')
     });
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: StacktraceOption.RAW } }));
+    // @ts-ignore
+    return global.browser.getCapabilities().then(async (capabilities) => {
+      const browserName = capabilities.get('browserName');
+      process.env.cpabilites_browserName = browserName;
+      if (browserName !== 'firefox') {
+        process.env.capability_mouseMove = 'true';
+        process.env.capability_getLogs = 'true';
+        process.env.capability_simulateArrowKeys = 'true';
+      } else {
+        delete process.env.capability_mouseMove;
+        delete process.env.capability_getLogs;
+        delete process.env.capability_simulateArrowKeys;
+      }
+    })
   }
 };

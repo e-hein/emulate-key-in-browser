@@ -45,5 +45,5 @@ describe('emulate key in browser', () => {
   });
 
   describe('emulate tab', () => testEmulateTab(context));
-  fdescribe('emulate arrows', () => testEmulateArrows(context));
+  describe('emulate arrows', () => testEmulateArrows(context));
 });

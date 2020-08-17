@@ -1,36 +1,26 @@
 import { ProtractorHarnessEnvironment } from '@angular/cdk/testing/protractor';
-import { testApp } from '@app/testing';
+import { AppHarness, testApp } from '@app/testing';
 import { browser } from 'protractor';
 import { expectNoErrorLogs } from './utils';
 
-describe('workspace-project App', () => {
-  beforeEach(() => browser.get('/'));
-  testApp(
-    () => ProtractorHarnessEnvironment.loader(),
-    () => Promise.resolve().then(() => browser.driver.executeScript(() => document.activeElement?.id)),
-  );
+describe('emulate key in angular demo app', () => {
+  beforeEach(() => {
+    browser.get('/');
+  });
+  if (process.env.capability_mouseMove) {
+    testApp(
+      () => ProtractorHarnessEnvironment.loader(),
+      () => Promise.resolve().then(() => browser.driver.executeScript(() => document.activeElement?.id)),
+    );
+  } else {
+    it('just testing startup (can\'t simulate hover)', async () => {
+      const app = await ProtractorHarnessEnvironment.loader().getHarness(AppHarness);
+      const demoForm  = await app.getDemoFrom();
+      expect(await demoForm.getControl('first input')).toBeTruthy();
+    });
+  }
 
   afterEach(async () => {
     expectNoErrorLogs();
   });
 });
-
-// fdescribe('app with webdriger', () => {
-//   let wd: WebdriverIO.BrowserObject;
-//   beforeEach(async () => {
-//     wd = await remote({ capabilities: {
-//       browserName: 'firefox',
-//       'moz:firefoxOptions': {
-//         binary: '/Applications/Firefox.app/Contents/MacOS/firefox-bin'
-//       },
-//     }});
-//     wd.navigateTo('http://localhost:4200');
-//   });
-//   it ('take screenshot', async () => {
-//     const result = await wd.takeScreenshot();
-//     expect(result).toBeTruthy();
-//   });
-//   afterEach(async () => {
-//     await wd.deleteSession();
-//   });
-// });

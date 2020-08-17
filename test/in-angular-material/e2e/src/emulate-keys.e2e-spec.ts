@@ -1,8 +1,8 @@
 import { ProtractorHarnessEnvironment } from '@angular/cdk/testing/protractor';
-import { AsyncEmulateKey, testEmulateArrows, testEmulateTab } from '@app/testing';
+import { AsyncEmulateKey, testEmulateArrows, testEmulateTab, SharedSpecContext } from '@app/testing';
 import { AppHarness } from '@app/testing/app.harness';
-import { browser, by, element, Key, promise, WebElement } from 'protractor';
-import { expectNoErrorLogs } from './utils';
+import { browser, by, element, Key, promise, WebElement, logging } from 'protractor';
+import { expectNoErrorLogs, detailedWebDriverLogs } from './utils';
 
 function realTab() {
   return browser.switchTo().activeElement().sendKeys(Key.TAB);
@@ -52,48 +52,52 @@ namespace realTab {
   export const forwards = () => realTab();
 }
 
-const realKeys: AsyncEmulateKey = {
-  tab: {
-    forwards: () => sendTabKey(Key.TAB),
-    backwards: () => sendTabKey(Key.chord(Key.SHIFT, Key.TAB)),
+class AsyncEmulateKeyWrapper implements AsyncEmulateKey {
+  private activeElement: WebElement;
+
+  public readonly tab = {
+    forwards: () => this.sendTabKey(Key.TAB),
+    backwards: () => this.sendTabKey(Key.chord(Key.SHIFT, Key.TAB)),
     findSelectableElements: () => lookupSelectableElements(),
-  },
-  shiftTab: () => sendTabKey(Key.chord(Key.SHIFT, Key.TAB)),
-  arrow: {
-    up: () => sendKeys(Key.ARROW_UP),
-    right: () =>  sendKeys(Key.ARROW_RIGHT),
-    down: () => sendKeys(Key.ARROW_DOWN),
-    left: () => sendKeys(Key.ARROW_LEFT),
-  },
-  shiftArrow: {
-    up: () => sendKeys(Key.chord(Key.SHIFT, Key.ARROW_UP)),
-    right: () =>  sendKeys(Key.chord(Key.SHIFT, Key.ARROW_RIGHT)),
-    down: () => sendKeys(Key.chord(Key.SHIFT, Key.ARROW_DOWN)),
-    left: () => sendKeys(Key.chord(Key.SHIFT, Key.ARROW_LEFT)),
+  };
+  public readonly arrow = {
+    up: () => this.sendKeys(Key.ARROW_UP),
+    right: () =>  this.sendKeys(Key.ARROW_RIGHT),
+    down: () => this.sendKeys(Key.ARROW_DOWN),
+    left: () => this.sendKeys(Key.ARROW_LEFT),
+  };
+  public readonly shiftArrow = {
+    up: () => this.sendKeys(Key.chord(Key.SHIFT, Key.ARROW_UP)),
+    right: () =>  this.sendKeys(Key.chord(Key.SHIFT, Key.ARROW_RIGHT)),
+    down: () => this.sendKeys(Key.chord(Key.SHIFT, Key.ARROW_DOWN)),
+    left: () => this.sendKeys(Key.chord(Key.SHIFT, Key.ARROW_LEFT)),
+  };
+  public readonly shiftTab = () => this.sendTabKey(Key.chord(Key.SHIFT, Key.TAB));
+
+
+  private async sendKeys(...args: Array<string|number|promise.Promise<string|number>>): Promise<void> {
+    const activeElement = this.activeElement = this.activeElement || await browser.switchTo().activeElement();
+    await activeElement.sendKeys(...args);
   }
-};
 
-async function sendKeys(...args: Array<string|number|promise.Promise<string|number>>): Promise<void> {
-  await browser.switchTo().activeElement().sendKeys(...args);
-}
-
-async function sendTabKey(key: string) {
-  const activeElementIdBefore = await (await browser.switchTo().activeElement()).getId();
-  await sendKeys(key);
-  const activeElementIdAfter = await (await browser.switchTo().activeElement()).getId();
-  const preventedDefault = activeElementIdBefore !== activeElementIdAfter;
-  return preventedDefault;
+  private async sendTabKey(key: string) {
+    const activeElementBefore = this.activeElement =  this.activeElement || await (await browser.switchTo().activeElement());
+    const activeElementIdBefore = await activeElementBefore.getId();
+    await this.sendKeys(key);
+    const activeElementafter = this.activeElement =  await browser.switchTo().activeElement();
+    const activeElementIdAfter = await activeElementafter.getId();
+    const preventedDefault = activeElementIdBefore !== activeElementIdAfter;
+    return preventedDefault;
+  }
 }
 
 describe('emulate key', () => {
-  const context = {
-    app: undefined as AppHarness,
-    emulateKey: realKeys,
-  };
+  const context = {} as SharedSpecContext;
 
   beforeEach(async () => {
     await browser.get('/');
     context.app = await ProtractorHarnessEnvironment.loader().getHarness(AppHarness);
+    context.emulateKey = new AsyncEmulateKeyWrapper();
   });
 
   beforeAll(async () => {
@@ -102,7 +106,10 @@ describe('emulate key', () => {
   });
 
   describe('tab', () => testEmulateTab(context));
-  describe('arrow', () => testEmulateArrows(context));
+
+  if (process.env.capability_simulateArrowKeys) {
+    describe('arrow', () => testEmulateArrows(context));
+  }
 
   afterEach(async () => {
     expectNoErrorLogs();
