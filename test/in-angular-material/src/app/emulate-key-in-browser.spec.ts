@@ -1,6 +1,6 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
-import { AppHarness, AsyncEmulateKey, testEmulateArrows, testEmulateTab } from '@app/testing';
+import { AppHarness, AsyncEmulateKey, testEmulateArrows, testEmulateTab, testEmulateShiftArrows, testEmulateArrowAfterSelection } from '@app/testing';
 import { emulateKey } from 'emulate-key-in-browser';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
@@ -37,13 +37,15 @@ describe('emulate key in browser', () => {
       },
       shiftArrow: {
         up: () => forceStabilize(emulateKey.shiftArrow.up),
-        right: () => forceStabilize(emulateKey.shiftArrow.up),
-        down: () => forceStabilize(emulateKey.shiftArrow.up),
-        left: () => forceStabilize(emulateKey.shiftArrow.up),
+        right: () => forceStabilize(emulateKey.shiftArrow.right),
+        down: () => forceStabilize(emulateKey.shiftArrow.down),
+        left: () => forceStabilize(emulateKey.shiftArrow.left),
       }
     };
   });
 
-  describe('emulate tab', () => testEmulateTab(context));
-  describe('emulate arrows', () => testEmulateArrows(context));
+  describe('tab', () => testEmulateTab(context));
+  describe('arrows', () => testEmulateArrows(context));
+  describe('shift arrow', () => testEmulateShiftArrows(context));
+  describe('arrow after selection', () => testEmulateArrowAfterSelection(context));
 });

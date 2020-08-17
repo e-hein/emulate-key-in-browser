@@ -1,8 +1,9 @@
 import { TestElement } from '@angular/cdk/testing';
 import { AppDemoFormHarness, AppHarness } from './app.harness';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
+import { ensureInitialSelectionRange } from './expect.function';
 
-export function testEmulateArrows(
+export function testEmulateShiftArrows(
   context: SharedSpecContext,
 ) {
   let app: AppHarness;
@@ -15,317 +16,7 @@ export function testEmulateArrows(
     demoForm = await app.getDemoFrom();
   });
 
-  xdescribe('arrow up', () => {
-    describe('in text input', () => {
-      let textInput: TestElement;
-
-      beforeEach(async () => {
-        textInput = await demoForm.getControl('first input');
-        await textInput.focus();
-      });
-
-      describe('that is empty', () => {
-        it('should do nothing', async () => {
-          await emulateKey.arrow.up();
-
-          expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
-        });
-      });
-
-      describe('that contains text', () => {
-        beforeEach(() => textInput.sendKeys('12345'));
-
-        describe('with cursor at end', () => {
-          it('should move cursor to the start', async () => {
-            await emulateKey.arrow.up();
-
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
-          });
-        });
-
-        describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            const selectionStart = await textInput.getProperty('selectionStart');
-            const selectionEnd = await textInput.getProperty('selectionEnd');
-            if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-          });
-
-          it('should do nothing', async () => {
-            await emulateKey.arrow.up();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
-          });
-        });
-
-        describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            const selectionStart = await textInput.getProperty('selectionStart');
-            const selectionEnd = await textInput.getProperty('selectionEnd');
-            if ((selectionStart !== 4) || (selectionEnd !== 4)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-          });
-
-          it('should cursor to the start', async () => {
-            await emulateKey.arrow.up();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
-          });
-        });
-      });
-    });
-
-    describe('in text area', () => {
-      let textArea: TestElement;
-
-      beforeEach(async () => {
-        textArea = await demoForm.getControl('textarea');
-        await textArea.focus();
-      });
-
-      describe('that is empty', () => {
-        it('should do nothing', async () => {
-          await emulateKey.arrow.up();
-
-          expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
-        });
-      });
-
-      describe('that contains text fitting in one row', () => {
-        beforeEach(() => textArea.sendKeys('12345'));
-
-        describe('with cursor at end', () => {
-          it('should move cursor to the start', async () => {
-            await emulateKey.arrow.up();
-
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
-          });
-        });
-
-        describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            const selectionStart = await textArea.getProperty('selectionStart');
-            const selectionEnd = await textArea.getProperty('selectionEnd');
-            if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-          });
-
-          it('should do nothing', async () => {
-            await emulateKey.arrow.up();
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
-          });
-        });
-
-        describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            const selectionStart = await textArea.getProperty('selectionStart');
-            const selectionEnd = await textArea.getProperty('selectionEnd');
-            if ((selectionStart !== 4) || (selectionEnd !== 4)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-          });
-
-          it('should cursor to the start', async () => {
-            await emulateKey.arrow.up();
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
-          });
-        });
-      });
-
-      describe('that contains multiple lines of text', () => {
-        const oneLine = '12345678901234567';
-        const multipleLines = oneLine + oneLine + oneLine;
-        beforeEach(async () => textArea.sendKeys(multipleLines));
-
-        it('should move round about one line', async () => {
-          await emulateKey.arrow.up();
-
-          expect(await textArea.getProperty('selectionStart')).toBeGreaterThan(oneLine.length, 'selection start > 0');
-          expect(await textArea.getProperty('selectionEnd')).toBeGreaterThan(oneLine.length, 'selection end > 0');
-
-          expect(await textArea.getProperty('selectionStart')).toBeLessThan(multipleLines.length - 4, 'selection start < length');
-          expect(await textArea.getProperty('selectionEnd')).toBeLessThan(multipleLines.length - 4, 'selection end < length');
-        });
-      });
-    });
-  });
-
-  xdescribe('arrow down', () => {
-    describe('in text input', () => {
-      let textInput: TestElement;
-
-      beforeEach(async () => {
-        textInput = await demoForm.getControl('first input');
-        await textInput.focus();
-      });
-
-      describe('that is empty', () => {
-        it('should do nothing', async () => {
-          await emulateKey.arrow.down();
-
-          expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
-        });
-      });
-
-      describe('that contains text', () => {
-        beforeEach(() => textInput.sendKeys('12345'));
-
-        describe('with cursor at end', () => {
-          it('should do nothing', async () => {
-            await emulateKey.arrow.down();
-
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-          });
-        });
-
-        describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            const selectionStart = await textInput.getProperty('selectionStart');
-            const selectionEnd = await textInput.getProperty('selectionEnd');
-            if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-          });
-
-          it('should move cursor to the end of text', async () => {
-            await emulateKey.arrow.down();
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-          });
-        });
-
-        describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            const selectionStart = await textInput.getProperty('selectionStart');
-            const selectionEnd = await textInput.getProperty('selectionEnd');
-            if ((selectionStart !== 3) || (selectionEnd !== 3)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-          });
-
-          it('should cursor to the end of text', async () => {
-            await emulateKey.arrow.down();
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-          });
-        });
-      });
-    });
-
-    describe('in text area', () => {
-      let textArea: TestElement;
-
-      beforeEach(async () => {
-        textArea = await demoForm.getControl('textarea');
-        await textArea.focus();
-      });
-
-      describe('that is empty', () => {
-        it('should do nothing', async () => {
-          await emulateKey.arrow.down();
-
-          expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
-        });
-      });
-
-      describe('that contains text fitting in one row', () => {
-        beforeEach(() => textArea.sendKeys('12345'));
-
-        describe('with cursor at end', () => {
-          it('should do nothing', async () => {
-            await emulateKey.arrow.down();
-
-            expect(await textArea.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
-          });
-        });
-
-        describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            const selectionStart = await textArea.getProperty('selectionStart');
-            const selectionEnd = await textArea.getProperty('selectionEnd');
-            if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-          });
-
-          it('should move cursor to the end of text', async () => {
-            await emulateKey.arrow.down();
-            expect(await textArea.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
-          });
-        });
-
-        describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            const selectionStart = await textArea.getProperty('selectionStart');
-            const selectionEnd = await textArea.getProperty('selectionEnd');
-            if ((selectionStart !== 3) || (selectionEnd !== 3)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-          });
-
-          it('should move cursor to the end of text', async () => {
-            await emulateKey.arrow.down();
-            expect(await textArea.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
-          });
-        });
-      });
-
-      describe('that contains multiple lines of text', () => {
-        const oneLine = '12345678901234567';
-        const multipleLines = oneLine + oneLine + oneLine;
-        beforeEach(async () => {
-          await textArea.sendKeys(multipleLines);
-          await emulateKey.arrow.up();
-          await emulateKey.arrow.up();
-          await emulateKey.arrow.up();
-          await emulateKey.arrow.up();
-          await emulateKey.arrow.up();
-          const selectionStart = await textArea.getProperty('selectionStart');
-          const selectionEnd = await textArea.getProperty('selectionEnd');
-          if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
-        });
-
-        it('should move round about one line', async () => {
-          await emulateKey.arrow.down();
-
-          expect(await textArea.getProperty('selectionStart')).toBeGreaterThan(4, 'selection start > 0');
-          expect(await textArea.getProperty('selectionEnd')).toBeGreaterThan(4, 'selection end > 0');
-
-          expect(await textArea.getProperty('selectionStart')).toBeLessThan(multipleLines.length - oneLine.length, 'selection start < length');
-          expect(await textArea.getProperty('selectionEnd')).toBeLessThan(multipleLines.length - oneLine.length, 'selection end < length');
-        });
-      });
-    });
-  });
-
-  describe('shift arrow right in input', () => {
+  describe('right in input', () => {
     let textInput: TestElement;
 
     beforeEach(async () => {
@@ -335,7 +26,7 @@ export function testEmulateArrows(
 
     describe('that is empty', () => {
       it('should do nothing', async () => {
-        await emulateKey.arrow.right();
+        await emulateKey.shiftArrow.right();
 
         expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
         expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
@@ -343,55 +34,138 @@ export function testEmulateArrows(
     });
 
     describe('that contains text', () => {
-      beforeEach(() => textInput.sendKeys('12345'));
+      beforeEach(async () => {
+        await textInput.sendKeys('12345');
+        await ensureInitialSelectionRange(textInput, 5, 5);
+      });
 
-      describe('with cursor at end', () => {
-        it('should do nothing', async () => {
-          await emulateKey.arrow.right();
+      describe('without selection', () => {
+        describe('with cursor at end', () => {
+          it('should do nothing', async () => {
+            await emulateKey.shiftArrow.right();
 
-          expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+          });
+        });
+
+        describe('with cursor at start', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.up();
+            await ensureInitialSelectionRange(textInput, 0, 0);
+          });
+
+          it('should select first character', async () => {
+            await emulateKey.shiftArrow.right();
+            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+          });
+        });
+
+        describe('with cursor somewhere in the middle', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.left();
+            await emulateKey.arrow.left();
+            await ensureInitialSelectionRange(textInput, 3, 3);
+          });
+
+          it('should select next character', async () => {
+            await emulateKey.shiftArrow.right();
+            expect(await textInput.getProperty('selectionStart')).toBe(3, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+          });
         });
       });
 
-      describe('with cursor at start', () => {
-        beforeEach(async () => {
-          await emulateKey.arrow.up();
-          const selectionStart = await textInput.getProperty('selectionStart');
-          const selectionEnd = await textInput.getProperty('selectionEnd');
-          if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-            throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-          }
+      describe('with selection forward', () => {
+        describe('from middle to the end', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.up();
+            await emulateKey.arrow.right();
+            await emulateKey.shiftArrow.down();
+            await ensureInitialSelectionRange(textInput, 1, 5, 'forward');
+          });
+
+          it('should do nothing', async () => {
+            await emulateKey.shiftArrow.right();
+
+            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+          });
         });
 
-        it('should move cursor to the next (right) character', async () => {
-          await emulateKey.arrow.right();
-          expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
+        describe('from middle to middle', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.up();
+            await emulateKey.arrow.right();
+            await emulateKey.shiftArrow.right();
+            await ensureInitialSelectionRange(textInput, 1, 2, 'forward');
+          });
+
+          it('should extend selection at the end of selection', async () => {
+            await emulateKey.shiftArrow.right();
+            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(3, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+          });
         });
       });
 
-      describe('with cursor somewhere in the middle', () => {
-        beforeEach(async () => {
-          await emulateKey.arrow.left();
-          await emulateKey.arrow.left();
-          const selectionStart = await textInput.getProperty('selectionStart');
-          const selectionEnd = await textInput.getProperty('selectionEnd');
-          if ((selectionStart !== 3) || (selectionEnd !== 3)) {
-            throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-          }
+      describe('with existing selection backward', () => {
+        describe('from middle to the start', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.left();
+            await emulateKey.shiftArrow.up();
+            await ensureInitialSelectionRange(textInput, 0, 4, 'backward');
+          });
+
+          it('should reduce selection at selection start', async () => {
+            await emulateKey.shiftArrow.right();
+
+            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+          });
         });
 
-        it('should cursor to the next character', async () => {
-          await emulateKey.arrow.right();
-          expect(await textInput.getProperty('selectionStart')).toBe(4, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+        describe('one chars in the middle', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.left();
+            await emulateKey.shiftArrow.left();
+            await ensureInitialSelectionRange(textInput, 3, 4, 'backward');
+          });
+
+          it('should remove selection', async () => {
+            await emulateKey.shiftArrow.right();
+            expect(await textInput.getProperty('selectionStart')).toBe(4, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+          });
+        });
+
+        describe('two chars in the middle', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.left();
+            await emulateKey.shiftArrow.left();
+            await emulateKey.shiftArrow.left();
+            await ensureInitialSelectionRange(textInput, 2, 4, 'backward');
+          });
+
+          it('should reduce selection at selection start', async () => {
+            await emulateKey.shiftArrow.right();
+            expect(await textInput.getProperty('selectionStart')).toBe(3, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+          });
         });
       });
     });
   });
 
-  describe('arrow left in input', () => {
+  describe('left in input', () => {
     let textInput: TestElement;
 
     beforeEach(async () => {
@@ -401,7 +175,7 @@ export function testEmulateArrows(
 
     describe('that is empty', () => {
       it('should do nothing', async () => {
-        await emulateKey.arrow.left();
+        await emulateKey.shiftArrow.left();
 
         expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
         expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
@@ -409,49 +183,133 @@ export function testEmulateArrows(
     });
 
     describe('that contains text', () => {
-      beforeEach(() => textInput.sendKeys('12345'));
+      beforeEach(async () => {
+        await textInput.sendKeys('12345');
+        await ensureInitialSelectionRange(textInput, 5, 5);
+      });
 
-      describe('with cursor at end', () => {
-        it('should move cursor one character left', async () => {
-          await emulateKey.arrow.left();
+      describe('without selection', () => {
+        describe('with cursor at end', () => {
+          it('should select last character', async () => {
+            await emulateKey.shiftArrow.left();
 
-          expect(await textInput.getProperty('selectionStart')).toBe(4, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+            expect(await textInput.getProperty('selectionStart')).toBe(4, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+          });
+        });
+
+        describe('with cursor at start', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.up();
+            await ensureInitialSelectionRange(textInput, 0, 0);
+          });
+
+          it('should do nothing', async () => {
+            await emulateKey.shiftArrow.left();
+            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+          });
+        });
+
+        describe('with cursor somewhere in the middle', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.left();
+            await emulateKey.arrow.left();
+            await ensureInitialSelectionRange(textInput, 3, 3);
+          });
+
+          it('should select previous character', async () => {
+            await emulateKey.shiftArrow.left();
+            expect(await textInput.getProperty('selectionStart')).toBe(2, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(3, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+          });
         });
       });
 
-      describe('with cursor at start of text', () => {
-        beforeEach(async () => {
-          await emulateKey.arrow.up();
-          const selectionStart = await textInput.getProperty('selectionStart');
-          const selectionEnd = await textInput.getProperty('selectionEnd');
-          if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-            throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-          }
+      describe('with existing selection forward', () => {
+        describe('from middle to the end', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.left();
+            await emulateKey.arrow.left();
+            await emulateKey.shiftArrow.down();
+            await ensureInitialSelectionRange(textInput, 3, 5, 'forward');
+          });
+
+          it('should reduce selection at selection end', async () => {
+            await emulateKey.shiftArrow.left();
+
+            expect(await textInput.getProperty('selectionStart')).toBe(3, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+          });
         });
 
-        it('should do nothing', async () => {
-          await emulateKey.arrow.left();
-          expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+        describe('one characters in the middle', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.up();
+            await emulateKey.arrow.right();
+            await emulateKey.shiftArrow.right();
+            await ensureInitialSelectionRange(textInput, 1, 2, 'forward');
+          });
+
+          it('should remove selection', async () => {
+            await emulateKey.shiftArrow.left();
+            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+          });
+        });
+
+        describe('multiple characters in the middle', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.up();
+            await emulateKey.arrow.right();
+            await emulateKey.shiftArrow.right();
+            await emulateKey.shiftArrow.right();
+            await ensureInitialSelectionRange(textInput, 1, 3, 'forward');
+          });
+
+          it('should reduce selection at selection end', async () => {
+            await emulateKey.shiftArrow.left();
+            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(2, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+          });
         });
       });
 
-      describe('with cursor somewhere in the middle', () => {
-        beforeEach(async () => {
-          await emulateKey.arrow.left();
-          await emulateKey.arrow.left();
-          const selectionStart = await textInput.getProperty('selectionStart');
-          const selectionEnd = await textInput.getProperty('selectionEnd');
-          if ((selectionStart !== 3) || (selectionEnd !== 3)) {
-            throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-          }
+      describe('with existing selection backward', () => {
+        describe('from middle to the start', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.left();
+            await emulateKey.shiftArrow.up();
+            await ensureInitialSelectionRange(textInput, 0, 4, 'backward');
+          });
+
+          it('should do nothing', async () => {
+            await emulateKey.shiftArrow.left();
+
+            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+          });
         });
 
-        it('should cursor to the next character', async () => {
-          await emulateKey.arrow.left();
-          expect(await textInput.getProperty('selectionStart')).toBe(2, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(2, 'selection end');
+        describe('from middle to middle', () => {
+          beforeEach(async () => {
+            await emulateKey.arrow.left();
+            await emulateKey.shiftArrow.left();
+            await ensureInitialSelectionRange(textInput, 3, 4, 'backward');
+          });
+
+          it('should reduce selection at selection end', async () => {
+            await emulateKey.shiftArrow.left();
+            expect(await textInput.getProperty('selectionStart')).toBe(2, 'selection start');
+            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+          });
         });
       });
     });

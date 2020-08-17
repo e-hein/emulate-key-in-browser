@@ -1,8 +1,10 @@
 import { ProtractorHarnessEnvironment } from '@angular/cdk/testing/protractor';
-import { AsyncEmulateKey, testEmulateArrows, testEmulateTab, SharedSpecContext } from '@app/testing';
+import {
+  AsyncEmulateKey, SharedSpecContext, testEmulateArrowAfterSelection, testEmulateArrows, testEmulateShiftArrows, testEmulateTab,
+} from '@app/testing';
 import { AppHarness } from '@app/testing/app.harness';
-import { browser, by, element, Key, promise, WebElement, logging } from 'protractor';
-import { expectNoErrorLogs, detailedWebDriverLogs } from './utils';
+import { browser, by, element, Key, promise, WebElement } from 'protractor';
+import { expectNoErrorLogs } from './utils';
 
 function realTab() {
   return browser.switchTo().activeElement().sendKeys(Key.TAB);
@@ -109,7 +111,10 @@ describe('emulate key', () => {
 
   if (process.env.capability_simulateArrowKeys) {
     describe('arrow', () => testEmulateArrows(context));
+    describe('shift arrow', () => testEmulateShiftArrows(context));
+    describe('arrow after selection', () => testEmulateArrowAfterSelection(context));
   }
+
 
   afterEach(async () => {
     expectNoErrorLogs();
