@@ -315,7 +315,7 @@ export function testEmulateShiftArrows(
     });
   });
 
-  describe('arrow up', () => {
+  describe('up', () => {
     describe('in text input', () => {
       let textInput: TestElement;
 
@@ -491,14 +491,36 @@ export function testEmulateShiftArrows(
           });
 
           it('should remove selection', async () => {
-            /**
-             * This is the behavior of Chrome, Firefox would inverse selection!
-             */
             await emulateKey.shiftArrow.up();
 
-            expect(await textArea.getProperty('selectionStart')).toBe(initialCursorPos - 3, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(initialCursorPos - 3, 'selection end');
-            expect(await textArea.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+            const selectionStart = await textArea.getProperty('selectionStart');
+            const selectionEnd = await textArea.getProperty('selectionEnd');
+            const selectionDirection = await textArea.getProperty('selectionDirection');
+
+            const selectionRemoved = selectionStart === selectionEnd;
+            const selectionInverted = selectionStart < selectionEnd - 3;
+
+            /**
+             * behavior variant a like e.g. chrome on mac os and windows
+             */
+            const behaviorVariantA = selectionRemoved && /forward|none/.test(selectionDirection);
+
+            /**
+             * behavior vairant b like e.g. firefox or chrome on linux
+             */
+            const behaviorVariantB = selectionInverted && selectionDirection === 'backward';
+
+            const behaviorVariant = (behaviorVariantA && 'A') || (behaviorVariantB && 'B') || 'other';
+            console.log('shift arrow up behaviorVariant: ' + behaviorVariant);
+
+            expect(selectionEnd).toBe(initialCursorPos - 3, 'selection end');
+            expect(behaviorVariant).toMatch(/[AB]/, JSON.stringify({
+              selectionStart,
+              selectionEnd,
+              selectionDirection,
+              selectionRemoved,
+              selectionInverted,
+            }));
           });
         });
 
@@ -528,7 +550,7 @@ export function testEmulateShiftArrows(
     });
   });
 
-  describe('arrow down', () => {
+  describe('down', () => {
     describe('in text input', () => {
       let textInput: TestElement;
 
@@ -678,7 +700,7 @@ export function testEmulateShiftArrows(
 
             expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
             expect(await textArea.getProperty('selectionEnd')).toBeGreaterThan(4, 'selection end > 0');
-            expect(await textArea.getProperty('selectionEnd')).toBeLessThan(oneLine.length + 4, 'selection end < length');
+            expect(await textArea.getProperty('selectionEnd')).toBeLessThan(oneLine.length * 2, 'selection end < length');
             expect(await textArea.getProperty('selectionDirection')).toBe('forward', 'selection direction');
           });
         });
@@ -716,14 +738,36 @@ export function testEmulateShiftArrows(
           });
 
           it('should remove selection', async () => {
-            /**
-             * This is the behavior of Chrome, Firefox would inverse selection!
-             */
             await emulateKey.shiftArrow.down();
 
-            expect(await textArea.getProperty('selectionStart')).toBe(initialCursorPos - 1, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(initialCursorPos - 1, 'selection end');
-            expect(await textArea.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+            const selectionStart = await textArea.getProperty('selectionStart');
+            const selectionEnd = await textArea.getProperty('selectionEnd');
+            const selectionDirection = await textArea.getProperty('selectionDirection');
+
+            const selectionRemoved = selectionStart === selectionEnd;
+            const selectionInverted = selectionEnd === multipleLines.length;
+
+            /**
+             * behavior variant a like e.g. chrome on mac os and windows
+             */
+            const behaviorVariantA = selectionRemoved && /forward|none/.test(selectionDirection);
+
+            /**
+             * behavior vairant b like e.g. firefox or chrome on linux
+             */
+            const behaviorVariantB = selectionInverted && selectionDirection === 'forward';
+
+            const behaviorVariant = (behaviorVariantA && 'A') || (behaviorVariantB && 'B') || 'other';
+            console.log('shift arrow down behaviorVariant: ' + behaviorVariant);
+
+            expect(selectionStart).toBe(initialCursorPos - 1, 'selection start');
+            expect(behaviorVariant).toMatch(/[AB]/, JSON.stringify({
+              selectionStart,
+              selectionEnd,
+              selectionDirection,
+              selectionRemoved,
+              selectionInverted,
+            }));
           });
         });
 

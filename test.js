@@ -57,7 +57,7 @@ Promise.resolve()
   .then(() => run('npm i', inAngular))
   .then(() => run('npm run version', inAngular))
   .then(() => run('npm run coverage', inAngular))
-  .then(() => run('npm run e2e -- --protractor-config e2e/protractor.conf.js', inAngular))
+  .then(() => run('npm run e2e', inAngular))
   .then(
     () => process.exit(0),
     (error) => process.exit(error.code)

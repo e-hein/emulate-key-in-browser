@@ -9,11 +9,13 @@
     "test": "ng test",
     "version": "ng version",
     "coverage": "ng test --code-coverage --watch false --browsers 'ChromeHeadless,FirefoxHeadless' --reporters 'mocha,kjhtml,fail-fast'",
+    "coverage:chrome": "ng test --code-coverage --watch true --browsers 'ChromeHeadless' --reporters 'mocha,kjhtml'",
+    "coverage:firefox": "ng test --code-coverage --watch true --browsers 'FirefoxHeadless' --reporters 'mocha,kjhtml'",
     "lint": "ng lint",
-    "update-webdriver": "node node_modules/protractor/node_modules/webdriver-manager/bin/webdriver-manager update --standalone false --versions.firefox 79",
+    "update-webdriver": "node node_modules/protractor/node_modules/webdriver-manager/bin/webdriver-manager update --standalone false",
     "pree2e": "npm run update-webdriver",
     "e2e": "ng e2e --webdriver-update false --devServerTarget emulate-key-in-browser-in-angular-material:serve",
-    "protractor": "ng e2e --webdriver-update false --protractor-config e2e/protractor.conf.js",
+    "protractor": "ng e2e --webdriver-update false --protractor-config e2e/protractor.chrome.conf.js",
     "protractor_watch": "watch-npm protractor"
   },
   "watch": {
