@@ -1,6 +1,7 @@
 import { TestElement } from '@angular/cdk/testing';
 import { AppDemoFormHarness, AppHarness } from './app.harness';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
+import { assertInitialSelectionRange } from './expect.function';
 
 export function testEmulateArrows(
   context: SharedSpecContext,
@@ -34,7 +35,10 @@ export function testEmulateArrows(
       });
 
       describe('that contains text', () => {
-        beforeEach(() => textInput.sendKeys('12345'));
+        beforeEach(async () => {
+          await textInput.sendKeys('12345');
+          await assertInitialSelectionRange(textInput, 5, 5);
+        });
 
         describe('with cursor at end', () => {
           it('should move cursor to the start', async () => {
@@ -48,11 +52,7 @@ export function testEmulateArrows(
         describe('with cursor at start', () => {
           beforeEach(async () => {
             await emulateKey.arrow.up();
-            const selectionStart = await textInput.getProperty('selectionStart');
-            const selectionEnd = await textInput.getProperty('selectionEnd');
-            if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+            await assertInitialSelectionRange(textInput, 0, 0);
           });
 
           it('should do nothing', async () => {
@@ -65,11 +65,7 @@ export function testEmulateArrows(
         describe('with cursor somewhere in the middle', () => {
           beforeEach(async () => {
             await emulateKey.arrow.left();
-            const selectionStart = await textInput.getProperty('selectionStart');
-            const selectionEnd = await textInput.getProperty('selectionEnd');
-            if ((selectionStart !== 4) || (selectionEnd !== 4)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+            await assertInitialSelectionRange(textInput, 4, 4);
           });
 
           it('should cursor to the start', async () => {
@@ -99,7 +95,10 @@ export function testEmulateArrows(
       });
 
       describe('that contains text fitting in one row', () => {
-        beforeEach(() => textArea.sendKeys('12345'));
+        beforeEach(async () => {
+          await textArea.sendKeys('12345');
+          await assertInitialSelectionRange(textArea, 5, 5);
+        });
 
         describe('with cursor at end', () => {
           it('should move cursor to the start', async () => {
@@ -113,11 +112,7 @@ export function testEmulateArrows(
         describe('with cursor at start', () => {
           beforeEach(async () => {
             await emulateKey.arrow.up();
-            const selectionStart = await textArea.getProperty('selectionStart');
-            const selectionEnd = await textArea.getProperty('selectionEnd');
-            if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+            await assertInitialSelectionRange(textArea, 0, 0);
           });
 
           it('should do nothing', async () => {
@@ -130,11 +125,7 @@ export function testEmulateArrows(
         describe('with cursor somewhere in the middle', () => {
           beforeEach(async () => {
             await emulateKey.arrow.left();
-            const selectionStart = await textArea.getProperty('selectionStart');
-            const selectionEnd = await textArea.getProperty('selectionEnd');
-            if ((selectionStart !== 4) || (selectionEnd !== 4)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+            await assertInitialSelectionRange(textArea, 4, 4);
           });
 
           it('should cursor to the start', async () => {
@@ -148,7 +139,10 @@ export function testEmulateArrows(
       describe('that contains multiple lines of text', () => {
         const oneLine = '12345678901234567';
         const multipleLines = oneLine + oneLine + oneLine;
-        beforeEach(async () => textArea.sendKeys(multipleLines));
+        beforeEach(async () => {
+          await textArea.sendKeys(multipleLines);
+          await assertInitialSelectionRange(textArea, multipleLines.length, multipleLines.length);
+        });
 
         it('should move round about one line', async () => {
           await emulateKey.arrow.up();
@@ -182,7 +176,10 @@ export function testEmulateArrows(
       });
 
       describe('that contains text', () => {
-        beforeEach(() => textInput.sendKeys('12345'));
+        beforeEach(async () => {
+          await textInput.sendKeys('12345');
+          await assertInitialSelectionRange(textInput, 5, 5);
+        });
 
         describe('with cursor at end', () => {
           it('should do nothing', async () => {
@@ -196,11 +193,7 @@ export function testEmulateArrows(
         describe('with cursor at start', () => {
           beforeEach(async () => {
             await emulateKey.arrow.up();
-            const selectionStart = await textInput.getProperty('selectionStart');
-            const selectionEnd = await textInput.getProperty('selectionEnd');
-            if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+            await assertInitialSelectionRange(textInput, 0, 0);
           });
 
           it('should move cursor to the end of text', async () => {
@@ -214,11 +207,7 @@ export function testEmulateArrows(
           beforeEach(async () => {
             await emulateKey.arrow.left();
             await emulateKey.arrow.left();
-            const selectionStart = await textInput.getProperty('selectionStart');
-            const selectionEnd = await textInput.getProperty('selectionEnd');
-            if ((selectionStart !== 3) || (selectionEnd !== 3)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+            await assertInitialSelectionRange(textInput, 3, 3);
           });
 
           it('should cursor to the end of text', async () => {
@@ -248,7 +237,10 @@ export function testEmulateArrows(
       });
 
       describe('that contains text fitting in one row', () => {
-        beforeEach(() => textArea.sendKeys('12345'));
+        beforeEach(async () => {
+          await textArea.sendKeys('12345');
+          await assertInitialSelectionRange(textArea, 5, 5);
+        });
 
         describe('with cursor at end', () => {
           it('should do nothing', async () => {
@@ -262,11 +254,7 @@ export function testEmulateArrows(
         describe('with cursor at start', () => {
           beforeEach(async () => {
             await emulateKey.arrow.up();
-            const selectionStart = await textArea.getProperty('selectionStart');
-            const selectionEnd = await textArea.getProperty('selectionEnd');
-            if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+            await assertInitialSelectionRange(textArea, 0, 0);
           });
 
           it('should move cursor to the end of text', async () => {
@@ -280,11 +268,7 @@ export function testEmulateArrows(
           beforeEach(async () => {
             await emulateKey.arrow.left();
             await emulateKey.arrow.left();
-            const selectionStart = await textArea.getProperty('selectionStart');
-            const selectionEnd = await textArea.getProperty('selectionEnd');
-            if ((selectionStart !== 3) || (selectionEnd !== 3)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+            await assertInitialSelectionRange(textArea, 3, 3);
           });
 
           it('should move cursor to the end of text', async () => {
@@ -304,12 +288,7 @@ export function testEmulateArrows(
           await emulateKey.arrow.up();
           await emulateKey.arrow.up();
           await emulateKey.arrow.up();
-          await emulateKey.arrow.up();
-          const selectionStart = await textArea.getProperty('selectionStart');
-          const selectionEnd = await textArea.getProperty('selectionEnd');
-          if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-              throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-            }
+          await assertInitialSelectionRange(textArea, 0, 0);
         });
 
         it('should move round about one line', async () => {
@@ -343,7 +322,10 @@ export function testEmulateArrows(
     });
 
     describe('that contains text', () => {
-      beforeEach(() => textInput.sendKeys('12345'));
+      beforeEach(async () => {
+        await textInput.sendKeys('12345');
+        await assertInitialSelectionRange(textInput, 5, 5);
+      });
 
       describe('with cursor at end', () => {
         it('should do nothing', async () => {
@@ -357,11 +339,7 @@ export function testEmulateArrows(
       describe('with cursor at start', () => {
         beforeEach(async () => {
           await emulateKey.arrow.up();
-          const selectionStart = await textInput.getProperty('selectionStart');
-          const selectionEnd = await textInput.getProperty('selectionEnd');
-          if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-            throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-          }
+          await assertInitialSelectionRange(textInput, 0, 0);
         });
 
         it('should move cursor to the next (right) character', async () => {
@@ -375,11 +353,7 @@ export function testEmulateArrows(
         beforeEach(async () => {
           await emulateKey.arrow.left();
           await emulateKey.arrow.left();
-          const selectionStart = await textInput.getProperty('selectionStart');
-          const selectionEnd = await textInput.getProperty('selectionEnd');
-          if ((selectionStart !== 3) || (selectionEnd !== 3)) {
-            throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-          }
+          await assertInitialSelectionRange(textInput, 3, 3);
         });
 
         it('should cursor to the next character', async () => {
@@ -409,7 +383,10 @@ export function testEmulateArrows(
     });
 
     describe('that contains text', () => {
-      beforeEach(() => textInput.sendKeys('12345'));
+      beforeEach(async () => {
+        await textInput.sendKeys('12345');
+        await assertInitialSelectionRange(textInput, 5, 5);
+      });
 
       describe('with cursor at end', () => {
         it('should move cursor one character left', async () => {
@@ -423,11 +400,7 @@ export function testEmulateArrows(
       describe('with cursor at start of text', () => {
         beforeEach(async () => {
           await emulateKey.arrow.up();
-          const selectionStart = await textInput.getProperty('selectionStart');
-          const selectionEnd = await textInput.getProperty('selectionEnd');
-          if ((selectionStart !== 0) || (selectionEnd !== 0)) {
-            throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-          }
+          await assertInitialSelectionRange(textInput, 0, 0);
         });
 
         it('should do nothing', async () => {
@@ -441,11 +414,7 @@ export function testEmulateArrows(
         beforeEach(async () => {
           await emulateKey.arrow.left();
           await emulateKey.arrow.left();
-          const selectionStart = await textInput.getProperty('selectionStart');
-          const selectionEnd = await textInput.getProperty('selectionEnd');
-          if ((selectionStart !== 3) || (selectionEnd !== 3)) {
-            throw new Error(`given test conditions invalid! (selection start: ${selectionStart}, selection end: ${selectionEnd})`);
-          }
+          await assertInitialSelectionRange(textInput, 3, 3);
         });
 
         it('should cursor to the next character', async () => {

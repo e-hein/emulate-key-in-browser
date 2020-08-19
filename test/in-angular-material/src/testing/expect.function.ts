@@ -4,7 +4,7 @@ export function expectNotToHaveThrownAnything() {
   expect().nothing();
 }
 
-export async function ensureInitialSelectionRange(input: TestElement, start: number, end: number, direction?: string) {
+export async function assertInitialSelectionRange(input: TestElement, start: number, end: number, direction?: string) {
   const selectionStart = await input.getProperty('selectionStart');
   const selectionEnd = await input.getProperty('selectionEnd');
   if ((selectionStart !== start) || (selectionEnd !== end)) {

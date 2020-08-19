@@ -1,7 +1,7 @@
 import { TestElement } from '@angular/cdk/testing';
 import { AppDemoFormHarness, AppHarness } from './app.harness';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
-import { ensureInitialSelectionRange } from './expect.function';
+import { assertInitialSelectionRange } from './expect.function';
 
 export function testEmulateArrowAfterSelection(
   context: SharedSpecContext,
@@ -26,7 +26,7 @@ export function testEmulateArrowAfterSelection(
     describe('that contains text', () => {
       beforeEach(async () => {
         await textInput.sendKeys('12345');
-        await ensureInitialSelectionRange(textInput, 5, 5);
+        await assertInitialSelectionRange(textInput, 5, 5);
       });
 
       describe('with selection forward', () => {
@@ -34,7 +34,7 @@ export function testEmulateArrowAfterSelection(
           beforeEach(async () => {
             await emulateKey.arrow.left();
             await emulateKey.shiftArrow.right();
-            await ensureInitialSelectionRange(textInput, 4, 5, 'forward');
+            await assertInitialSelectionRange(textInput, 4, 5, 'forward');
           });
 
           it('should only remove selection', async () => {
@@ -51,7 +51,7 @@ export function testEmulateArrowAfterSelection(
             await emulateKey.arrow.up();
             await emulateKey.arrow.right();
             await emulateKey.shiftArrow.right();
-            await ensureInitialSelectionRange(textInput, 1, 2, 'forward');
+            await assertInitialSelectionRange(textInput, 1, 2, 'forward');
           });
 
           it('should remove selection', async () => {
@@ -76,7 +76,7 @@ export function testEmulateArrowAfterSelection(
     describe('that contains text', () => {
       beforeEach(async () => {
         await textInput.sendKeys('12345');
-        await ensureInitialSelectionRange(textInput, 5, 5);
+        await assertInitialSelectionRange(textInput, 5, 5);
       });
 
       describe('with selection forward', () => {
@@ -85,7 +85,7 @@ export function testEmulateArrowAfterSelection(
             await emulateKey.arrow.up();
             await emulateKey.arrow.right();
             await emulateKey.shiftArrow.down();
-            await ensureInitialSelectionRange(textInput, 1, 5, 'forward');
+            await assertInitialSelectionRange(textInput, 1, 5, 'forward');
           });
 
           it('should only remove selection', async () => {
@@ -102,7 +102,7 @@ export function testEmulateArrowAfterSelection(
             await emulateKey.arrow.up();
             await emulateKey.arrow.right();
             await emulateKey.shiftArrow.right();
-            await ensureInitialSelectionRange(textInput, 1, 2, 'forward');
+            await assertInitialSelectionRange(textInput, 1, 2, 'forward');
           });
 
           it('should remove selection', async () => {
