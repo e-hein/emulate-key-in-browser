@@ -7,12 +7,16 @@ export interface AsyncEmulateKey {
     findSelectableElements: () => Promise<{ id?: string, tagName: string, className?: string }[]>;
   };
   shiftTab: () => Promise<boolean>;
+
   arrow: {
     [key in keyof typeof emulateKeyType.arrow]: () => Promise<void>;
   };
   shiftArrow: {
     [key in keyof typeof emulateKeyType.shiftArrow]: () => Promise<void>;
   };
+
+  backspace: () => Promise<void>;
+  delete: () => Promise<void>;
 }
 
 export interface SharedSpecContext {

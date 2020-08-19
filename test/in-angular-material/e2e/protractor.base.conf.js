@@ -4,7 +4,6 @@
 
 const { SpecReporter, StacktraceOption } = require('jasmine-spec-reporter');
 const path = require('path');
-const { browser } = require('protractor');
 
 /**
  * @type { import("protractor").Config }

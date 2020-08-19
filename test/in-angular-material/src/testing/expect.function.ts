@@ -18,3 +18,10 @@ export async function assertInitialSelectionRange(input: TestElement, start: num
     }
   }
 }
+
+export async function assertValue(input: TestElement, expectedValue: string) {
+  const actualValue = await input.getProperty('value');
+  if (actualValue !== expectedValue) {
+    throw new Error(`given test conditions invalid! Expected value "${actualValue}" to be "${expectedValue}"`);
+  }
+}

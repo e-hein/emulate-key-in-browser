@@ -1,6 +1,7 @@
 import { ProtractorHarnessEnvironment } from '@angular/cdk/testing/protractor';
 import {
-  AsyncEmulateKey, SharedSpecContext, testEmulateArrowAfterSelection, testEmulateArrows, testEmulateShiftArrows, testEmulateTab,
+  AsyncEmulateKey, SharedSpecContext, testEmulateArrowAfterSelection, testEmulateArrows,
+  testEmulateBackspace, testEmulateDelete, testEmulateShiftArrows, testEmulateTab,
 } from '@app/testing';
 import { AppHarness } from '@app/testing/app.harness';
 import { browser, by, element, Key, promise, WebElement } from 'protractor';
@@ -76,6 +77,9 @@ class AsyncEmulateKeyWrapper implements AsyncEmulateKey {
   };
   public readonly shiftTab = () => this.sendTabKey(Key.chord(Key.SHIFT, Key.TAB));
 
+  public readonly backspace = () => this.sendKeys(Key.BACK_SPACE);
+  public readonly delete = () => this.sendKeys(Key.DELETE);
+
 
   private async sendKeys(...args: Array<string|number|promise.Promise<string|number>>): Promise<void> {
     const activeElement = this.activeElement = this.activeElement || await browser.switchTo().activeElement();
@@ -113,6 +117,8 @@ describe('emulate key', () => {
     describe('arrow', () => testEmulateArrows(context));
     describe('shift arrow', () => testEmulateShiftArrows(context));
     describe('arrow after selection', () => testEmulateArrowAfterSelection(context));
+    describe('backspace', () => testEmulateBackspace(context));
+    describe('delete', () => testEmulateDelete(context));
   }
 
 

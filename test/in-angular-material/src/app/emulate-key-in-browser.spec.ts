@@ -1,6 +1,9 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
-import { AppHarness, AsyncEmulateKey, testEmulateArrows, testEmulateTab, testEmulateShiftArrows, testEmulateArrowAfterSelection } from '@app/testing';
+import {
+  AppHarness, AsyncEmulateKey, testEmulateArrows, testEmulateTab, testEmulateShiftArrows,
+  testEmulateArrowAfterSelection, testEmulateBackspace, testEmulateDelete,
+} from '@app/testing';
 import { emulateKey } from 'emulate-key-in-browser';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
@@ -29,6 +32,7 @@ describe('emulate key in browser', () => {
         findSelectableElements: () => Promise.resolve(emulateKey.tab.findSelectableElements()),
       },
       shiftTab: () => forceStabilize(emulateKey.shiftTab),
+
       arrow: {
         up: () => forceStabilize(emulateKey.arrow.up),
         right: () => forceStabilize(emulateKey.arrow.right),
@@ -40,7 +44,10 @@ describe('emulate key in browser', () => {
         right: () => forceStabilize(emulateKey.shiftArrow.right),
         down: () => forceStabilize(emulateKey.shiftArrow.down),
         left: () => forceStabilize(emulateKey.shiftArrow.left),
-      }
+      },
+
+      backspace: () => forceStabilize(emulateKey.backspace),
+      delete: () => forceStabilize(emulateKey.delete),
     };
   });
 
@@ -48,4 +55,6 @@ describe('emulate key in browser', () => {
   describe('arrows', () => testEmulateArrows(context));
   describe('shift arrow', () => testEmulateShiftArrows(context));
   describe('arrow after selection', () => testEmulateArrowAfterSelection(context));
+  fdescribe('backspace', () => testEmulateBackspace(context));
+  fdescribe('delete', () => testEmulateDelete(context));
 });
