@@ -51,15 +51,21 @@ emulateKey.writeText('content');
 
 Limitations
 -----------
-- line navigation in multiline inputs will use character count, not character offset width and position like browsers
+- selection in multiline inputs
+  - line navigation will use character count, not character offset width and position like browsers
+  - there are environmen specific behaviors when hitting the cursor with arrow down or up key.
+    (see [emulate-shift-arrows-spec](./test/in-angular-material/src/testing/emulate-shift-arrows.shared-spec.ts) for details)
+
 
 Dependencies
 ------------
-none.
+[emulate-tab](https://www.npmjs.com/package/emulate-tab)
 
 Browser compatibility:
 ----------------------
-Automated tests for current Chrome and Firefox: 
+There are automated tests for emulating keys in Chrome and Firefox. There are also automated tests that check the behavior of Chrome is equal (except multi line arrow key selection) to the emulated behavior. There's more information in our [TESTING_CONCEPT.md](./test/TESTING_CONCEPT.md).
+
+Automated tests for the latestest emulate-key-in-browser version are currently: 
 [![Travis (.org)](https://img.shields.io/travis/e-hein/emulate-key-in-browser?label=travis)](https://travis-ci.org/e-hein/emulate-key-in-browser)
 
 License:
