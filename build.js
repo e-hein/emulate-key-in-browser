@@ -15,6 +15,7 @@ shelljs.mkdir('-p', bundlesDir);
 buildBundle('umd');
 buildBundle('cjs');
 buildBundle('amd');
+buildBundle('es');
 buildDefaultBundle();
 buildMinBundleFromDefault();
 

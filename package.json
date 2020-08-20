@@ -49,6 +49,7 @@
   ],
   "main": "dist/emulate-key-in-browser.js",
   "types": "dist/emulate-key-in-browser.d.ts",
+  "module": "dist/bundles/emulate-key-in-browser.es.js",
   "dependencies": {
     "emulate-tab": "^1.2.0"
   }

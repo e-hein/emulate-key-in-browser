@@ -7,7 +7,7 @@ There are multiple test and example applications. Each of them ensures the integ
 
 * [test/in-plain-html-js](./in-plain-html-js) integrates ```emulateKey``` by loading the ```emulate-key-in-brower.js```
 * [test/in-typescript-requirejs](./in-typescript-requirejs) integrates ```emulateKey``` by loading the amd module
-* [test/in-angular-material](./in-angular-material) integrates ```emulateKey``` by bundling the IFEE file during.
+* [test/in-angular-material](./in-angular-material) integrates ```emulateKey``` by bundling the ECMAScript Module file during.
 
 Testing each key
 ----------------

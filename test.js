@@ -58,6 +58,8 @@ Promise.resolve()
   .then(() => run('npm run version', inAngular))
   .then(() => run('npm run coverage', inAngular))
   .then(() => run('npm run e2e', inAngular))
+  .then(() => run('npm run build', inAngular))
+  .then(() => run('npm run test:build-result', inAngular))
   .then(
     () => process.exit(0),
     (error) => process.exit(error.code)
