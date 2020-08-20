@@ -17,6 +17,11 @@ export function testEmulateShiftArrows(
   });
 
   describe('right in input', () => {
+    /* istanbul ignore if */
+    if (process.env.bug_multipleArrows) {
+      pending(process.env.bug_multipleArrows);
+    }
+
     let textInput: TestElement;
 
     beforeEach(async () => {
@@ -34,13 +39,12 @@ export function testEmulateShiftArrows(
     });
 
     describe('that contains text', () => {
-      beforeEach(async () => {
-        await textInput.sendKeys('12345');
-        await assertInitialSelectionRange(textInput, 5, 5);
-      });
+      beforeEach(() =>  context.setValue('12345'));
 
       describe('without selection', () => {
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.right();
 
@@ -50,10 +54,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textInput, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should select first character', async () => {
             await emulateKey.shiftArrow.right();
@@ -64,11 +65,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            await assertInitialSelectionRange(textInput, 3, 3);
-          });
+          beforeEach(() => context.setCursor(3));
 
           it('should select next character', async () => {
             await emulateKey.shiftArrow.right();
@@ -81,12 +78,7 @@ export function testEmulateShiftArrows(
 
       describe('with selection forward', () => {
         describe('from middle to the end', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.right();
-            await emulateKey.shiftArrow.down();
-            await assertInitialSelectionRange(textInput, 1, 5, 'forward');
-          });
+          beforeEach(() => context.setSelectionRange(1, 5, 'forward'));
 
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.right();
@@ -98,12 +90,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('from middle to middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.right();
-            await emulateKey.shiftArrow.right();
-            await assertInitialSelectionRange(textInput, 1, 2, 'forward');
-          });
+          beforeEach(() => context.setSelectionRange(1, 2, 'forward'));
 
           it('should extend selection at the end of selection', async () => {
             await emulateKey.shiftArrow.right();
@@ -116,11 +103,7 @@ export function testEmulateShiftArrows(
 
       describe('with existing selection backward', () => {
         describe('from middle to the start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.up();
-            await assertInitialSelectionRange(textInput, 0, 4, 'backward');
-          });
+          beforeEach(() => context.setSelectionRange(0, 4, 'backward'));
 
           it('should reduce selection at selection start', async () => {
             await emulateKey.shiftArrow.right();
@@ -132,11 +115,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('one chars in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.left();
-            await assertInitialSelectionRange(textInput, 3, 4, 'backward');
-          });
+          beforeEach(() => context.setSelectionRange(3, 4, 'backward'));
 
           it('should remove selection', async () => {
             await emulateKey.shiftArrow.right();
@@ -147,12 +126,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('two chars in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.left();
-            await emulateKey.shiftArrow.left();
-            await assertInitialSelectionRange(textInput, 2, 4, 'backward');
-          });
+          beforeEach(() => context.setSelectionRange(2, 4, 'backward'));
 
           it('should reduce selection at selection start', async () => {
             await emulateKey.shiftArrow.right();
@@ -166,6 +140,11 @@ export function testEmulateShiftArrows(
   });
 
   describe('left in input', () => {
+    /* istanbul ignore if */
+    if (process.env.bug_multipleArrows) {
+      pending(process.env.bug_multipleArrows);
+    }
+
     let textInput: TestElement;
 
     beforeEach(async () => {
@@ -183,13 +162,12 @@ export function testEmulateShiftArrows(
     });
 
     describe('that contains text', () => {
-      beforeEach(async () => {
-        await textInput.sendKeys('12345');
-        await assertInitialSelectionRange(textInput, 5, 5);
-      });
+      beforeEach(() => context.setValue('12345'));
 
       describe('without selection', () => {
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should select last character', async () => {
             await emulateKey.shiftArrow.left();
 
@@ -200,10 +178,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textInput, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.left();
@@ -213,11 +188,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            await assertInitialSelectionRange(textInput, 3, 3);
-          });
+          beforeEach(() => context.setCursor(3));
 
           it('should select previous character', async () => {
             await emulateKey.shiftArrow.left();
@@ -230,12 +201,7 @@ export function testEmulateShiftArrows(
 
       describe('with existing selection forward', () => {
         describe('from middle to the end', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.down();
-            await assertInitialSelectionRange(textInput, 3, 5, 'forward');
-          });
+          beforeEach(() => context.setSelectionRange(3, 5, 'forward'));
 
           it('should reduce selection at selection end', async () => {
             await emulateKey.shiftArrow.left();
@@ -247,12 +213,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('one characters in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.right();
-            await emulateKey.shiftArrow.right();
-            await assertInitialSelectionRange(textInput, 1, 2, 'forward');
-          });
+          beforeEach(() => context.setSelectionRange(1, 2, 'forward'));
 
           it('should remove selection', async () => {
             await emulateKey.shiftArrow.left();
@@ -263,13 +224,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('multiple characters in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.right();
-            await emulateKey.shiftArrow.right();
-            await emulateKey.shiftArrow.right();
-            await assertInitialSelectionRange(textInput, 1, 3, 'forward');
-          });
+          beforeEach(() => context.setSelectionRange(1, 3, 'forward'));
 
           it('should reduce selection at selection end', async () => {
             await emulateKey.shiftArrow.left();
@@ -282,11 +237,7 @@ export function testEmulateShiftArrows(
 
       describe('with existing selection backward', () => {
         describe('from middle to the start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.up();
-            await assertInitialSelectionRange(textInput, 0, 4, 'backward');
-          });
+          beforeEach(() => context.setSelectionRange(0, 4, 'backward'));
 
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.left();
@@ -298,11 +249,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('from middle to middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.left();
-            await assertInitialSelectionRange(textInput, 3, 4, 'backward');
-          });
+          beforeEach(() => context.setSelectionRange(3, 4, 'backward'));
 
           it('should reduce selection at selection end', async () => {
             await emulateKey.shiftArrow.left();
@@ -334,12 +281,11 @@ export function testEmulateShiftArrows(
       });
 
       describe('that contains text', () => {
-        beforeEach(async () => {
-          await textInput.sendKeys('12345');
-          await assertInitialSelectionRange(textInput, 5, 5);
-        });
+        beforeEach(() => context.setValue('12345'));
 
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should select everything', async () => {
             await emulateKey.shiftArrow.up();
 
@@ -350,10 +296,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textInput, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.up();
@@ -363,10 +306,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await assertInitialSelectionRange(textInput, 4, 4);
-          });
+          beforeEach(() => context.setCursor(4));
 
           it('should select to the start', async () => {
             await emulateKey.shiftArrow.up();
@@ -396,12 +336,11 @@ export function testEmulateShiftArrows(
       });
 
       describe('that contains text fitting in one row', () => {
-        beforeEach(async () => {
-          await textArea.sendKeys('12345');
-          await assertInitialSelectionRange(textArea, 5, 5);
-        });
+        beforeEach(() => context.setValue('12345'));
 
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should select everything', async () => {
             await emulateKey.shiftArrow.up();
 
@@ -412,10 +351,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textArea, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.up();
@@ -425,10 +361,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await assertInitialSelectionRange(textArea, 4, 4);
-          });
+          beforeEach(() => context.setCursor(4));
 
           it('should cursor to the start', async () => {
             await emulateKey.shiftArrow.up();
@@ -445,11 +378,12 @@ export function testEmulateShiftArrows(
         const initialCursorPos = multipleLines.length;
 
         beforeEach(async () => {
-          await textArea.sendKeys(multipleLines);
-          await assertInitialSelectionRange(textArea, initialCursorPos, initialCursorPos);
+          await context.setValue(multipleLines);
         });
 
         describe('without initial selection', () => {
+          beforeEach(() => context.setCursor(multipleLines.length));
+
           it('should select round about one line', async () => {
             await emulateKey.shiftArrow.up();
 
@@ -461,13 +395,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with initial selection direction backward', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.left();
-            await emulateKey.shiftArrow.left();
-
-            await assertInitialSelectionRange(textArea, initialCursorPos - 3, initialCursorPos - 1, 'backward');
-          });
+          beforeEach(() => context.setSelectionRange(initialCursorPos - 3, initialCursorPos - 1, 'backward'));
 
           it('should extend selection about one line', async () => {
             await emulateKey.shiftArrow.up();
@@ -480,15 +408,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with initial selection direction forward and selected less than one line', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.right();
-            await emulateKey.shiftArrow.right();
-
-            await assertInitialSelectionRange(textArea, initialCursorPos - 3, initialCursorPos - 1, 'forward');
-          });
+          beforeEach(() => context.setSelectionRange(initialCursorPos - 3, initialCursorPos - 1, 'forward'));
 
           it('should remove selection', async () => {
             await emulateKey.shiftArrow.up();
@@ -526,15 +446,7 @@ export function testEmulateShiftArrows(
 
         describe('with initial selection direction forward and selected more than one line', () => {
           beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.right();
-            await emulateKey.shiftArrow.right();
-            await emulateKey.shiftArrow.right();
-            await assertInitialSelectionRange(textArea, 1, 3, 'forward');
-
+            await context.setSelectionRange(1, 3, 'forward');
             await emulateKey.shiftArrow.down();
           });
 
@@ -569,12 +481,11 @@ export function testEmulateShiftArrows(
       });
 
       describe('that contains text', () => {
-        beforeEach(async () => {
-          await textInput.sendKeys('12345');
-          await assertInitialSelectionRange(textInput, 5, 5);
-        });
+        beforeEach(() => context.setValue('12345'));
 
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.down();
 
@@ -584,10 +495,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textInput, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should select everything', async () => {
             await emulateKey.shiftArrow.down();
@@ -598,11 +506,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.right();
-            await assertInitialSelectionRange(textInput, 1, 1);
-          });
+          beforeEach(() => context.setCursor(1));
 
           it('should select to the end', async () => {
             await emulateKey.shiftArrow.down();
@@ -632,12 +536,11 @@ export function testEmulateShiftArrows(
       });
 
       describe('that contains text fitting in one row', () => {
-        beforeEach(async () => {
-          await textArea.sendKeys('12345');
-          await assertInitialSelectionRange(textArea, 5, 5);
-        });
+        beforeEach(() => context.setValue('12345'));
 
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.down();
 
@@ -647,10 +550,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textArea, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should select everything', async () => {
             await emulateKey.shiftArrow.down();
@@ -661,11 +561,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.right();
-            await assertInitialSelectionRange(textArea, 1, 1);
-          });
+          beforeEach(() => context.setCursor(1));
 
           it('should cursor to the end', async () => {
             await emulateKey.shiftArrow.down();
@@ -681,42 +577,23 @@ export function testEmulateShiftArrows(
         const multipleLines = oneLine + oneLine + oneLine;
         const initialCursorPos = multipleLines.length;
 
-        beforeEach(async () => {
-          await textArea.sendKeys(multipleLines);
-          await assertInitialSelectionRange(textArea, initialCursorPos, initialCursorPos);
-        });
+        beforeEach(() => context.setValue(multipleLines));
 
         describe('without initial selection and cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textArea, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should select round about one line', async () => {
             await emulateKey.shiftArrow.down();
 
             expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
             expect(await textArea.getProperty('selectionEnd')).toBeGreaterThan(4, 'selection end > 0');
-            expect(await textArea.getProperty('selectionEnd')).toBeLessThan(oneLine.length * 2, 'selection end < length');
+            expect(await textArea.getProperty('selectionEnd')).toBeLessThan(oneLine.length * 2 + 4, 'selection end < length');
             expect(await textArea.getProperty('selectionDirection')).toBe('forward', 'selection direction');
           });
         });
 
         describe('with initial selection direction forward', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.up();
-            await emulateKey.arrow.right();
-            await emulateKey.shiftArrow.right();
-            await emulateKey.shiftArrow.right();
-
-            await assertInitialSelectionRange(textArea, 1, 3, 'forward');
-          });
+          beforeEach(() => context.setSelectionRange(1, 3, 'forward'));
 
           it('should extend selection about one line', async () => {
             await emulateKey.shiftArrow.down();
@@ -729,13 +606,7 @@ export function testEmulateShiftArrows(
         });
 
         describe('with initial selection direction backward and selected less than one line', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.left();
-            await emulateKey.shiftArrow.left();
-
-            await assertInitialSelectionRange(textArea, initialCursorPos - 3, initialCursorPos - 1, 'backward');
-          });
+          beforeEach(() => context.setSelectionRange(initialCursorPos - 3, initialCursorPos - 1, 'backward'));
 
           it('should remove selection', async () => {
             await emulateKey.shiftArrow.down();
@@ -773,10 +644,7 @@ export function testEmulateShiftArrows(
 
         describe('with initial selection direction backward and selected more than one line', () => {
           beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.shiftArrow.left();
-            await emulateKey.shiftArrow.left();
-            await assertInitialSelectionRange(textArea, initialCursorPos - 3, initialCursorPos - 1, 'backward');
+            await context.setSelectionRange(initialCursorPos - 3, initialCursorPos - 1, 'backward');
 
             await emulateKey.shiftArrow.up();
           });

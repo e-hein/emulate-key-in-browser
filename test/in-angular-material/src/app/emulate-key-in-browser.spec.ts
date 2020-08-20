@@ -1,18 +1,30 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
 import {
-  AppHarness, AsyncEmulateKey, testEmulateArrows, testEmulateTab, testEmulateShiftArrows,
-  testEmulateArrowAfterSelection, testEmulateBackspace, testEmulateDelete,
+  AppHarness,
+  SharedSpecContext, testEmulateArrowAfterSelection, testEmulateArrows,
+  testEmulateBackspace, testEmulateDelete, testEmulateShiftArrows, testEmulateTab,
+  testEmulateWritingText,
+  testSharedSpecContext,
 } from '@app/testing';
 import { emulateKey } from 'emulate-key-in-browser';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
 
+function setSelectionRange(start: number, end = start, direction: 'forward' | 'backward' | 'none') {
+  const input = document.activeElement as HTMLInputElement;
+  input.selectionStart = start;
+  input.selectionEnd = end;
+  input.selectionDirection = direction;
+}
+
+function setValue(value: string | null) {
+  const input = document.activeElement as HTMLInputElement;
+  input.value = value;
+}
+
 describe('emulate key in browser', () => {
-  const context = {
-    app: undefined as AppHarness,
-    emulateKey: undefined as AsyncEmulateKey,
-  };
+  const context = {} as SharedSpecContext;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,6 +37,10 @@ describe('emulate key in browser', () => {
       return fixture.whenStable();
     }
     context.app = await TestbedHarnessEnvironment.harnessForFixture(fixture, AppHarness);
+    context.setSelectionRange = (start, end, direction) => forceStabilize(() => setSelectionRange(start, end, direction));
+    context.setCursor = (pos) => context.setSelectionRange(pos, pos, 'none');
+    context.setValue = (value) => forceStabilize(() => setValue(value));
+
     context.emulateKey = {
       tab: {
         forwards: () => forceStabilize(emulateKey.tab.forwards),
@@ -48,13 +64,17 @@ describe('emulate key in browser', () => {
 
       backspace: () => forceStabilize(emulateKey.backspace),
       delete: () => forceStabilize(emulateKey.delete),
+
+      writeText: (keys: string) => forceStabilize(() => emulateKey.writeText(keys)),
     };
   });
 
+  describe('shared spec context', () => testSharedSpecContext(context));
   describe('tab', () => testEmulateTab(context));
   describe('arrows', () => testEmulateArrows(context));
   describe('shift arrow', () => testEmulateShiftArrows(context));
   describe('arrow after selection', () => testEmulateArrowAfterSelection(context));
-  fdescribe('backspace', () => testEmulateBackspace(context));
-  fdescribe('delete', () => testEmulateDelete(context));
+  describe('backspace', () => testEmulateBackspace(context));
+  describe('delete', () => testEmulateDelete(context));
+  describe('writing text', () => testEmulateWritingText(context));
 });

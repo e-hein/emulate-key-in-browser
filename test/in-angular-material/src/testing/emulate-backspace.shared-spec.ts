@@ -1,25 +1,24 @@
 import { TestElement } from '@angular/cdk/testing';
-import { AppHarness } from './app.harness';
-import { assertInitialSelectionRange, assertValue } from './expect.function';
+import { assertInitialValue } from './expect.function';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
 
 export function testEmulateBackspace(
   context: SharedSpecContext,
 ) {
-  let app: AppHarness;
   let emulateKey: AsyncEmulateKey;
   let textInput: TestElement;
 
   beforeEach(async () => {
-    app = context.app;
+    const app = context.app;
     emulateKey = context.emulateKey;
     const demoForm = await app.getDemoFrom();
     textInput = await demoForm.getControl('first input');
+    await textInput.focus();
   });
 
   describe('in empty input', () => {
     beforeEach(async () => {
-      await assertValue(textInput, '');
+      await assertInitialValue(textInput, '');
     });
 
     it('should do nothing', async () => {
@@ -30,15 +29,11 @@ export function testEmulateBackspace(
   });
 
   describe('in input with text', () => {
-    beforeEach(async () => {
-      await textInput.sendKeys('12345');
-      await assertValue(textInput, '12345');
-    });
+    beforeEach(() => context.setValue('12345'));
 
     describe('with cursor at the end', () => {
-      beforeEach(async () => {
-        await assertInitialSelectionRange(textInput, 5, 5);
-      });
+      beforeEach(() => context.setCursor(5));
+
       it('should remove the last character', async () => {
         await emulateKey.backspace();
 
@@ -47,10 +42,12 @@ export function testEmulateBackspace(
     });
 
     describe('with cursor at start', () => {
-      beforeEach(async () => {
-        emulateKey.arrow.up();
-        await assertInitialSelectionRange(textInput, 0, 0);
-      });
+      /* istanbul ignore if */
+      if (process.env.bug_cannotSelectPos0) {
+        pending(process.env.bug_cannotSelectPos0);
+      }
+
+      beforeEach(() => context.setCursor(0));
 
       it('should do nothing', async () => {
         await emulateKey.backspace();
@@ -60,11 +57,7 @@ export function testEmulateBackspace(
     });
 
     describe('with cursor somewhere in the middle', () => {
-      beforeEach(async () => {
-        emulateKey.arrow.left();
-        emulateKey.arrow.left();
-        await assertInitialSelectionRange(textInput, 3, 3);
-      });
+      beforeEach(() => context.setCursor(3));
 
       it('should delete character before cursor', async () => {
         await emulateKey.backspace();
@@ -74,12 +67,7 @@ export function testEmulateBackspace(
     });
 
     describe('with selection somewhere in the middle', () => {
-      beforeEach(async () => {
-        emulateKey.arrow.left();
-        emulateKey.shiftArrow.left();
-        emulateKey.shiftArrow.left();
-        await assertInitialSelectionRange(textInput, 2, 4);
-      });
+      beforeEach(() => context.setSelectionRange(2, 4, 'backward'));
 
       it('should delete selected characters', async () => {
         await emulateKey.backspace();

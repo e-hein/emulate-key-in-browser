@@ -1,14 +1,29 @@
 import { ProtractorHarnessEnvironment } from '@angular/cdk/testing/protractor';
 import {
   AsyncEmulateKey, SharedSpecContext, testEmulateArrowAfterSelection, testEmulateArrows,
-  testEmulateBackspace, testEmulateDelete, testEmulateShiftArrows, testEmulateTab,
+  testEmulateBackspace, testEmulateDelete, testEmulateShiftArrows, testEmulateTab, testEmulateWritingText, testSharedSpecContext,
 } from '@app/testing';
 import { AppHarness } from '@app/testing/app.harness';
 import { browser, by, element, Key, promise, WebElement } from 'protractor';
-import { expectNoErrorLogs } from './utils';
+import { expectNoErrorLogs, detailedWebDriverLogs } from './utils';
 
 function realTab() {
   return browser.switchTo().activeElement().sendKeys(Key.TAB);
+}
+
+async function setSelectionRange(start: number, end: number, direction: 'forward' | 'backward' | 'none') {
+  await browser.driver.executeScript((
+    target: HTMLInputElement, startToSet: number, endToSet: number, directionToSet: 'forward' | 'backward' | 'none',
+  ) => {
+    target.setSelectionRange(startToSet, endToSet, directionToSet);
+  }, browser.switchTo().activeElement(), start, end, direction);
+}
+
+async function setValue(value: string) {
+  await browser.driver.executeScript(
+    (target: HTMLInputElement, valueToSet: string) => target.value = valueToSet,
+    browser.switchTo().activeElement(), value,
+  );
 }
 
 async function lookupSelectableElements() {
@@ -79,10 +94,15 @@ class AsyncEmulateKeyWrapper implements AsyncEmulateKey {
 
   public readonly backspace = () => this.sendKeys(Key.BACK_SPACE);
   public readonly delete = () => this.sendKeys(Key.DELETE);
+  public readonly writeText = (keys: string) => this.sendKeys(keys);
 
+  async getActiveElement() {
+    if (this.activeElement) { return this.activeElement; }
+    return this.activeElement = await browser.switchTo().activeElement();
+  }
 
   private async sendKeys(...args: Array<string|number|promise.Promise<string|number>>): Promise<void> {
-    const activeElement = this.activeElement = this.activeElement || await browser.switchTo().activeElement();
+    const activeElement = await this.getActiveElement();
     await activeElement.sendKeys(...args);
   }
 
@@ -103,6 +123,9 @@ describe('emulate key', () => {
   beforeEach(async () => {
     await browser.get('/');
     context.app = await ProtractorHarnessEnvironment.loader().getHarness(AppHarness);
+    context.setSelectionRange = (start, end, direction) => setSelectionRange(start, end, direction);
+    context.setCursor = (pos) => context.setSelectionRange(pos, pos, 'forward');
+    context.setValue = (value) => setValue(value);
     context.emulateKey = new AsyncEmulateKeyWrapper();
   });
 
@@ -111,16 +134,24 @@ describe('emulate key', () => {
     await lookupSelectableElements();
   });
 
+  describe('shared spec context', () => testSharedSpecContext(context));
   describe('tab', () => testEmulateTab(context));
 
   if (process.env.capability_simulateArrowKeys) {
     describe('arrow', () => testEmulateArrows(context));
     describe('shift arrow', () => testEmulateShiftArrows(context));
     describe('arrow after selection', () => testEmulateArrowAfterSelection(context));
-    describe('backspace', () => testEmulateBackspace(context));
-    describe('delete', () => testEmulateDelete(context));
   }
 
+  describe('backspace', () => testEmulateBackspace(context));
+  describe('delete', () => testEmulateDelete(context));
+  describe('writing text', () => {
+    // let reset: () => void;
+    // beforeEach(() => reset = detailedWebDriverLogs());
+    // afterEach(() => reset());
+
+    testEmulateWritingText(context);
+  });
 
   afterEach(async () => {
     expectNoErrorLogs();

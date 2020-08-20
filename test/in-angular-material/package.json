@@ -15,11 +15,23 @@
     "update-webdriver": "node node_modules/protractor/node_modules/webdriver-manager/bin/webdriver-manager update --standalone false",
     "pree2e": "npm run update-webdriver",
     "e2e": "ng e2e --webdriver-update false --devServerTarget emulate-key-in-browser-in-angular-material:serve",
-    "protractor": "ng e2e --webdriver-update false --protractor-config e2e/protractor.chrome.conf.js",
-    "protractor_watch": "watch-npm protractor"
+    "protractor:chrome": "ng e2e --webdriver-update false --protractor-config e2e/protractor.chrome.conf.js",
+    "protractor:chrome_watch": "watch-npm protractor:chrome",
+    "protractor:firefox": "ng e2e --webdriver-update false --protractor-config e2e/protractor.firefox.conf.js",
+    "protractor:firefox_watch": "watch-npm protractor:firefox"
   },
   "watch": {
-    "protractor": {
+    "protractor:chrome": {
+      "patterns": [
+        "src/**/*.*",
+        "e2e/**/*.*"
+      ],
+      "extensions": "*",
+      "quiet": false,
+      "inherit": false,
+      "verbose": true
+    },
+    "protractor:firefox": {
       "patterns": [
         "src/**/*.*",
         "e2e/**/*.*"

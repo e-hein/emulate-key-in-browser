@@ -1,7 +1,6 @@
 import { TestElement } from '@angular/cdk/testing';
 import { AppDemoFormHarness, AppHarness } from './app.harness';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
-import { assertInitialSelectionRange } from './expect.function';
 
 export function testEmulateArrows(
   context: SharedSpecContext,
@@ -16,7 +15,7 @@ export function testEmulateArrows(
     demoForm = await app.getDemoFrom();
   });
 
-  describe('arrow up', () => {
+  describe('up', () => {
     describe('in text input', () => {
       let textInput: TestElement;
 
@@ -35,12 +34,11 @@ export function testEmulateArrows(
       });
 
       describe('that contains text', () => {
-        beforeEach(async () => {
-          await textInput.sendKeys('12345');
-          await assertInitialSelectionRange(textInput, 5, 5);
-        });
+        beforeEach(() => context.setValue('12345'));
 
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should move cursor to the start', async () => {
             await emulateKey.arrow.up();
 
@@ -50,10 +48,7 @@ export function testEmulateArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textInput, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should do nothing', async () => {
             await emulateKey.arrow.up();
@@ -63,10 +58,7 @@ export function testEmulateArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await assertInitialSelectionRange(textInput, 4, 4);
-          });
+          beforeEach(() => context.setCursor(4));
 
           it('should cursor to the start', async () => {
             await emulateKey.arrow.up();
@@ -95,12 +87,11 @@ export function testEmulateArrows(
       });
 
       describe('that contains text fitting in one row', () => {
-        beforeEach(async () => {
-          await textArea.sendKeys('12345');
-          await assertInitialSelectionRange(textArea, 5, 5);
-        });
+        beforeEach(() => context.setValue('12345'));
 
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should move cursor to the start', async () => {
             await emulateKey.arrow.up();
 
@@ -110,10 +101,7 @@ export function testEmulateArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textArea, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should do nothing', async () => {
             await emulateKey.arrow.up();
@@ -123,10 +111,7 @@ export function testEmulateArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await assertInitialSelectionRange(textArea, 4, 4);
-          });
+          beforeEach(() => context.setCursor(4));
 
           it('should cursor to the start', async () => {
             await emulateKey.arrow.up();
@@ -140,8 +125,8 @@ export function testEmulateArrows(
         const oneLine = '12345678901234567';
         const multipleLines = oneLine + oneLine + oneLine;
         beforeEach(async () => {
-          await textArea.sendKeys(multipleLines);
-          await assertInitialSelectionRange(textArea, multipleLines.length, multipleLines.length);
+          await context.setValue(multipleLines);
+          await context.setCursor(multipleLines.length);
         });
 
         it('should move round about one line', async () => {
@@ -157,7 +142,7 @@ export function testEmulateArrows(
     });
   });
 
-  describe('arrow down', () => {
+  describe('down', () => {
     describe('in text input', () => {
       let textInput: TestElement;
 
@@ -176,12 +161,11 @@ export function testEmulateArrows(
       });
 
       describe('that contains text', () => {
-        beforeEach(async () => {
-          await textInput.sendKeys('12345');
-          await assertInitialSelectionRange(textInput, 5, 5);
-        });
+        beforeEach(() => context.setValue('12345'));
 
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should do nothing', async () => {
             await emulateKey.arrow.down();
 
@@ -191,10 +175,7 @@ export function testEmulateArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textInput, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should move cursor to the end of text', async () => {
             await emulateKey.arrow.down();
@@ -204,11 +185,7 @@ export function testEmulateArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            await assertInitialSelectionRange(textInput, 3, 3);
-          });
+          beforeEach(() => context.setCursor(3));
 
           it('should cursor to the end of text', async () => {
             await emulateKey.arrow.down();
@@ -237,12 +214,11 @@ export function testEmulateArrows(
       });
 
       describe('that contains text fitting in one row', () => {
-        beforeEach(async () => {
-          await textArea.sendKeys('12345');
-          await assertInitialSelectionRange(textArea, 5, 5);
-        });
+        beforeEach(() => context.setValue('12345'));
 
         describe('with cursor at end', () => {
+          beforeEach(() => context.setCursor(5));
+
           it('should do nothing', async () => {
             await emulateKey.arrow.down();
 
@@ -252,10 +228,7 @@ export function testEmulateArrows(
         });
 
         describe('with cursor at start', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.up();
-            await assertInitialSelectionRange(textArea, 0, 0);
-          });
+          beforeEach(() => context.setCursor(0));
 
           it('should move cursor to the end of text', async () => {
             await emulateKey.arrow.down();
@@ -265,11 +238,7 @@ export function testEmulateArrows(
         });
 
         describe('with cursor somewhere in the middle', () => {
-          beforeEach(async () => {
-            await emulateKey.arrow.left();
-            await emulateKey.arrow.left();
-            await assertInitialSelectionRange(textArea, 3, 3);
-          });
+          beforeEach(() => context.setCursor(3));
 
           it('should move cursor to the end of text', async () => {
             await emulateKey.arrow.down();
@@ -283,15 +252,15 @@ export function testEmulateArrows(
         const oneLine = '12345678901234567';
         const multipleLines = oneLine + oneLine + oneLine;
         beforeEach(async () => {
-          await textArea.sendKeys(multipleLines);
-          await emulateKey.arrow.up();
-          await emulateKey.arrow.up();
-          await emulateKey.arrow.up();
-          await emulateKey.arrow.up();
-          await assertInitialSelectionRange(textArea, 0, 0);
+          await context.setValue(multipleLines);
+          await context.setCursor(0);
         });
 
         it('should move round about one line', async () => {
+          /* istanbul ignore if */
+          if (process.env.bug_multipleArrows) {
+            pending(process.env.bug_multipleArrows);
+          }
           await emulateKey.arrow.down();
 
           expect(await textArea.getProperty('selectionStart')).toBeGreaterThan(4, 'selection start > 0');
@@ -304,7 +273,11 @@ export function testEmulateArrows(
     });
   });
 
-  describe('arrow right in input', () => {
+  describe('right', () => {
+    /* istanbul ignore if */
+    if (process.env.bug_multipleArrows) {
+      pending(process.env.bug_multipleArrows);
+    }
     let textInput: TestElement;
 
     beforeEach(async () => {
@@ -322,12 +295,11 @@ export function testEmulateArrows(
     });
 
     describe('that contains text', () => {
-      beforeEach(async () => {
-        await textInput.sendKeys('12345');
-        await assertInitialSelectionRange(textInput, 5, 5);
-      });
+      beforeEach(() => context.setValue('12345'));
 
       describe('with cursor at end', () => {
+        beforeEach(() => context.setCursor(5));
+
         it('should do nothing', async () => {
           await emulateKey.arrow.right();
 
@@ -337,10 +309,7 @@ export function testEmulateArrows(
       });
 
       describe('with cursor at start', () => {
-        beforeEach(async () => {
-          await emulateKey.arrow.up();
-          await assertInitialSelectionRange(textInput, 0, 0);
-        });
+        beforeEach(() => context.setCursor(0));
 
         it('should move cursor to the next (right) character', async () => {
           await emulateKey.arrow.right();
@@ -350,11 +319,7 @@ export function testEmulateArrows(
       });
 
       describe('with cursor somewhere in the middle', () => {
-        beforeEach(async () => {
-          await emulateKey.arrow.left();
-          await emulateKey.arrow.left();
-          await assertInitialSelectionRange(textInput, 3, 3);
-        });
+        beforeEach(() => context.setCursor(3));
 
         it('should cursor to the next character', async () => {
           await emulateKey.arrow.right();
@@ -365,7 +330,12 @@ export function testEmulateArrows(
     });
   });
 
-  describe('arrow left in input', () => {
+  describe('left', () => {
+    /* istanbul ignore if */
+    if (process.env.bug_multipleArrows) {
+      pending(process.env.bug_multipleArrows);
+    }
+
     let textInput: TestElement;
 
     beforeEach(async () => {
@@ -383,12 +353,11 @@ export function testEmulateArrows(
     });
 
     describe('that contains text', () => {
-      beforeEach(async () => {
-        await textInput.sendKeys('12345');
-        await assertInitialSelectionRange(textInput, 5, 5);
-      });
+      beforeEach(() => context.setValue('12345'));
 
       describe('with cursor at end', () => {
+        beforeEach(() => context.setCursor(5));
+
         it('should move cursor one character left', async () => {
           await emulateKey.arrow.left();
 
@@ -398,10 +367,7 @@ export function testEmulateArrows(
       });
 
       describe('with cursor at start of text', () => {
-        beforeEach(async () => {
-          await emulateKey.arrow.up();
-          await assertInitialSelectionRange(textInput, 0, 0);
-        });
+        beforeEach(() => context.setCursor(0));
 
         it('should do nothing', async () => {
           await emulateKey.arrow.left();
@@ -411,11 +377,7 @@ export function testEmulateArrows(
       });
 
       describe('with cursor somewhere in the middle', () => {
-        beforeEach(async () => {
-          await emulateKey.arrow.left();
-          await emulateKey.arrow.left();
-          await assertInitialSelectionRange(textInput, 3, 3);
-        });
+        beforeEach(() => context.setCursor(3));
 
         it('should cursor to the next character', async () => {
           await emulateKey.arrow.left();

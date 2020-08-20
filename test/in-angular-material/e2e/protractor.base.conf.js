@@ -38,14 +38,18 @@ exports.config = {
     return global.browser.getCapabilities().then(async (capabilities) => {
       const browserName = capabilities.get('browserName');
       process.env.cpabilites_browserName = browserName;
-      if (browserName !== 'firefox') {
-        process.env.capability_mouseMove = 'true';
-        process.env.capability_getLogs = 'true';
-        process.env.capability_simulateArrowKeys = 'true';
-      } else {
+      if (browserName === 'firefox') {
         delete process.env.capability_mouseMove;
         delete process.env.capability_getLogs;
         delete process.env.capability_simulateArrowKeys;
+        process.env.bug_multipleArrows = 'firefox seems to send sometimes multiple arrows when controled by webdriver';
+        process.env.bug_cannotSelectPos0 = 'firefox seems not to be able to write at pos 0';
+      } else {
+        process.env.capability_mouseMove = 'true';
+        process.env.capability_getLogs = 'true';
+        process.env.capability_simulateArrowKeys = 'true';
+        delete process.env.bug_multipleArrows;
+        delete process.env.bug_cannotSelectPos0;
       }
     })
   }

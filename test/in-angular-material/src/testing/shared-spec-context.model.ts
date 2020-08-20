@@ -17,9 +17,14 @@ export interface AsyncEmulateKey {
 
   backspace: () => Promise<void>;
   delete: () => Promise<void>;
+
+  writeText: (keys: string) => Promise<void>;
 }
 
 export interface SharedSpecContext {
   app: AppHarness;
+  setSelectionRange: (start: number, end: number, direction: 'forward' | 'backward' | 'none') => Promise<void>;
+  setCursor: (position: number) => Promise<void>;
+  setValue: (value: string) => Promise<void>;
   emulateKey: AsyncEmulateKey;
 }
