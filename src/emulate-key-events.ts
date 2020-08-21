@@ -5,10 +5,11 @@ export function findKeyTarget(): Element {
 }
 
 export function emulateKeyEvents(key: string, textInputAction?: (target: TextInputElement) => boolean, target = findKeyTarget()) {
-  return true
-    && target.dispatchEvent(new KeyboardEvent('keydown', { key }))
-    && target.dispatchEvent(new KeyboardEvent('keypress', { key }))
-    && (!isTextInputElement(target) || !textInputAction || textInputAction(target))
-    && target.dispatchEvent(new KeyboardEvent('keyup', { key }))
-  ;
+  let executeDefaultActions = target.dispatchEvent(new KeyboardEvent('keydown', { key, cancelable: true }));
+  executeDefaultActions = target.dispatchEvent(new KeyboardEvent('keypress', { key, cancelable: true })) && executeDefaultActions;
+  if (executeDefaultActions && textInputAction && isTextInputElement(target)) {
+    executeDefaultActions = textInputAction(target);
+  }
+  executeDefaultActions = target.dispatchEvent(new KeyboardEvent('keyup', { key, cancelable: true })) && executeDefaultActions;
+  return executeDefaultActions;
 }

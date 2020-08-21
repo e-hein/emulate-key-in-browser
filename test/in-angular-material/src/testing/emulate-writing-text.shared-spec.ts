@@ -1,5 +1,5 @@
 import { TestElement } from '@angular/cdk/testing';
-import { AppHarness } from './app.harness';
+import { AppHarness, AppDemoFormHarness } from './app.harness';
 import { assertInitialSelectionRange, assertInitialValue } from './expect.function';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
 
@@ -7,13 +7,14 @@ export function testEmulateWritingText(
   context: SharedSpecContext,
 ) {
   let app: AppHarness;
+  let demoForm: AppDemoFormHarness;
   let emulateKey: AsyncEmulateKey;
   let textInput: TestElement;
 
   beforeEach(async () => {
     app = context.app;
     emulateKey = context.emulateKey;
-    const demoForm = await app.getDemoFrom();
+    demoForm = await app.getDemoFrom();
     textInput = await demoForm.getControl('first input');
   });
 
@@ -116,5 +117,14 @@ export function testEmulateWritingText(
         expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
       });
     });
+  });
+
+  it('should not write into input that prevents default', async () => {
+    const input = await demoForm.getControl('prevent default');
+    await input.focus();
+
+    await emulateKey.writeText('abc');
+
+    expect(await input.getProperty('value')).toBe('');
   });
 }
