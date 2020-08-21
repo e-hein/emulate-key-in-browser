@@ -5,6 +5,8 @@ import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model'
 const envSpecificTabableElements = [
   'a.jasmine-title',  // protractor tests real browser window, so it can't find jasmine frame border
   'body.mat-typography', // protractor tabs out of website, so body will get the active element (Todo: should get emulated?)
+  // tslint:disable-next-line: max-line-length
+  'mat-sidenav-content.mat-drawer-content mat-sidenav-content', // protractor + firefox will tab into elements with scrollbar (Todo: should get emulated?)
 ];
 
 /** Todo: merge this spec into emulate tab and test only integration, here */
