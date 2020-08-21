@@ -15,8 +15,8 @@ export interface AsyncEmulateKey {
     [key in keyof typeof emulateKeyType.shiftArrow]: () => Promise<void>;
   };
 
-  backspace: () => Promise<boolean>;
-  delete: () => Promise<boolean>;
+  backspace: () => Promise<void>;
+  delete: () => Promise<void>;
 
   writeText: (keys: string) => Promise<void>;
 }

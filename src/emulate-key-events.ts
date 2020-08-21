@@ -11,5 +11,4 @@ export function emulateKeyEvents(key: string, textInputAction?: (target: TextInp
     executeDefaultActions = textInputAction(target);
   }
   executeDefaultActions = target.dispatchEvent(new KeyboardEvent('keyup', { key, cancelable: true })) && executeDefaultActions;
-  return executeDefaultActions;
 }
