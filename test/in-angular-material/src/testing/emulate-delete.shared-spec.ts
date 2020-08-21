@@ -1,18 +1,19 @@
 import { TestElement } from '@angular/cdk/testing';
-import { AppHarness } from './app.harness';
-import { assertInitialSelectionRange, assertInitialValue } from './expect.function';
+import { AppHarness, AppDemoFormHarness } from './app.harness';
+import { assertInitialSelectionRange, assertInitialValue, describeDoNothingInInputThatPreventsDefaults } from './expect.function';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
 
 export function testEmulateDelete(
   context: SharedSpecContext,
 ) {
+  let demoForm: AppDemoFormHarness;
   let emulateKey: AsyncEmulateKey;
   let textInput: TestElement;
 
   beforeEach(async () => {
     const app = context.app;
     emulateKey = context.emulateKey;
-    const demoForm = await app.getDemoFrom();
+    demoForm = await app.getDemoFrom();
     textInput = await demoForm.getControl('first input');
     await textInput.focus();
   });
@@ -77,4 +78,6 @@ export function testEmulateDelete(
       });
     });
   });
+
+  describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.delete());
 }

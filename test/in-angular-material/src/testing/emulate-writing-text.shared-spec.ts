@@ -1,6 +1,6 @@
 import { TestElement } from '@angular/cdk/testing';
 import { AppHarness, AppDemoFormHarness } from './app.harness';
-import { assertInitialSelectionRange, assertInitialValue } from './expect.function';
+import { assertInitialSelectionRange, assertInitialValue, expectSelectionRange, describeDoNothingInInputThatPreventsDefaults } from './expect.function';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
 
 export function testEmulateWritingText(
@@ -71,18 +71,14 @@ export function testEmulateWritingText(
         await emulateKey.writeText('6');
 
         expect(await textInput.getProperty('value')).toBe('612345');
-        expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-        expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
-        expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+        await expectSelectionRange(textInput, 1, 1, /forward|none/);
       });
 
       it('should insert multiple characters at start', async () => {
         await emulateKey.writeText('67890');
 
         expect(await textInput.getProperty('value')).toBe('6789012345');
-        expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-        expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-        expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+        await expectSelectionRange(textInput, 5, 5, /forward|none/);
       });
     });
 
@@ -96,9 +92,7 @@ export function testEmulateWritingText(
         await emulateKey.writeText('67890');
 
         expect(await textInput.getProperty('value')).toBe('1236789045');
-        expect(await textInput.getProperty('selectionStart')).toBe(8, 'selection start');
-        expect(await textInput.getProperty('selectionEnd')).toBe(8, 'selection end');
-        expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+        await expectSelectionRange(textInput, 8, 8, /forward|none/);
       });
     });
 
@@ -112,19 +106,10 @@ export function testEmulateWritingText(
         await emulateKey.writeText('67890');
 
         expect(await textInput.getProperty('value')).toBe('12678905');
-        expect(await textInput.getProperty('selectionStart')).toBe(7, 'selection start');
-        expect(await textInput.getProperty('selectionEnd')).toBe(7, 'selection end');
-        expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+        await expectSelectionRange(textInput, 7, 7, /forward|none/);
       });
     });
   });
 
-  it('should not write into input that prevents default', async () => {
-    const input = await demoForm.getControl('prevent default');
-    await input.focus();
-
-    await emulateKey.writeText('abc');
-
-    expect(await input.getProperty('value')).toBe('');
-  });
+  describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.writeText('abc'));
 }

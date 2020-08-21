@@ -103,7 +103,7 @@ export function testEmulateTab(
       const input = await demoForm.getControl('prevent default');
       await input.focus();
 
-      await emulateKey.tab.forwards();
+      await emulateKey.shiftTab();
 
       expect(await input.isFocused()).toBe(true);
     });
