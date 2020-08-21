@@ -32,6 +32,7 @@
         <mat-form-field><mat-label>second input</mat-label><input id="second-input" matInput tabindex="1" /></mat-form-field>
         <mat-form-field><mat-label>textarea</mat-label><textarea id="textarea" matInput></textarea></mat-form-field>
         <mat-form-field><mat-label>disabled input</mat-label><input id="disabled-input" matInput disabled="disabled" /></mat-form-field>
+        <mat-form-field><mat-label>prevent default</mat-label><input id="prevent-default" matInput tabindex="-1" (keydown)="$event.preventDefault()" /></mat-form-field>
         <mat-form-field><mat-label>hidden input</mat-label><input id="hidden-input" matInput class="hidden" /></mat-form-field>
         <button mat-raised-button id="button">button</button>
       </div>

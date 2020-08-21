@@ -63,7 +63,7 @@ export function testEmulateTab(
       expect(await secondInput.isFocused()).toBe(true);
     });
 
-    it('tab into input with value should select everything', async () => {
+    it('tab into single line input with value should select everything', async () => {
       // given
       const firstInput =  await demoForm.getControl('first input');
       const secondInput = await demoForm.getControl('second input');
@@ -74,9 +74,38 @@ export function testEmulateTab(
       await emulateKey.tab.forwards();
 
       // then
-      expect(await secondInput.isFocused()).toBe(true, 'second input has focus');
+      expect(await secondInput.isFocused()).toBe(true, 'second input has no focus');
       expect(await secondInput.getProperty('selectionStart')).toBe(0, 'selection start');
       expect(await secondInput.getProperty('selectionEnd')).toBeGreaterThan(0, 'selection end');
+    });
+
+    it('tab into multi line input with value should set cursor to the end of the input', async () => {
+      // given
+      const button = await demoForm.getControl('button');
+      const textarea =  await demoForm.getControl('textarea');
+      await textarea.sendKeys('something');
+      await button.focus();
+
+      // when
+      await emulateKey.tab.backwards();
+
+      // then
+      expect(await textarea.isFocused()).toBe(true, 'textarea has no focus');
+      const selectionStart: number = await textarea.getProperty('selectionStart');
+      const selectionEnd: number = await textarea.getProperty('selectionEnd');
+      const value: string = await textarea.getProperty('value');
+
+      expect(selectionStart).toBe(value.length, 'cursor not at the end');
+      expect(selectionStart).toBe(selectionEnd, 'selected something');
+    });
+
+    it('should not tab out of input that prevents default', async () => {
+      const input = await demoForm.getControl('prevent default');
+      await input.focus();
+
+      await emulateKey.tab.forwards();
+
+      expect(await input.isFocused()).toBe(true);
     });
   });
 }

@@ -22,10 +22,17 @@ export function testSharedSpecContext(
 
       it('that should be present', () => expect(textInput).toBeTruthy());
 
-      it('should be able to set value', async () => {
+      it('should be able to set value of first input', async () => {
         await textInput.focus();
         await context.setValue('12345');
         expect(await textInput.getProperty('value')).toBe('12345');
+      });
+
+      it('should be able to set value of input that prevents default', async () => {
+        const input = await demoForm.getControl('prevent default');
+        await input.focus();
+        await context.setValue('12345');
+        expect(await input.getProperty('value')).toBe('12345');
       });
 
       describe('with value "12345"', () => {

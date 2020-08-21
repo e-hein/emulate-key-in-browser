@@ -16,17 +16,49 @@ export function testApp(loaderProvider: () => HarnessLoader, getActiveElementId:
   it('should start', () => expect(app).toBeTruthy());
 
   describe('initially', () => {
-    it('should find all controls', async () => {
-      await controls.getAll();
-      expectNotToHaveThrownAnything();
+    describe('controls', () => {
+      it('should find all controls', async () => {
+        await controls.getAll();
+        expectNotToHaveThrownAnything();
+      });
+
+      it('should initially have no active element', async () => expect(await getActiveElementId()).toBe(''));
+
+      itShouldShow('tab');
+      itShouldNotShow('shift tab');
+      itShouldShow('backspace');
+      itShouldNotShow('delete');
     });
 
-    it('should initially have no active element', async () => expect(await getActiveElementId()).toBe(''));
+    describe('demoForm', () => {
+      it('should show first input', async () => {
+        expect(await demoForm.getControl('first input')).toBeTruthy();
+      });
 
-    itShouldShow('tab');
-    itShouldNotShow('shift tab');
-    itShouldShow('backspace');
-    itShouldNotShow('delete');
+      it('should show second input', async () => {
+        expect(await demoForm.getControl('second input')).toBeTruthy();
+      });
+
+      it('should show textarea', async () => {
+        const textarea = await demoForm.getControl('textarea');
+        expect(textarea).toBeTruthy('not found');
+        expect(await textarea.matchesSelector('textarea')).toBe(true, 'is not textarea');
+      });
+
+      it('should show disabled input', async () => {
+        const disabledInput = await demoForm.getControl('disabled input');
+        expect(disabledInput).toBeTruthy('not found');
+        expect(await disabledInput.getProperty('disabled')).toBe(true, 'is not disabled');
+      });
+
+      it('should show input that prevents defaults', async () => {
+        expect(await demoForm.getControl('prevent default')).toBeTruthy();
+      });
+
+      it('should show button', async () => {
+        expect(await demoForm.getControl('button')).toBeTruthy();
+      });
+    });
   });
 
   describe('interaction', () => {

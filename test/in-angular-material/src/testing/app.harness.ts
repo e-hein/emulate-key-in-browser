@@ -125,7 +125,7 @@ export class AppControlsHarness extends ComponentHarness {
   }
 }
 
-export type AppDemoFormInputNames = 'first input' | 'second input' | 'textarea' | 'disabled input' | 'button';
+export type AppDemoFormInputNames = 'first input' | 'second input' | 'textarea' | 'disabled input' | 'prevent default' | 'button';
 
 export class AppDemoFormHarness extends ComponentHarness {
   public static hostSelector = '.demo-form-controls';
