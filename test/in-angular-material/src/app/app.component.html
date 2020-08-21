@@ -28,8 +28,8 @@
     <section>
       <h2>demo form</h2>
       <div class="demo-form-controls">
-        <mat-form-field><mat-label>first input</mat-label><input id="first-input" matInput tabindex="1" /></mat-form-field>
-        <mat-form-field><mat-label>second input</mat-label><input id="second-input" matInput tabindex="1" /></mat-form-field>
+        <mat-form-field><mat-label>first input</mat-label><input id="first-input" matInput tabindex="1" #firstInput /></mat-form-field>
+        <mat-form-field><mat-label>second input</mat-label><input id="second-input" matInput tabindex="1" #secondInput /></mat-form-field>
         <mat-form-field><mat-label>textarea</mat-label><textarea id="textarea" matInput></textarea></mat-form-field>
         <mat-form-field><mat-label>disabled input</mat-label><input id="disabled-input" matInput disabled="disabled" /></mat-form-field>
         <mat-form-field><mat-label>prevent default</mat-label><input id="prevent-default" matInput tabindex="-1" (keydown)="$event.preventDefault()" /></mat-form-field>
@@ -38,7 +38,33 @@
       </div>
       </section>
     <section>
-      <h2>event log</h2>
+      <h2>
+        event log
+        <div (mouseenter)="clearEventLog()" color="primary" class="mat-icon-button" title="hover to clear event log"><mat-icon>clear</mat-icon></div>
+        <div (mouseenter)="saveSample()" color="primary" class="mat-icon-button" title="hover to save sample"><mat-icon>save</mat-icon></div>
+      </h2>
+      <table mat-table [dataSource]="eventLog" class="mat-elevation-z8">
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{
+          'match': row.match === true,
+          'failed': row.match === false
+        }"></tr>
+
+        <ng-container matColumnDef="recievedBy">
+          <th mat-header-cell *matHeaderCellDef>recieved by</th>
+          <td mat-cell *matCellDef="let element">{{element.recievedBy}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>type</th>
+          <td mat-cell *matCellDef="let element">{{element.event.type}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="target">
+          <th mat-header-cell *matHeaderCellDef>target</th>
+          <td mat-cell *matCellDef="let element">{{element.target}}</td>
+        </ng-container>
+      </table>
     </section>
   </mat-sidenav-content>
 </mat-sidenav-container>

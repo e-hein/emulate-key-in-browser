@@ -5,6 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
@@ -22,6 +24,8 @@ import { AppComponent } from './app.component';
     MatInputModule,
     MatSelectModule,
     MatSidenavModule,
+    MatTableModule,
+    MatTooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
