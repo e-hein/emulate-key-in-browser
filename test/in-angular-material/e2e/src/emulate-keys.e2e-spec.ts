@@ -5,7 +5,7 @@ import {
 } from '@app/testing';
 import { AppHarness } from '@app/testing/app.harness';
 import { browser, by, element, Key, promise, WebElement } from 'protractor';
-import { expectNoErrorLogs, detailedWebDriverLogs } from './utils';
+import { expectNoErrorLogs} from './utils';
 
 function realTab() {
   return browser.switchTo().activeElement().sendKeys(Key.TAB);
@@ -127,6 +127,9 @@ describe('emulate key', () => {
     context.setCursor = (pos) => context.setSelectionRange(pos, pos, 'forward');
     context.setValue = (value) => setValue(value);
     context.emulateKey = new AsyncEmulateKeyWrapper();
+    context.takeScreenshot = async (ident: string) => {
+      await browser.imageComparison.saveScreen(ident, { /* some options*/ });
+    };
   });
 
   beforeAll(async () => {

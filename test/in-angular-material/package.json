@@ -82,10 +82,12 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-safari-launcher": "^1.0.0",
     "protractor": "~7.0.0",
+    "protractor-image-comparison": "^3.9.0",
     "ts-node": "~8.3.0",
     "tsconfig-paths": "^3.9.0",
     "tslint": "~6.1.0",
     "typescript": "~3.9.7",
-    "watch-npm": "^1.0.1"
+    "watch-npm": "^1.0.1",
+    "webdriver-image-comparison": "^0.14.4"
   }
 }

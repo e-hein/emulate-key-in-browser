@@ -21,6 +21,14 @@ exports.config = {
     defaultTimeoutInterval: 30000,
     print: function() {}
   },
+  plugins: [{
+    package: 'protractor-image-comparison',
+    options: {
+      baselineFolder: path.join(process.cwd(), './spec-shots/baseline/'),
+      formatImageName: `{tag}`,
+      screenshotPath: path.join(process.cwd(), './spec-shots/'),
+    },
+  }],
   onPrepare() {
     const tsNode = require('ts-node');
     const tsConfigPaths = require('tsconfig-paths');

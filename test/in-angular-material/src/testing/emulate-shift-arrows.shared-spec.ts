@@ -407,11 +407,14 @@ export function testEmulateShiftArrows(
         fdescribe('with initial selection direction forward and selected more than one line', () => {
           beforeEach(async () => {
             await context.setSelectionRange(1, 6, 'forward');
+            await context.takeScreenshot('arrow-up-reducing-selection-0-before-arrow-down');
             await emulateKey.shiftArrow.down();
+            await context.takeScreenshot('arrow-up-reducing-selection-1-after-arrow-down');
           });
 
           it('should reduce selection at end', async () => {
             await emulateKey.shiftArrow.up();
+            await context.takeScreenshot('arrow-up-reducing-selection-2-after-arrow-up');
 
             await expectSelectionRange(textArea, 1, 6, 'forward');
           });

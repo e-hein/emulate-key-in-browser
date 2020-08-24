@@ -27,4 +27,5 @@ export interface SharedSpecContext {
   setCursor: (position: number) => Promise<void>;
   setValue: (value: string) => Promise<void>;
   emulateKey: AsyncEmulateKey;
+  takeScreenshot: (ident: string) => Promise<void>;
 }

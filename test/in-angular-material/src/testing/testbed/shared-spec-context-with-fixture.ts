@@ -23,6 +23,7 @@ export class SharedSpecContextWithFixture implements SharedSpecContext {
   setSelectionRange: (start: number, end: number, direction: 'forward' | 'backward' | 'none') => Promise<void>;
   setCursor: (position: number) => Promise<void>;
   setValue: (value: string) => Promise<void>;
+  takeScreenshot = () => Promise.resolve();
 
   async updateFixture(fixture: ComponentFixture<AppComponent>) {
     this.app = await TestbedHarnessEnvironment.harnessForFixture(fixture, AppHarness);
