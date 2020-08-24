@@ -406,14 +406,14 @@ export function testEmulateShiftArrows(
 
         fdescribe('with initial selection direction forward and selected more than one line', () => {
           beforeEach(async () => {
-            await context.setSelectionRange(1, 3, 'forward');
+            await context.setSelectionRange(1, 6, 'forward');
             await emulateKey.shiftArrow.down();
           });
 
           it('should reduce selection at end', async () => {
             await emulateKey.shiftArrow.up();
 
-            await expectSelectionRange(textArea, 1, 3, 'forward');
+            await expectSelectionRange(textArea, 1, 6, 'forward');
           });
         });
       });
@@ -592,15 +592,15 @@ export function testEmulateShiftArrows(
 
         fdescribe('with initial selection direction backward and selected more than one line', () => {
           beforeEach(async () => {
-            await context.setSelectionRange(initialCursorPos - 3, initialCursorPos - 1, 'backward');
+            await context.setSelectionRange(initialCursorPos - 6, initialCursorPos - 1, 'backward');
 
             await emulateKey.shiftArrow.up();
           });
 
-          it('should reduce selection at end', async () => {
+          it('should reduce selection at start', async () => {
             await emulateKey.shiftArrow.down();
 
-            expect(await textArea.getProperty('selectionStart')).toBe(initialCursorPos - 3, 'selection start');
+            expect(await textArea.getProperty('selectionStart')).toBe(initialCursorPos - 6, 'selection start');
             expect(await textArea.getProperty('selectionEnd')).toBe(initialCursorPos - 1, 'selection end');
             expect(await textArea.getProperty('selectionDirection')).toBe('backward', 'selection direction');
           });
