@@ -1,3 +1,6 @@
+branches:
+  except:
+    - /^.*-spec-shots$/
 language: node_js
 addons:
   chrome: stable
