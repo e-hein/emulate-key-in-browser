@@ -2,8 +2,36 @@ branches:
   except:
     - /^.*-spec-shots$/
 language: node_js
-addons:
-  chrome: stable
-  firefox: latest
 node_js:
   - lts/*
+before_install:
+jobs:
+  include:
+    - stage: Build
+      name: Build
+      script: npm run build:all
+      after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/dist" "~/storage/$TRAVIS_BUILD_NUMBER/"
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/tmp" "~/storage/$TRAVIS_BUILD_NUMBER/"
+    - stage: Test
+      name: in angular material
+      before_script: node ./storage.js download "~/storage/$TRAVIS_BUILD_NUMBER/tmp" "$TRAVIS_BUILD_DIR"
+      script: node test-in-angular.js
+      addons:
+        chrome: stable
+        firefox: latest
+    - stage: Test
+      name: in plain html
+      before_script: node ./storage.js download "~/storage/$TRAVIS_BUILD_NUMBER/dist" "$TRAVIS_BUILD_DIR"
+      script: node test-in-plain-html.js
+      addons:
+        chrome: stable
+        firefox: latest
+    - stage: Test
+      name: in typescript requirejs
+      before_script: node ./storage.js download "~/storage/$TRAVIS_BUILD_NUMBER/tmp" "$TRAVIS_BUILD_DIR"
+      script: node test-in-typescript-require.js
+      addons:
+        chrome: stable
+        firefox: latest
+      

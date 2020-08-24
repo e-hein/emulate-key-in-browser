@@ -17,4 +17,4 @@ const packLatestFile = path.join(tmpDir, 'emulate-key-in-browser.latest.tgz');
 try {
   fs.unlinkSync(packLatestFile);
 } catch(e) {}
-shelljs.ln('-sf', packResultFile, path.join(tmpDir, 'emulate-key-in-browser.latest.tgz'));
+shelljs.ln('-sf', path.relative(tmpDir, packResultFile), path.join(tmpDir, 'emulate-key-in-browser.latest.tgz'));
