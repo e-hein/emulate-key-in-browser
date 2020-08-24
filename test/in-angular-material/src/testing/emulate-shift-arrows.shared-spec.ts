@@ -404,7 +404,7 @@ export function testEmulateShiftArrows(
           });
         });
 
-        describe('with initial selection direction forward and selected more than one line', () => {
+        fdescribe('with initial selection direction forward and selected more than one line', () => {
           beforeEach(async () => {
             await context.setSelectionRange(1, 3, 'forward');
             await emulateKey.shiftArrow.down();
@@ -590,7 +590,7 @@ export function testEmulateShiftArrows(
           });
         });
 
-        describe('with initial selection direction backward and selected more than one line', () => {
+        fdescribe('with initial selection direction backward and selected more than one line', () => {
           beforeEach(async () => {
             await context.setSelectionRange(initialCursorPos - 3, initialCursorPos - 1, 'backward');
 
