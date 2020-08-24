@@ -17,6 +17,8 @@ jobs:
       name: in angular material
       before_script: node ./storage.js download "~/storage/$TRAVIS_BUILD_NUMBER/tmp" "$TRAVIS_BUILD_DIR"
       script: node test-in-angular.js
+      after_failure: node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/spec-shots/$TRAVIS_BUILD_NUMBER/"
+      after_success: node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/spec-shots/$TRAVIS_BUILD_NUMBER/"
       addons:
         chrome: stable
         firefox: latest
