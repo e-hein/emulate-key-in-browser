@@ -27,7 +27,7 @@ export function testEmulateTab(
 
     it('should start', () => expectNotToHaveThrownAnything());
 
-    fit('should find selectable inputs', async () => {
+    it('should find selectable inputs', async () => {
       await ensureTheresMoreThanOnePageOfEvents();
 
       const selectableElementIds = await emulateKey.tab.findSelectableElements();

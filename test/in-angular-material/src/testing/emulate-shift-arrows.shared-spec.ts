@@ -404,7 +404,7 @@ export function testEmulateShiftArrows(
           });
         });
 
-        fdescribe('with initial selection direction forward and selected more than one line', () => {
+        describe('with initial selection direction forward and selected more than one line', () => {
           beforeEach(async () => {
             await context.setSelectionRange(1, 6, 'forward');
             await context.takeScreenshot('arrow-up-reducing-selection-0-before-arrow-down');
@@ -593,7 +593,7 @@ export function testEmulateShiftArrows(
           });
         });
 
-        fdescribe('with initial selection direction backward and selected more than one line', () => {
+        describe('with initial selection direction backward and selected more than one line', () => {
           beforeEach(async () => {
             await context.setSelectionRange(initialCursorPos - 6, initialCursorPos - 1, 'backward');
 
