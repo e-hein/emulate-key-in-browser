@@ -20,7 +20,9 @@ jobs:
         firefox: latest
       before_script: node ./storage.js download "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/tmp" "$TRAVIS_BUILD_DIR"
       script: node test-in-angular.js
-      after_failure: node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
+      after_failure:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
+        - sh commit-spec-shots.sh
       after_success:
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/dist/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/angular"
