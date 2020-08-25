@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
 import { emulateKey } from 'emulate-key-in-browser';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 const eventsToLog: Array<keyof DocumentEventMap> = [
   'keydown', 'keypress', 'keydown',
@@ -48,6 +49,11 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('secondInput') set secondInput(secondInput: ElementRef | undefined) {
     if (secondInput) { this.logEvents(secondInput.nativeElement); }
   }
+  @ViewChild(MatPaginator) set newPaginator(paginator: MatPaginator) {
+    this.paginator = paginator;
+    this.eventLog.paginator = paginator;
+  }
+  private paginator?: MatPaginator;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -91,6 +97,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   clearEventLog() {
     this.eventLog = new MatTableDataSource<EventLogRow>();
+    this.eventLog.paginator = this.paginator;
   }
 
   saveSample() {

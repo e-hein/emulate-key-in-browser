@@ -134,13 +134,23 @@ $title-height: 48px
       display: block
       margin-left: auto
 
+  .table-container
+    width: calc(100% - 20px)
+    margin: 0px 10px
+
   table
+    width: 100%
+
     td, th
       &:not(:first-of-type)
         padding-left: 2em
 
-    tr.match
-      background-color: rgb(200, 255, 200)
+    tr
+      &.mat-row
+        height: auto
 
-    tr.fail
-      background-color: rgb(255, 200, 200)
+      &.match
+        background-color: rgb(200, 255, 200)
+
+      &.fail
+        background-color: rgb(255, 200, 200)
