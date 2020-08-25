@@ -25,6 +25,7 @@ function run(cmd, options = {}) {
 Promise.resolve()
   .then(() => run('npm i', inPlainHtmlJs))
   .then(() => run('npm run test:once', inPlainHtmlJs))
+  .then(() => run('npm build', inPlainHtmlJs))
   .then(
     () => process.exit(0),
     (error) => process.exit(error.code)

@@ -25,6 +25,7 @@ function run(cmd, options = {}) {
 Promise.resolve()
   .then(() => run('npm i', inTypescriptRequireJs))
   .then(() => run('npm run coverage', inTypescriptRequireJs))
+  .then(() => run('npm build', inTypescriptRequireJs))
   .then(
     () => process.exit(0),
     (error) => process.exit(error.code)

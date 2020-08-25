@@ -25,7 +25,7 @@ function run(cmd, options = {}) {
 Promise.resolve()
   .then(() => run('npm i', inAngular))
   .then(() => run('npm run version', inAngular))
-  // .then(() => run('npm run coverage', inAngular))
+  .then(() => run('npm run coverage', inAngular))
   .then(() => run('npm run e2e', inAngular))
   .then(() => run('npm run build', inAngular))
   .then(() => run('npm run test:build-result', inAngular))

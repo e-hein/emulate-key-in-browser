@@ -11,29 +11,36 @@ jobs:
       name: Build
       script: npm run build:all
       after_success:
-        - node ./storage.js upload "$TRAVIS_BUILD_DIR/dist" "~/storage/$TRAVIS_BUILD_NUMBER/"
-        - node ./storage.js upload "$TRAVIS_BUILD_DIR/tmp" "~/storage/$TRAVIS_BUILD_NUMBER/"
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/dist" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser"
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/tmp" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser"
     - stage: Test
       name: in angular material
-      before_script: node ./storage.js download "~/storage/$TRAVIS_BUILD_NUMBER/tmp" "$TRAVIS_BUILD_DIR"
-      script: node test-in-angular.js
-      after_failure: node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots/" "~/spec-shots/build-$TRAVIS_BUILD_NUMBER/"
-      after_success: node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots/" "~/spec-shots/build-$TRAVIS_BUILD_NUMBER/"
       addons:
         chrome: stable
         firefox: latest
+      before_script: node ./storage.js download "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/tmp" "$TRAVIS_BUILD_DIR"
+      script: node test-in-angular.js
+      after_failure: node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
+      after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/dist/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/angular"
     - stage: Test
       name: in plain html
-      before_script: node ./storage.js download "~/storage/$TRAVIS_BUILD_NUMBER/dist" "$TRAVIS_BUILD_DIR"
-      script: node test-in-plain-html.js
       addons:
         chrome: stable
         firefox: latest
+      before_script:
+        - node ./storage.js download "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/" "$TRAVIS_BUILD_DIR"
+      script: node test-in-plain-html.js
+      after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-plain-html-js/www/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/html"
     - stage: Test
       name: in typescript requirejs
-      before_script: node ./storage.js download "~/storage/$TRAVIS_BUILD_NUMBER/tmp" "$TRAVIS_BUILD_DIR"
-      script: node test-in-typescript-require.js
       addons:
         chrome: stable
         firefox: latest
+      before_script: node ./storage.js download "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/" "$TRAVIS_BUILD_DIR"
+      script: node test-in-typescript-require.js
+      after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-typescript-requirejs/dist/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/requirejs"
       
