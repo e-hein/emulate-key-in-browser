@@ -88,6 +88,10 @@ export class AppComponent implements OnInit, OnDestroy {
           target: target.id || target.tagName || (document === event.target && 'document') || ('' + target),
         });
         this.eventLog.data = this.eventLog.data.slice();
+        if (this.paginator) {
+          this.paginator.length = this.eventLog.data.length;
+          this.paginator.lastPage();
+        }
         this.changeDetectorRef.markForCheck();
       };
       element.addEventListener(eventType, listener);

@@ -27,7 +27,9 @@ export function testEmulateTab(
 
     it('should start', () => expectNotToHaveThrownAnything());
 
-    it('should find selectable inputs', async () => {
+    fit('should find selectable inputs', async () => {
+      await ensureTheresMoreThanOnePageOfEvents();
+
       const selectableElementIds = await emulateKey.tab.findSelectableElements();
       expect(selectableElementIds.map((e) => {
         return (e.id && ('#' + e.id)) || (e.tagName.toLowerCase() + '.' + e.className);
@@ -36,8 +38,13 @@ export function testEmulateTab(
         '#second-input',
         '#textarea',
         '#button',
+        jasmine.stringMatching(/mat-paginator-navigation-previous/),
       ]);
     });
+
+    async function ensureTheresMoreThanOnePageOfEvents() {
+      await emulateKey.writeText('0123456');
+    }
 
     it('backwards', async () => {
       // given
