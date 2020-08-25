@@ -1,14 +1,20 @@
-import { AppHarness, AppControlsHarness, AppDemoFormHarness, AppDemoFormInputNames, AppControlNames } from './app.harness';
+import { AppControlNames, AppControlsHarness, AppDemoFormHarness, AppDemoFormInputNames, AppHarness } from './app.harness';
 import { expectNotToHaveThrownAnything } from './expect.function';
-import { HarnessLoader } from '@angular/cdk/testing';
+import { SharedSpecContext } from './shared-spec-context.model';
 
-export function testApp(loaderProvider: () => HarnessLoader, getActiveElementId: () => Promise<string>) {
+export function itShouldMatchInitialScreenshot(context: SharedSpecContext) {
+  it('should match screenshot', async () => {
+    expect(await context.takeScreenshot('app-0-initially')).toBeLessThan(.5);
+  });
+}
+
+export function testApp(context: SharedSpecContext) {
   let app: AppHarness;
   let controls: AppControlsHarness;
   let demoForm: AppDemoFormHarness;
 
   beforeEach(async () => {
-    app = await loaderProvider().getHarness(AppHarness);
+    app = context.app;
     controls = await app.getControls();
     demoForm = await app.getDemoFrom();
   });
@@ -16,13 +22,15 @@ export function testApp(loaderProvider: () => HarnessLoader, getActiveElementId:
   it('should start', () => expect(app).toBeTruthy());
 
   describe('initially', () => {
+    itShouldMatchInitialScreenshot(context);
+
     describe('controls', () => {
       it('should find all controls', async () => {
         await controls.getAll();
         expectNotToHaveThrownAnything();
       });
 
-      it('should initially have no active element', async () => expect(await getActiveElementId()).toBe(''));
+      it('should initially have no active element', async () => expect(await context.getActiveElementId()).toBe(''));
 
       itShouldShow('tab');
       itShouldNotShow('shift tab');
@@ -65,6 +73,7 @@ export function testApp(loaderProvider: () => HarnessLoader, getActiveElementId:
     describeAfterHover('shift', () => {
       it('should find alternative controls', async () => {
         const controlsFound = await controls.getAll();
+        await context.takeScreenshot('app-1-alternative-controls');
 
         // tslint:disable: no-string-literal
         expect(controlsFound['tab']).toBeFalsy('tab');

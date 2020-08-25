@@ -27,5 +27,6 @@ export interface SharedSpecContext {
   setCursor: (position: number) => Promise<void>;
   setValue: (value: string) => Promise<void>;
   emulateKey: AsyncEmulateKey;
-  takeScreenshot: (ident: string) => Promise<void>;
+  takeScreenshot: (ident: string) => Promise<number>;
+  getActiveElementId: () => Promise<string | undefined>;
 }

@@ -90,7 +90,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.eventLog.data = this.eventLog.data.slice();
         if (this.paginator) {
           this.paginator.length = this.eventLog.data.length;
-          this.paginator.lastPage();
         }
         this.changeDetectorRef.markForCheck();
       };

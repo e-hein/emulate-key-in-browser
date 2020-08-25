@@ -29,6 +29,7 @@ export function testEmulateTab(
 
     it('should find selectable inputs', async () => {
       await ensureTheresMoreThanOnePageOfEvents();
+      await context.takeScreenshot('tab-0-selectable-inputs');
 
       const selectableElementIds = await emulateKey.tab.findSelectableElements();
       expect(selectableElementIds.map((e) => {
@@ -38,7 +39,7 @@ export function testEmulateTab(
         '#second-input',
         '#textarea',
         '#button',
-        jasmine.stringMatching(/mat-paginator-navigation-previous/),
+        jasmine.stringMatching(/paginator-navigation-next/),
       ]);
     });
 

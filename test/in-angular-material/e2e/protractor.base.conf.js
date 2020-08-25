@@ -27,6 +27,7 @@ exports.config = {
       baselineFolder: path.join(process.cwd(), './spec-shots/baseline/'),
       formatImageName: `{tag}`,
       screenshotPath: path.join(process.cwd(), './spec-shots/'),
+      savePerInstance: true,
     },
   }],
   onPrepare() {

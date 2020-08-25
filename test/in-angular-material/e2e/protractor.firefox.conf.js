@@ -1,11 +1,3 @@
 const config = require('./protractor.base.conf').config;
-config.capabilities =  {
-  browserName: 'firefox',
-  firefoxOptions: {
-    args: ['--headless'],
-  },
-  'moz:firefoxOptions': {
-    args: ['--headless'],
-  },
-};
+config.capabilities = require('./capability.firefox');
 exports.config = config;

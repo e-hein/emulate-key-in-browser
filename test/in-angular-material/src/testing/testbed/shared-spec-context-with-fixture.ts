@@ -1,7 +1,6 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture } from '@angular/core/testing';
 import { AppHarness, AsyncEmulateKey, SharedSpecContext } from '@app/testing';
-import { AppComponent } from 'src/app/app.component';
 import { forceStabilize } from './force-stabilze';
 import { WrappedEmulateKeyWithFixture } from './wrapped-emulate-key-with-fixture';
 
@@ -23,13 +22,17 @@ export class SharedSpecContextWithFixture implements SharedSpecContext {
   setSelectionRange: (start: number, end: number, direction: 'forward' | 'backward' | 'none') => Promise<void>;
   setCursor: (position: number) => Promise<void>;
   setValue: (value: string) => Promise<void>;
-  takeScreenshot = () => Promise.resolve();
+  takeScreenshot = () => Promise.resolve(0);
 
-  async updateFixture(fixture: ComponentFixture<AppComponent>) {
+  async updateFixture(fixture: ComponentFixture<any>) {
     this.app = await TestbedHarnessEnvironment.harnessForFixture(fixture, AppHarness);
     this.emulateKey = new WrappedEmulateKeyWithFixture(fixture);
     this.setSelectionRange = (start, end, direction) => forceStabilize(fixture, () => setSelectionRange(start, end, direction));
     this.setCursor = (pos) => this.setSelectionRange(pos, pos, 'none');
     this.setValue = (value) => forceStabilize(fixture, () => setValue(value));
+  }
+
+  async getActiveElementId() {
+    return document.activeElement?.id;
   }
 }
