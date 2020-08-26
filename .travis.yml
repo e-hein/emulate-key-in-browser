@@ -22,7 +22,7 @@ jobs:
       script: node test-in-angular.js
       after_failure:
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
-        - sh commit-spec-shots.sh
+        - DEBUG=* node ./commit-spec-shot-branch.js
       after_success:
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/dist/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/angular"
