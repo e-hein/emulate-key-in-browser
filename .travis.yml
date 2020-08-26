@@ -44,5 +44,5 @@ jobs:
       before_script: node ./storage.js download "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/" "$TRAVIS_BUILD_DIR"
       script: node test-in-typescript-require.js
       after_success:
-        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-typescript-requirejs/dist/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/requirejs"
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-typescript-requirejs/www/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/requirejs"
       
