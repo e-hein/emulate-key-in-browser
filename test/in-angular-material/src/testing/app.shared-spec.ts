@@ -120,10 +120,6 @@ export function testApp(context: SharedSpecContext) {
         itShouldHaveSetValueOf('first input').to('Jenkins');
       });
 
-      describeAndHover('write "Jenkins"', () => {
-        itShouldHaveSetValueOf('first input').to('Jenkins');
-      });
-
       describeAndHover('write lorem ipsum', () => {
         itShouldHaveSetValueOf('first input').to(/^Lorem ipsum.{100,}/);
       });
