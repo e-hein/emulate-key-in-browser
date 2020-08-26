@@ -26,6 +26,15 @@ exports.config = {
     browserName: 'chrome',
     chromeOptions: { args: [ "--headless", "--disable-gpu", "--window-size=1920,1080"] },
   },
+  plugins: [{
+    package: 'protractor-image-comparison',
+    options: {
+      baselineFolder: path.join(process.cwd(), './spec-shots/baseline/'),
+      formatImageName: `dist/{tag}`,
+      screenshotPath: path.join(process.cwd(), './spec-shots/'),
+      savePerInstance: true,
+    },
+  }],
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
