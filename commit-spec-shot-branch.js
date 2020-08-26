@@ -12,11 +12,11 @@ const { execSync } = require('child_process');
 const baseDir = path.join(__dirname, 'test/in-angular-material');
 const specShotDir = path.join(baseDir, 'spec-shots');
 const actualDir = path.join(specShotDir, 'actual');
-const baselineDir = path.join(specShotDir, 'baseline2');
+const baselineDir = path.join(specShotDir, 'baseline');
 
 const specShotBranchSuffix = '-spec-shots';
 const specShotCommitMessage = 'updated spec shots';
-const remoteName = 'origin';
+const repositoryName = 'emulate-key/emulate-key-in-browser';
 
 info('start commit spec shots');
 const hasToPop = cleanUpWorkingDirectory();
@@ -59,7 +59,17 @@ function pushNewBaseline(branchName) {
   info('start pushing new baseline');
   execLogged('stage new baseline', '', `git add ${baselineDir}`);
   execLogged('commit new baseline', '', `git commit -m '${specShotCommitMessage}'`);
-  execLogged('push new baseline', `: ${remoteName} ${branchName}`, `git push --set-upstream ${remoteName} ${branchName}`);
+  const remoteUrl = `git@authenticatedGit:${repositoryName}.git`;
+  execLogged('add authenticated remote', `: ${remoteUrl}`, `git remote add authenticated ${remoteUrl}`);
+  execSync('node storage.js authGit authenticatedGit');
+  try {
+    execLogged('push new baseline', `: ${branchName}`, `git push --set-upstream authenticated ${branchName}`);
+  } catch (e) {
+    throw e;
+  } finally {
+    execSync('node storage.js unAuthGit');
+    execLogged(`remove authenticated remote`, `: ${remoteUrl}`, `git remote remove authenticated`);
+  }
   info('end pushing new baseline');
 }
 
@@ -135,7 +145,10 @@ function ensureNotSpecShotBranch(currentBranch) {
 }
 
 function getCurrentBranch() {
-  const currentBranch = execSync('git branch --show-current').toString().trim();
+  const gitStatus = execLogged('git status', '', `git status`).toString();
+  const currentBranchParts = gitStatus.match(/^.* ([^ ]+)\n/);
+  debug('git status matched', currentBranchParts);
+  const currentBranch = currentBranchParts[1];
   detail('get current branch: ', currentBranch);
   if (typeof currentBranch !== 'string' || currentBranch.length < 3) {
     throw andLogError(`could not detect current branch (${currentBranch})`);
@@ -196,28 +209,3 @@ function restoreUncommittedChanges(hasToPop) {
     debug(execSync('git stash pop').toString());
   }
 }
-/*
-#!/bin/bash
-
-currentBranch=`git branch --show-current`
-echo "current branch: " $currentBranch
-if [[ "$currentBranch" == *-spec-shots ]]; then
-  echo "already on spec shot branch"
-  exit 1
-fi
-
-specShotBranch="$currentBranch-spec-shots"
-echo "spec shot branch": $specShotBranch
-
-git branch -C $specShotBranch
-git checkout $specShotBranch
-
-rm -rf spec-shots/baseline
-mv spec-shots/actual spec-shots/baseline
-
-git add spec-shots/baseline
-git commit -m 'updated spec shots'
-git push --set-upstream origin $specShotBranch --force
-
-git checkout $currentBranch
-*/
