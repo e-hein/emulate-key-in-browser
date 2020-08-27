@@ -2,6 +2,8 @@ branches:
   except:
     - /^.*-spec-shots$/
 language: node_js
+os: linux
+dist: xenial
 node_js:
   - lts/*
 before_install:
