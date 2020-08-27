@@ -50,7 +50,7 @@ class AppControlHarness extends ComponentHarness {
     ;
   }
 
-  public async getIcon(): Promise<MatIconHarness | undefined> {
+  public async getIcon(): Promise<MatIconHarness | null> {
     return this.locatorForOptional(MatIconHarness)();
   }
 
@@ -101,7 +101,7 @@ export class AppControlsHarness extends ComponentHarness {
   public async getAll(): Promise<{ [key in AppControlNames ]?: TestElement }> {
     const controlsToSkip = await this.isShiftActive() ? Object.keys(alternativeControls) : Object.values(alternativeControls);
     return Object.entries(this.getter)
-    .filter(([key]) => !controlsToSkip.includes(key))
+    .filter(([key]) => !controlsToSkip.includes(key as AppControlNames))
     .reduce((others, [key, getter]) => others.then(
       (controls) => getter().then(
         (control) => Object.assign(controls, { [key]: control }),
@@ -145,7 +145,10 @@ export class AppDemoFormHarness extends ComponentHarness {
   }
 
   private async elementFromFormField(formField: MatFormFieldHarness) {
-    const control = (await formField.getControl());
+    const control = await formField.getControl();
+    if (!control) {
+      throw new Error('control not found');
+    }
     return control.host();
   }
 }
