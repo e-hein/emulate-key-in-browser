@@ -1,6 +1,6 @@
 import { HarnessLoader, TestElement } from '@angular/cdk/testing';
 import { ProtractorHarnessEnvironment } from '@angular/cdk/testing/protractor';
-import { browser } from 'protractor';
+import { browser, ExpectedConditions, element, by } from 'protractor';
 import { checkScreen, DemoHarness, PrivacySettingsHarness, ReadmeHarness, webElementFromTestElement } from './lib';
 
 describe('accaptance', () => {
@@ -46,16 +46,15 @@ describe('accaptance', () => {
 
   describe('after clicking on "example in angular material"', async () => {
     beforeAll(async () => {
-      await browser.driver.switchToParentFrame();
+      await browser.get('/');
+      browser.waitForAngularEnabled(false);
+      demoHarness = await loader.getHarness(DemoHarness);
       await demoHarness.clickOnAngularExampleLink();
       await browser.switchTo().frame(0);
-      browser.waitForAngularEnabled(true);
     });
-    afterAll(() => {
-      browser.waitForAngularEnabled(false);
-    })
 
     it ('should show angular sample', async () => {
+      await browser.wait(ExpectedConditions.elementToBeClickable(element(by.css('#first-input'))));
       expect(await checkScreen('acc-2-angular')).toBeLessThan(1);
     });
   });
