@@ -9,7 +9,7 @@ const detail = createLogMethod('commit-spec-shots:detail');
 const debug = createLogMethod('commit-spec-shots:---debug');
 const { execSync } = require('child_process');
 
-const baseDir = path.join(__dirname, 'test/in-angular-material');
+const baseDir = path.join(__dirname, process.argv[2] || 'test/in-angular-material');
 const specShotDir = path.join(baseDir, 'spec-shots');
 const actualDir = path.join(specShotDir, 'actual');
 const baselineDir = path.join(specShotDir, 'baseline');
