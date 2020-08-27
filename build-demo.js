@@ -25,6 +25,7 @@ function run(cmd, options = {}) {
 Promise.resolve()
   .then(() => run('npm i', inDemo))
   .then(() => run('node build.js', inDemo))
+  .then(() => run('npm run test', inDemo))
   .then(
     () => process.exit(0),
     (error) => process.exit(error.code)
