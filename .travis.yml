@@ -49,6 +49,8 @@ jobs:
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-typescript-requirejs/www/" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/requirejs"
     - stage: Build demo
       name: Build demo
+      addons:
+        chrome: stable
       before_script:
         - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/html/" "$TRAVIS_BUILD_DIR/test/in-plain-html-js/www" 
         - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/angular/" "$TRAVIS_BUILD_DIR/test/in-angular-material/dist"
