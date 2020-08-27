@@ -1,17 +1,19 @@
 import { TestElement } from '@angular/cdk/testing';
-import { assertInitialValue } from './expect.function';
+import { assertInitialValue, describeDoNothingInInputThatPreventsDefaults } from './expect.function';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
+import { AppDemoFormHarness } from './app.harness';
 
 export function testEmulateBackspace(
   context: SharedSpecContext,
 ) {
+  let demoForm: AppDemoFormHarness;
   let emulateKey: AsyncEmulateKey;
   let textInput: TestElement;
 
   beforeEach(async () => {
     const app = context.app;
     emulateKey = context.emulateKey;
-    const demoForm = await app.getDemoFrom();
+    demoForm = await app.getDemoFrom();
     textInput = await demoForm.getControl('first input');
     await textInput.focus();
   });
@@ -76,4 +78,6 @@ export function testEmulateBackspace(
       });
     });
   });
+
+  describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.backspace());
 }

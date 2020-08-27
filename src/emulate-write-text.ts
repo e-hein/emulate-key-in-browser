@@ -18,6 +18,6 @@ function writeKey(key: string) {
     } else {
       target.value += key;
     }
-    return target.dispatchEvent(new InputEvent('input'));
-  });
+    return target.dispatchEvent(new InputEvent('input', { bubbles: true, }));
+  }, undefined, { keypressBubbles: true });
 }

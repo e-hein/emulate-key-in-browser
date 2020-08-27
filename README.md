@@ -55,7 +55,8 @@ Limitations
   - line navigation will use character count, not character offset width and position like browsers
   - there are environmen specific behaviors when hitting the cursor with arrow down or up key.
     (see [emulate-shift-arrows-spec](./test/in-angular-material/src/testing/emulate-shift-arrows.shared-spec.ts) for details)
-
+- tab to elements with scrollbars  
+  Firefox selects elements that are not selectable as soon as they get scrollbars (overflow: auto) - not decided yet how to handle that. Current behavior is to ignore them.
 
 Dependencies
 ------------

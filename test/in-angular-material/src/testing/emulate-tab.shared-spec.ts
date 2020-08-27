@@ -5,6 +5,8 @@ import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model'
 const envSpecificTabableElements = [
   'a.jasmine-title',  // protractor tests real browser window, so it can't find jasmine frame border
   'body.mat-typography', // protractor tabs out of website, so body will get the active element (Todo: should get emulated?)
+  // tslint:disable-next-line: max-line-length
+  'mat-sidenav-content.mat-drawer-content mat-sidenav-content', // protractor + firefox will tab into elements with scrollbar (Todo: should get emulated?)
 ];
 
 /** Todo: merge this spec into emulate tab and test only integration, here */
@@ -26,6 +28,9 @@ export function testEmulateTab(
     it('should start', () => expectNotToHaveThrownAnything());
 
     it('should find selectable inputs', async () => {
+      await ensureTheresMoreThanOnePageOfEvents();
+      await context.takeScreenshot('tab-0-selectable-inputs');
+
       const selectableElementIds = await emulateKey.tab.findSelectableElements();
       expect(selectableElementIds.map((e) => {
         return (e.id && ('#' + e.id)) || (e.tagName.toLowerCase() + '.' + e.className);
@@ -34,8 +39,13 @@ export function testEmulateTab(
         '#second-input',
         '#textarea',
         '#button',
+        jasmine.stringMatching(/paginator-navigation-next/),
       ]);
     });
+
+    async function ensureTheresMoreThanOnePageOfEvents() {
+      await emulateKey.writeText('0123456');
+    }
 
     it('backwards', async () => {
       // given
@@ -63,7 +73,7 @@ export function testEmulateTab(
       expect(await secondInput.isFocused()).toBe(true);
     });
 
-    it('tab into input with value should select everything', async () => {
+    it('tab into single line input with value should select everything', async () => {
       // given
       const firstInput =  await demoForm.getControl('first input');
       const secondInput = await demoForm.getControl('second input');
@@ -74,9 +84,38 @@ export function testEmulateTab(
       await emulateKey.tab.forwards();
 
       // then
-      expect(await secondInput.isFocused()).toBe(true, 'second input has focus');
+      expect(await secondInput.isFocused()).toBe(true, 'second input has no focus');
       expect(await secondInput.getProperty('selectionStart')).toBe(0, 'selection start');
       expect(await secondInput.getProperty('selectionEnd')).toBeGreaterThan(0, 'selection end');
+    });
+
+    it('tab into multi line input with value should set cursor to the end of the input', async () => {
+      // given
+      const button = await demoForm.getControl('button');
+      const textarea =  await demoForm.getControl('textarea');
+      await textarea.sendKeys('something');
+      await button.focus();
+
+      // when
+      await emulateKey.tab.backwards();
+
+      // then
+      expect(await textarea.isFocused()).toBe(true, 'textarea has no focus');
+      const selectionStart: number = await textarea.getProperty('selectionStart');
+      const selectionEnd: number = await textarea.getProperty('selectionEnd');
+      const value: string = await textarea.getProperty('value');
+
+      expect(selectionStart).toBe(value.length, 'cursor not at the end');
+      expect(selectionStart).toBe(selectionEnd, 'selected something');
+    });
+
+    it('should not tab out of input that prevents default', async () => {
+      const input = await demoForm.getControl('prevent default');
+      await input.focus();
+
+      await emulateKey.shiftTab();
+
+      expect(await input.isFocused()).toBe(true);
     });
   });
 }

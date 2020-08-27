@@ -1,6 +1,7 @@
 import { TestElement } from '@angular/cdk/testing';
 import { AppDemoFormHarness, AppHarness } from './app.harness';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
+import { describeDoNothingInInputThatPreventsDefaults, expectSelectionRange } from './expect.function';
 
 export function testEmulateArrows(
   context: SharedSpecContext,
@@ -28,8 +29,7 @@ export function testEmulateArrows(
         it('should do nothing', async () => {
           await emulateKey.arrow.up();
 
-          expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textInput, 0, 0);
         });
       });
 
@@ -42,8 +42,7 @@ export function testEmulateArrows(
           it('should move cursor to the start', async () => {
             await emulateKey.arrow.up();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textInput, 0, 0);
           });
         });
 
@@ -52,8 +51,7 @@ export function testEmulateArrows(
 
           it('should do nothing', async () => {
             await emulateKey.arrow.up();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textInput, 0, 0);
           });
         });
 
@@ -62,8 +60,7 @@ export function testEmulateArrows(
 
           it('should cursor to the start', async () => {
             await emulateKey.arrow.up();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textInput, 0, 0);
           });
         });
       });
@@ -81,8 +78,7 @@ export function testEmulateArrows(
         it('should do nothing', async () => {
           await emulateKey.arrow.up();
 
-          expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textArea, 0, 0);
         });
       });
 
@@ -95,8 +91,7 @@ export function testEmulateArrows(
           it('should move cursor to the start', async () => {
             await emulateKey.arrow.up();
 
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textArea, 0, 0);
           });
         });
 
@@ -105,8 +100,7 @@ export function testEmulateArrows(
 
           it('should do nothing', async () => {
             await emulateKey.arrow.up();
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textArea, 0, 0);
           });
         });
 
@@ -115,8 +109,7 @@ export function testEmulateArrows(
 
           it('should cursor to the start', async () => {
             await emulateKey.arrow.up();
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textArea, 0, 0);
           });
         });
       });
@@ -140,6 +133,8 @@ export function testEmulateArrows(
         });
       });
     });
+
+    describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.arrow.up());
   });
 
   describe('down', () => {
@@ -155,8 +150,7 @@ export function testEmulateArrows(
         it('should do nothing', async () => {
           await emulateKey.arrow.down();
 
-          expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textInput, 0, 0);
         });
       });
 
@@ -169,8 +163,7 @@ export function testEmulateArrows(
           it('should do nothing', async () => {
             await emulateKey.arrow.down();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textInput, 5, 5);
           });
         });
 
@@ -179,8 +172,7 @@ export function testEmulateArrows(
 
           it('should move cursor to the end of text', async () => {
             await emulateKey.arrow.down();
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textInput, 5, 5);
           });
         });
 
@@ -189,8 +181,7 @@ export function testEmulateArrows(
 
           it('should cursor to the end of text', async () => {
             await emulateKey.arrow.down();
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textInput, 5, 5);
           });
         });
       });
@@ -208,8 +199,7 @@ export function testEmulateArrows(
         it('should do nothing', async () => {
           await emulateKey.arrow.down();
 
-          expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textArea, 0, 0);
         });
       });
 
@@ -222,8 +212,7 @@ export function testEmulateArrows(
           it('should do nothing', async () => {
             await emulateKey.arrow.down();
 
-            expect(await textArea.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textArea, 5, 5);
           });
         });
 
@@ -232,8 +221,7 @@ export function testEmulateArrows(
 
           it('should move cursor to the end of text', async () => {
             await emulateKey.arrow.down();
-            expect(await textArea.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textArea, 5, 5);
           });
         });
 
@@ -242,8 +230,7 @@ export function testEmulateArrows(
 
           it('should move cursor to the end of text', async () => {
             await emulateKey.arrow.down();
-            expect(await textArea.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textArea, 5, 5);
           });
         });
       });
@@ -271,6 +258,8 @@ export function testEmulateArrows(
         });
       });
     });
+
+    describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.arrow.down());
   });
 
   describe('right', () => {
@@ -289,8 +278,7 @@ export function testEmulateArrows(
       it('should do nothing', async () => {
         await emulateKey.arrow.right();
 
-        expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-        expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+        await expectSelectionRange(textInput, 0, 0);
       });
     });
 
@@ -303,8 +291,7 @@ export function testEmulateArrows(
         it('should do nothing', async () => {
           await emulateKey.arrow.right();
 
-          expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+          await expectSelectionRange(textInput, 5, 5);
         });
       });
 
@@ -313,8 +300,7 @@ export function testEmulateArrows(
 
         it('should move cursor to the next (right) character', async () => {
           await emulateKey.arrow.right();
-          expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
+          await expectSelectionRange(textInput, 1, 1);
         });
       });
 
@@ -323,11 +309,12 @@ export function testEmulateArrows(
 
         it('should cursor to the next character', async () => {
           await emulateKey.arrow.right();
-          expect(await textInput.getProperty('selectionStart')).toBe(4, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+          await expectSelectionRange(textInput, 4, 4);
         });
       });
     });
+
+    describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.arrow.right());
   });
 
   describe('left', () => {
@@ -347,8 +334,7 @@ export function testEmulateArrows(
       it('should do nothing', async () => {
         await emulateKey.arrow.left();
 
-        expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-        expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+        await expectSelectionRange(textInput, 0, 0);
       });
     });
 
@@ -361,8 +347,7 @@ export function testEmulateArrows(
         it('should move cursor one character left', async () => {
           await emulateKey.arrow.left();
 
-          expect(await textInput.getProperty('selectionStart')).toBe(4, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
+          await expectSelectionRange(textInput, 4, 4);
         });
       });
 
@@ -371,8 +356,7 @@ export function testEmulateArrows(
 
         it('should do nothing', async () => {
           await emulateKey.arrow.left();
-          expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textInput, 0, 0);
         });
       });
 
@@ -381,10 +365,11 @@ export function testEmulateArrows(
 
         it('should cursor to the next character', async () => {
           await emulateKey.arrow.left();
-          expect(await textInput.getProperty('selectionStart')).toBe(2, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(2, 'selection end');
+          await expectSelectionRange(textInput, 2, 2);
         });
       });
     });
+
+    describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.arrow.left());
   });
 }

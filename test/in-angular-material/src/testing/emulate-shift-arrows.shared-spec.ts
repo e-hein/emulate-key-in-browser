@@ -1,7 +1,7 @@
 import { TestElement } from '@angular/cdk/testing';
 import { AppDemoFormHarness, AppHarness } from './app.harness';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
-import { assertInitialSelectionRange } from './expect.function';
+import { assertInitialSelectionRange, describeDoNothingInInputThatPreventsDefaults, expectSelectionRange } from './expect.function';
 
 export function testEmulateShiftArrows(
   context: SharedSpecContext,
@@ -16,7 +16,7 @@ export function testEmulateShiftArrows(
     demoForm = await app.getDemoFrom();
   });
 
-  describe('right in input', () => {
+  describe('right', () => {
     /* istanbul ignore if */
     if (process.env.bug_multipleArrows) {
       pending(process.env.bug_multipleArrows);
@@ -33,8 +33,7 @@ export function testEmulateShiftArrows(
       it('should do nothing', async () => {
         await emulateKey.shiftArrow.right();
 
-        expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-        expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+        await expectSelectionRange(textInput, 0, 0);
       });
     });
 
@@ -48,8 +47,7 @@ export function testEmulateShiftArrows(
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.right();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textInput, 5, 5);
           });
         });
 
@@ -58,9 +56,7 @@ export function testEmulateShiftArrows(
 
           it('should select first character', async () => {
             await emulateKey.shiftArrow.right();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textInput, 0, 1, 'forward');
           });
         });
 
@@ -69,9 +65,7 @@ export function testEmulateShiftArrows(
 
           it('should select next character', async () => {
             await emulateKey.shiftArrow.right();
-            expect(await textInput.getProperty('selectionStart')).toBe(3, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textInput, 3, 4, 'forward');
           });
         });
       });
@@ -83,9 +77,7 @@ export function testEmulateShiftArrows(
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.right();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textInput, 1, 5, 'forward');
           });
         });
 
@@ -94,9 +86,7 @@ export function testEmulateShiftArrows(
 
           it('should extend selection at the end of selection', async () => {
             await emulateKey.shiftArrow.right();
-            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(3, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textInput, 1, 3, 'forward');
           });
         });
       });
@@ -108,9 +98,7 @@ export function testEmulateShiftArrows(
           it('should reduce selection at selection start', async () => {
             await emulateKey.shiftArrow.right();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textInput, 1, 4, 'backward');
           });
         });
 
@@ -119,9 +107,7 @@ export function testEmulateShiftArrows(
 
           it('should remove selection', async () => {
             await emulateKey.shiftArrow.right();
-            expect(await textInput.getProperty('selectionStart')).toBe(4, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+            await expectSelectionRange(textInput, 4, 4, /forward|none/);
           });
         });
 
@@ -130,16 +116,16 @@ export function testEmulateShiftArrows(
 
           it('should reduce selection at selection start', async () => {
             await emulateKey.shiftArrow.right();
-            expect(await textInput.getProperty('selectionStart')).toBe(3, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textInput, 3, 4, 'backward');
           });
         });
       });
     });
+
+    describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.shiftArrow.right());
   });
 
-  describe('left in input', () => {
+  describe('left', () => {
     /* istanbul ignore if */
     if (process.env.bug_multipleArrows) {
       pending(process.env.bug_multipleArrows);
@@ -156,8 +142,7 @@ export function testEmulateShiftArrows(
       it('should do nothing', async () => {
         await emulateKey.shiftArrow.left();
 
-        expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-        expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+        await expectSelectionRange(textInput, 0, 0);
       });
     });
 
@@ -171,9 +156,7 @@ export function testEmulateShiftArrows(
           it('should select last character', async () => {
             await emulateKey.shiftArrow.left();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(4, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textInput, 4, 5, 'backward');
           });
         });
 
@@ -182,8 +165,7 @@ export function testEmulateShiftArrows(
 
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.left();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textInput, 0, 0);
           });
         });
 
@@ -192,9 +174,7 @@ export function testEmulateShiftArrows(
 
           it('should select previous character', async () => {
             await emulateKey.shiftArrow.left();
-            expect(await textInput.getProperty('selectionStart')).toBe(2, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(3, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textInput, 2, 3, 'backward');
           });
         });
       });
@@ -206,9 +186,7 @@ export function testEmulateShiftArrows(
           it('should reduce selection at selection end', async () => {
             await emulateKey.shiftArrow.left();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(3, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textInput, 3, 4, 'forward');
           });
         });
 
@@ -217,9 +195,7 @@ export function testEmulateShiftArrows(
 
           it('should remove selection', async () => {
             await emulateKey.shiftArrow.left();
-            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+            await expectSelectionRange(textInput, 1, 1, /forward|none/);
           });
         });
 
@@ -228,9 +204,7 @@ export function testEmulateShiftArrows(
 
           it('should reduce selection at selection end', async () => {
             await emulateKey.shiftArrow.left();
-            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(2, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textInput, 1, 2, 'forward');
           });
         });
       });
@@ -242,9 +216,7 @@ export function testEmulateShiftArrows(
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.left();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textInput, 0, 4, 'backward');
           });
         });
 
@@ -253,13 +225,13 @@ export function testEmulateShiftArrows(
 
           it('should reduce selection at selection end', async () => {
             await emulateKey.shiftArrow.left();
-            expect(await textInput.getProperty('selectionStart')).toBe(2, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textInput, 2, 4, 'backward');
           });
         });
       });
     });
+
+    describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.shiftArrow.left());
   });
 
   describe('up', () => {
@@ -275,8 +247,7 @@ export function testEmulateShiftArrows(
         it('should do nothing', async () => {
           await emulateKey.shiftArrow.up();
 
-          expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textInput, 0, 0);
         });
       });
 
@@ -289,9 +260,7 @@ export function testEmulateShiftArrows(
           it('should select everything', async () => {
             await emulateKey.shiftArrow.up();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textInput, 0, 5, 'backward');
           });
         });
 
@@ -300,8 +269,7 @@ export function testEmulateShiftArrows(
 
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.up();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textInput, 0, 0);
           });
         });
 
@@ -310,9 +278,7 @@ export function testEmulateShiftArrows(
 
           it('should select to the start', async () => {
             await emulateKey.shiftArrow.up();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textInput, 0, 4, 'backward');
           });
         });
       });
@@ -330,8 +296,7 @@ export function testEmulateShiftArrows(
         it('should do nothing', async () => {
           await emulateKey.shiftArrow.up();
 
-          expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textArea, 0, 0);
         });
       });
 
@@ -344,9 +309,7 @@ export function testEmulateShiftArrows(
           it('should select everything', async () => {
             await emulateKey.shiftArrow.up();
 
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textArea.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textArea, 0, 5, 'backward');
           });
         });
 
@@ -355,8 +318,7 @@ export function testEmulateShiftArrows(
 
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.up();
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
+            await expectSelectionRange(textArea, 0, 0);
           });
         });
 
@@ -365,9 +327,7 @@ export function testEmulateShiftArrows(
 
           it('should cursor to the start', async () => {
             await emulateKey.shiftArrow.up();
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(4, 'selection end');
-            expect(await textArea.getProperty('selectionDirection')).toBe('backward', 'selection direction');
+            await expectSelectionRange(textArea, 0, 4, 'backward');
           });
         });
       });
@@ -446,20 +406,23 @@ export function testEmulateShiftArrows(
 
         describe('with initial selection direction forward and selected more than one line', () => {
           beforeEach(async () => {
-            await context.setSelectionRange(1, 3, 'forward');
+            await context.setSelectionRange(1, 6, 'forward');
+            await context.takeScreenshot('arrow-up-reducing-selection-0-before-arrow-down');
             await emulateKey.shiftArrow.down();
+            await context.takeScreenshot('arrow-up-reducing-selection-1-after-arrow-down');
           });
 
           it('should reduce selection at end', async () => {
             await emulateKey.shiftArrow.up();
+            await context.takeScreenshot('arrow-up-reducing-selection-2-after-arrow-up');
 
-            expect(await textArea.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(3, 'selection end');
-            expect(await textArea.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textArea, 1, 6, 'forward');
           });
         });
       });
     });
+
+    describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.shiftArrow.up());
   });
 
   describe('down', () => {
@@ -475,8 +438,7 @@ export function testEmulateShiftArrows(
         it('should do nothing', async () => {
           await emulateKey.shiftArrow.down();
 
-          expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textInput.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textInput, 0, 0);
         });
       });
 
@@ -489,8 +451,7 @@ export function testEmulateShiftArrows(
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.down();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textInput, 5, 5);
           });
         });
 
@@ -499,9 +460,7 @@ export function testEmulateShiftArrows(
 
           it('should select everything', async () => {
             await emulateKey.shiftArrow.down();
-            expect(await textInput.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textInput, 0, 5, 'forward');
           });
         });
 
@@ -510,9 +469,7 @@ export function testEmulateShiftArrows(
 
           it('should select to the end', async () => {
             await emulateKey.shiftArrow.down();
-            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textInput, 1, 5, 'forward');
           });
         });
       });
@@ -530,8 +487,7 @@ export function testEmulateShiftArrows(
         it('should do nothing', async () => {
           await emulateKey.shiftArrow.down();
 
-          expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-          expect(await textArea.getProperty('selectionEnd')).toBe(0, 'selection end');
+          await expectSelectionRange(textArea, 0, 0);
         });
       });
 
@@ -544,8 +500,7 @@ export function testEmulateShiftArrows(
           it('should do nothing', async () => {
             await emulateKey.shiftArrow.down();
 
-            expect(await textArea.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
+            await expectSelectionRange(textArea, 5, 5);
           });
         });
 
@@ -554,9 +509,7 @@ export function testEmulateShiftArrows(
 
           it('should select everything', async () => {
             await emulateKey.shiftArrow.down();
-            expect(await textArea.getProperty('selectionStart')).toBe(0, 'selection start');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textArea.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textArea, 0, 5, 'forward');
           });
         });
 
@@ -565,9 +518,7 @@ export function testEmulateShiftArrows(
 
           it('should cursor to the end', async () => {
             await emulateKey.shiftArrow.down();
-            expect(await textArea.getProperty('selectionStart')).toBe(1, 'selection start (untouched)');
-            expect(await textArea.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textArea.getProperty('selectionDirection')).toBe('forward', 'selection direction');
+            await expectSelectionRange(textArea, 1, 5, 'forward');
           });
         });
       });
@@ -644,20 +595,22 @@ export function testEmulateShiftArrows(
 
         describe('with initial selection direction backward and selected more than one line', () => {
           beforeEach(async () => {
-            await context.setSelectionRange(initialCursorPos - 3, initialCursorPos - 1, 'backward');
+            await context.setSelectionRange(initialCursorPos - 6, initialCursorPos - 1, 'backward');
 
             await emulateKey.shiftArrow.up();
           });
 
-          it('should reduce selection at end', async () => {
+          it('should reduce selection at start', async () => {
             await emulateKey.shiftArrow.down();
 
-            expect(await textArea.getProperty('selectionStart')).toBe(initialCursorPos - 3, 'selection start');
+            expect(await textArea.getProperty('selectionStart')).toBe(initialCursorPos - 6, 'selection start');
             expect(await textArea.getProperty('selectionEnd')).toBe(initialCursorPos - 1, 'selection end');
             expect(await textArea.getProperty('selectionDirection')).toBe('backward', 'selection direction');
           });
         });
       });
     });
+
+    describeDoNothingInInputThatPreventsDefaults(context, () => demoForm, () => emulateKey.shiftArrow.down());
   });
 }

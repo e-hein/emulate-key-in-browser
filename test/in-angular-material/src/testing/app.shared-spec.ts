@@ -1,14 +1,20 @@
-import { AppHarness, AppControlsHarness, AppDemoFormHarness, AppDemoFormInputNames, AppControlNames } from './app.harness';
+import { AppControlNames, AppControlsHarness, AppDemoFormHarness, AppDemoFormInputNames, AppHarness } from './app.harness';
 import { expectNotToHaveThrownAnything } from './expect.function';
-import { HarnessLoader } from '@angular/cdk/testing';
+import { SharedSpecContext } from './shared-spec-context.model';
 
-export function testApp(loaderProvider: () => HarnessLoader, getActiveElementId: () => Promise<string>) {
+export function itShouldMatchInitialScreenshot(context: SharedSpecContext) {
+  it('should match screenshot', async () => {
+    expect(await context.takeScreenshot('app-0-initially')).toBeLessThan(.5);
+  });
+}
+
+export function testApp(context: SharedSpecContext) {
   let app: AppHarness;
   let controls: AppControlsHarness;
   let demoForm: AppDemoFormHarness;
 
   beforeEach(async () => {
-    app = await loaderProvider().getHarness(AppHarness);
+    app = context.app;
     controls = await app.getControls();
     demoForm = await app.getDemoFrom();
   });
@@ -16,23 +22,58 @@ export function testApp(loaderProvider: () => HarnessLoader, getActiveElementId:
   it('should start', () => expect(app).toBeTruthy());
 
   describe('initially', () => {
-    it('should find all controls', async () => {
-      await controls.getAll();
-      expectNotToHaveThrownAnything();
+    itShouldMatchInitialScreenshot(context);
+
+    describe('controls', () => {
+      it('should find all controls', async () => {
+        await controls.getAll();
+        expectNotToHaveThrownAnything();
+      });
+
+      it('should initially have no active element', async () => expect(await context.getActiveElementId()).toBe(''));
+
+      itShouldShow('tab');
+      itShouldNotShow('shift tab');
+      itShouldShow('backspace');
+      itShouldNotShow('delete');
     });
 
-    it('should initially have no active element', async () => expect(await getActiveElementId()).toBe(''));
+    describe('demoForm', () => {
+      it('should show first input', async () => {
+        expect(await demoForm.getControl('first input')).toBeTruthy();
+      });
 
-    itShouldShow('tab');
-    itShouldNotShow('shift tab');
-    itShouldShow('backspace');
-    itShouldNotShow('delete');
+      it('should show second input', async () => {
+        expect(await demoForm.getControl('second input')).toBeTruthy();
+      });
+
+      it('should show textarea', async () => {
+        const textarea = await demoForm.getControl('textarea');
+        expect(textarea).toBeTruthy('not found');
+        expect(await textarea.matchesSelector('textarea')).toBe(true, 'is not textarea');
+      });
+
+      it('should show disabled input', async () => {
+        const disabledInput = await demoForm.getControl('disabled input');
+        expect(disabledInput).toBeTruthy('not found');
+        expect(await disabledInput.getProperty('disabled')).toBe(true, 'is not disabled');
+      });
+
+      it('should show input that prevents defaults', async () => {
+        expect(await demoForm.getControl('prevent default')).toBeTruthy();
+      });
+
+      it('should show button', async () => {
+        expect(await demoForm.getControl('button')).toBeTruthy();
+      });
+    });
   });
 
   describe('interaction', () => {
     describeAfterHover('shift', () => {
       it('should find alternative controls', async () => {
         const controlsFound = await controls.getAll();
+        await context.takeScreenshot('app-1-alternative-controls');
 
         // tslint:disable: no-string-literal
         expect(controlsFound['tab']).toBeFalsy('tab');
@@ -73,10 +114,6 @@ export function testApp(loaderProvider: () => HarnessLoader, getActiveElementId:
 
         describeAndHover(['shift', 'arrow left', 'write "c"'], () => itShouldHaveSetValueOf('first input').to('LeeroC'));
         describeAndHover(['shift', 'arrow up', 'write "b"'], () => itShouldHaveSetValueOf('first input').to('B'));
-      });
-
-      describeAndHover('write "Jenkins"', () => {
-        itShouldHaveSetValueOf('first input').to('Jenkins');
       });
 
       describeAndHover('write "Jenkins"', () => {

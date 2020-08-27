@@ -1,7 +1,7 @@
 import { TestElement } from '@angular/cdk/testing';
 import { AppDemoFormHarness, AppHarness } from './app.harness';
 import { AsyncEmulateKey, SharedSpecContext } from './shared-spec-context.model';
-import { assertInitialSelectionRange } from './expect.function';
+import { assertInitialSelectionRange, expectSelectionRange } from './expect.function';
 
 export function testEmulateArrowAfterSelection(
   context: SharedSpecContext,
@@ -40,9 +40,7 @@ export function testEmulateArrowAfterSelection(
           it('should only remove selection', async () => {
             await emulateKey.arrow.right();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(5, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(5, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+            await expectSelectionRange(textInput, 5, 5, /forward|none/);
           });
         });
 
@@ -56,9 +54,7 @@ export function testEmulateArrowAfterSelection(
 
           it('should remove selection', async () => {
             await emulateKey.arrow.right();
-            expect(await textInput.getProperty('selectionStart')).toBe(2, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(2, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+            await expectSelectionRange(textInput, 2, 2, /forward|none/);
           });
         });
       });
@@ -91,9 +87,7 @@ export function testEmulateArrowAfterSelection(
           it('should only remove selection', async () => {
             await emulateKey.arrow.left();
 
-            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+            await expectSelectionRange(textInput, 1, 1, /forward|none/);
           });
         });
 
@@ -107,9 +101,7 @@ export function testEmulateArrowAfterSelection(
 
           it('should remove selection', async () => {
             await emulateKey.arrow.left();
-            expect(await textInput.getProperty('selectionStart')).toBe(1, 'selection start');
-            expect(await textInput.getProperty('selectionEnd')).toBe(1, 'selection end');
-            expect(await textInput.getProperty('selectionDirection')).toMatch(/forward|none/, 'selection direction');
+            await expectSelectionRange(textInput, 1, 1, /forward|none/);
           });
         });
       });

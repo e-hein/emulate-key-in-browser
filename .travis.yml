@@ -1,6 +1,48 @@
+branches:
+  except:
+    - /^.*-spec-shots$/
 language: node_js
-addons:
-  chrome: stable
-  firefox: latest
 node_js:
   - lts/*
+before_install:
+jobs:
+  include:
+    - stage: Build
+      name: Build
+      script: npm run build:all
+      after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/dist" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser"
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/tmp" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser"
+    - stage: Test
+      name: in angular material
+      addons:
+        chrome: stable
+        firefox: latest
+      before_script: node ./storage.js download "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/tmp" "$TRAVIS_BUILD_DIR"
+      script: node test-in-angular.js
+      after_failure:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
+        - DEBUG=* node ./commit-spec-shot-branch.js
+      after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/"
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/dist/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/angular"
+    - stage: Test
+      name: in plain html
+      addons:
+        chrome: stable
+        firefox: latest
+      before_script:
+        - node ./storage.js download "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/" "$TRAVIS_BUILD_DIR"
+      script: node test-in-plain-html.js
+      after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-plain-html-js/www/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/html"
+    - stage: Test
+      name: in typescript requirejs
+      addons:
+        chrome: stable
+        firefox: latest
+      before_script: node ./storage.js download "~/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/" "$TRAVIS_BUILD_DIR"
+      script: node test-in-typescript-require.js
+      after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-typescript-requirejs/www/" "~/artifacts/build-$TRAVIS_BUILD_NUMBER/requirejs"
+      
