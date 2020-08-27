@@ -28,6 +28,8 @@ export const viewIds = {
   button: 'button',
   parentOfHiddenInput: 'parent-of-hidden-input',
   hiddenInput: 'hidden-input',
+  parentOfPreventedInput: 'parent-of-prevented-input',
+  preventedInput: 'prevented-input',
 }
 
 export type EventCheckControls = {
@@ -43,6 +45,8 @@ export interface EventCheckView {
   button: HTMLButtonElement,
   parentOfHiddenInput: HTMLDivElement,
   hiddenInput: HTMLInputElement,
+  parentOfPreventedInput: HTMLDivElement,
+  preventedInput: HTMLInputElement,
 }
 
 export class EventCheckController {
@@ -72,6 +76,9 @@ export class EventCheckController {
       ...this.getElementsByIds<EventCheckView>(viewIds),
       control: this.getElementsByIds<EventCheckControls>(controlIds),
     };
+    this.view.preventedInput.addEventListener('keypress', (event: KeyboardEvent) => {
+      event.preventDefault();
+    });
   }
 
   private getElementsByIds<U>(ids: { [key in keyof U]: string }): U {
