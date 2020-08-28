@@ -73,6 +73,16 @@ jobs:
         - node ./storage.js approve next build-$TRAVIS_BUILD_NUMBER
       after_failure:
         - node ./storage.js rollback next build-$TRAVIS_BUILD_NUMBER
+      before_deploy:
+        - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/dist/bundles" "$TRAVIS_BUILD_DIR/dist/"
+      deploy:
+        provider: releases
+        api_key: $GITHUB_RELEASE_TOKEN
+        file:
+          - dist/bundles/emulate-key-in-browser.js
+          - dist/bundles/emulate-key-in-browser.min.js
+        skip_cleanup: true
+        draft: true
     - stage: Update https://www.emulate-key-in-browser.net-root.de
       if: branch = master
       name: Update preview
@@ -85,4 +95,14 @@ jobs:
         - node ./storage.js approve www build-$TRAVIS_BUILD_NUMBER
       after_failure:
         - node ./storage.js rollback www build-$TRAVIS_BUILD_NUMBER
+      before_deploy:
+        - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/dist/bundles" "$TRAVIS_BUILD_DIR/dist/"
+      deploy:
+        provider: releases
+        api_key: $GITHUB_RELEASE_TOKEN
+        file:
+          - dist/bundles/emulate-key-in-browser.js
+          - dist/bundles/emulate-key-in-browser.min.js
+        skip_cleanup: true
+        draft: true
   
