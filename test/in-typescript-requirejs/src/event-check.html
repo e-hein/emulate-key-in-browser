@@ -25,32 +25,38 @@
 </div>
 <h2>demo form</h2>
 </div>
-<div id="parent-of-first-input">
-  <label for="first-input">first input</label>
-  <input id="first-input" tabindex="1" />
-</div>
-<div id="parent-of-second-input">
-  <label for="second-input">second input</label>
-  <input id="second-input" tabindex="1" />
-</div>
-<div id="parent-of-textarea">
-  <label for="textarea">textarea</label>
-  <textarea id="textarea"></textarea>
-</div>
-<div id="parent-of-disabled-input">
-  <label for="disabled-input">second input</label>
-  <input id="disabled-input" disabled="disabled" />
-</div>
-<div id="parent-of-hidden-input">
-  <label for="hidden-input">hidden input</label>
-  <input id="hidden-input" class="hidden" />
-</div>
-<div id="parent-of-button">
-  <label for="button">button</label>
-  <button id="button">emulate tab</button>
-</div>
 <div>
-  <h2>event log</h2>
-  <pre id="event-log"></pre>
+  <div id="parent-of-first-input">
+    <label for="first-input">first input</label>
+    <input id="first-input" tabindex="1" />
+  </div>
+  <div id="parent-of-second-input">
+    <label for="second-input">second input</label>
+    <input id="second-input" tabindex="1" />
+  </div>
+  <div id="parent-of-textarea">
+    <label for="textarea">textarea</label>
+    <textarea id="textarea"></textarea>
+  </div>
+  <div id="parent-of-disabled-input">
+    <label for="disabled-input">second input</label>
+    <input id="disabled-input" disabled="disabled" />
+  </div>
+  <div id="parent-of-hidden-input">
+    <label for="hidden-input">hidden input</label>
+    <input id="hidden-input" class="hidden" />
+  </div>
+  <div id="parent-of-prevented-input">
+    <label for="prevented-input">input that prevents default</label>
+    <input id="prevented-input" />
+  </div>
+  <div id="parent-of-button">
+    <label for="button">button</label>
+    <button id="button">emulate tab</button>
+  </div>
+  <div>
+    <h2>event log</h2>
+    <pre id="event-log"></pre>
+  </div>
 </div>
 <script src="scripts/event-check-init.js"></script>

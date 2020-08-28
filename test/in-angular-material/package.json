@@ -5,13 +5,44 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prebuild": "npm i ../../tmp/emulate-key-in-browser.latest.tgz",
     "build": "ng build --prod --base-href './'",
     "test": "ng test",
     "version": "ng version",
     "coverage": "ng test --code-coverage --watch false --browsers 'ChromeHeadless,FirefoxHeadless' --reporters 'mocha,kjhtml,fail-fast'",
+    "coverage:chrome": "ng test --code-coverage --watch true --browsers 'ChromeHeadless' --reporters 'mocha,kjhtml'",
+    "coverage:firefox": "ng test --code-coverage --watch true --browsers 'FirefoxHeadless' --reporters 'mocha,kjhtml'",
     "lint": "ng lint",
-    "e2e": "ng e2e --devServerTarget emulate-key-in-browser-in-angular-material:serve",
-    "protractor": "ng e2e --webdriver-update false --protractor-config e2e/protractor-headless.conf.js"
+    "update-webdriver": "node node_modules/protractor/node_modules/webdriver-manager/bin/webdriver-manager update --standalone false",
+    "pree2e": "npm run update-webdriver",
+    "e2e": "ng e2e --webdriver-update false --devServerTarget emulate-key-in-browser-in-angular-material:serve",
+    "test:build-result": "ng e2e --webdriver-update false --protractor-config e2e/protractor.dist.conf.js",
+    "protractor:chrome": "ng e2e --webdriver-update false --protractor-config e2e/protractor.chrome.conf.js",
+    "protractor:chrome_watch": "watch-npm protractor:chrome",
+    "protractor:firefox": "ng e2e --webdriver-update false --protractor-config e2e/protractor.firefox.conf.js",
+    "protractor:firefox_watch": "watch-npm protractor:firefox"
+  },
+  "watch": {
+    "protractor:chrome": {
+      "patterns": [
+        "src/**/*.*",
+        "e2e/**/*.*"
+      ],
+      "extensions": "*",
+      "quiet": false,
+      "inherit": false,
+      "verbose": true
+    },
+    "protractor:firefox": {
+      "patterns": [
+        "src/**/*.*",
+        "e2e/**/*.*"
+      ],
+      "extensions": "*",
+      "quiet": false,
+      "inherit": false,
+      "verbose": true
+    }
   },
   "private": true,
   "dependencies": {
@@ -25,6 +56,7 @@
     "@angular/platform-browser": "~10.0.8",
     "@angular/platform-browser-dynamic": "~10.0.8",
     "@angular/router": "~10.0.8",
+    "emulate-key-in-browser": "file:../../tmp/emulate-key-in-browser.latest.tgz",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
@@ -37,6 +69,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
+    "http-server": "^0.12.3",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
@@ -47,10 +80,14 @@
     "karma-jasmine": "~3.3.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "karma-mocha-reporter": "^2.2.5",
+    "karma-safari-launcher": "^1.0.0",
     "protractor": "~7.0.0",
+    "protractor-image-comparison": "^3.9.0",
     "ts-node": "~8.3.0",
     "tsconfig-paths": "^3.9.0",
     "tslint": "~6.1.0",
-    "typescript": "~3.9.7"
+    "typescript": "~3.9.7",
+    "watch-npm": "^1.0.1",
+    "webdriver-image-comparison": "^0.14.4"
   }
 }

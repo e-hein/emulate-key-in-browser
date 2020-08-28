@@ -5,7 +5,6 @@ const withCoverage = true && process.env.COVERAGE;
 const tsConfig = require('./tsconfig.json');
 
 module.exports = function(config) {
-  tsConfig.compilerOptions.module = 'amd';
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)

@@ -4,61 +4,63 @@
     <script src="./libs/emulate-key-in-browser.min.js"></script>
     <script src="./index.js"></script>
   </head>
-  <body><div>
+  <body>
+    <div>
       <h1>emulate key in plain html/js</h1>
       <div id="controls">
-      <h2>emulate key</h2>
-      <p>
-        hover to trigger<br />
-        <i><small>(click would change focus)</small></i>
-      </p>
-      <div id="control-shift" onmouseover="toggleShift()">shift</div>
-      <div id="control-tab" onmouseover="emulateKey.tab()">tab</div>
-      <div id="control-shift-tab" onmouseover="emulateKey.tab.backwards()">shift-tab</div>
-      <div id="control-backspace" onmouseover="emulateKey.backspace()">backspace</div>
-      <div id="control-delete" onmouseover="emulateKey.delete()">delete</div>
-      <div id="control-arrow-up" class="arrow vertical" onmouseover="isShiftActive() ? emulateKey.shiftArrow.up() : emulateKey.arrow.up()">up</div>
-      <div id="control-arrow-left" class="arrow horizontal" onmouseover="isShiftActive() ? emulateKey.shiftArrow.left() : emulateKey.arrow.left()">left</div>
-      <div id="control-arrow-right" class="arrow horizontal" onmouseover="isShiftActive() ? emulateKey.shiftArrow.right() : emulateKey.arrow.right()">right</div>
-      <div id="control-arrow-down" class="arrow vertical" onmouseover="isShiftActive() ? emulateKey.shiftArrow.down() : emulateKey.arrow.down()">down</div>
-      <div id="control-write-a" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'A' : 'a')">"a"</div>
-      <div id="control-write-b" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'B' : 'b')">"b"</div>
-      <div id="control-write-c" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'C' : 'c')">"c"</div>
-      <div id="control-write-leeroy" class="word" onmouseover="emulateKey.writeText('Leeroy')">"Leeroy"</div>
-      <div id="control-write-jenkins" class="word" onmouseover="emulateKey.writeText('Jenkins')">"Jenkins"</div>
-      <div id="control-write-lorem-ipsum" onmouseover="emulateKey.writeText(loremIpsum)">lorem ipsum</div>
+        <h2>emulate key</h2>
+        <p>
+          hover to trigger<br />
+          <i><small>(click would change focus)</small></i>
+        </p>
+        <div id="control-shift" onmouseover="toggleShift()">shift</div>
+        <div id="control-tab" onmouseover="emulateKey.tab()">tab</div>
+        <div id="control-shift-tab" onmouseover="emulateKey.tab.backwards()">shift-tab</div>
+        <div id="control-backspace" onmouseover="emulateKey.backspace()">backspace</div>
+        <div id="control-delete" onmouseover="emulateKey.delete()">delete</div>
+        <div id="control-arrow-up" class="arrow vertical" onmouseover="isShiftActive() ? emulateKey.shiftArrow.up() : emulateKey.arrow.up()">up</div>
+        <div id="control-arrow-left" class="arrow horizontal" onmouseover="isShiftActive() ? emulateKey.shiftArrow.left() : emulateKey.arrow.left()">left</div>
+        <div id="control-arrow-right" class="arrow horizontal" onmouseover="isShiftActive() ? emulateKey.shiftArrow.right() : emulateKey.arrow.right()">right</div>
+        <div id="control-arrow-down" class="arrow vertical" onmouseover="isShiftActive() ? emulateKey.shiftArrow.down() : emulateKey.arrow.down()">down</div>
+        <div id="control-write-a" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'A' : 'a')">"a"</div>
+        <div id="control-write-b" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'B' : 'b')">"b"</div>
+        <div id="control-write-c" class="letter" onmouseover="emulateKey.writeText(isShiftActive() ? 'C' : 'c')">"c"</div>
+        <div id="control-write-leeroy" class="word" onmouseover="emulateKey.writeText('Leeroy')">"Leeroy"</div>
+        <div id="control-write-jenkins" class="word" onmouseover="emulateKey.writeText('Jenkins')">"Jenkins"</div>
+        <div id="control-write-lorem-ipsum" onmouseover="emulateKey.writeText(loremIpsum)">lorem ipsum</div>
+      </div>
+      <div id="contents">
+        <h2>demo form</h2>
+        <div id="parent-of-first-input">
+          <label for="first-input">first input</label>
+          <input id="first-input" tabindex="1" />
+        </div>
+        <div id="parent-of-second-input">
+          <label for="second-input">second input</label>
+          <input id="second-input" tabindex="1" />
+        </div>
+        <div id="parent-of-textarea">
+          <label for="textarea">textarea</label>
+          <textarea id="textarea"></textarea>
+        </div>
+        <div id="parent-of-disabled-input">
+          <label for="disabled-input">disabled input</label>
+          <input id="disabled-input" disabled="disabled" />
+        </div>
+        <div id="parent-of-hidden-input">
+          <label for="hidden-input">hidden input</label>
+          <input id="hidden-input" class="hidden" />
+        </div>
+        <div id="parent-of-button">
+          <label></label>
+          <button id="button">button</button>
+        </div>
+        <div>
+          <h2>event log</h2>
+          <pre id="event-log"></pre>
+        </div>
+      </div>
     </div>
-    <div id="contents">
-      <h2>demo form</h2>
-      <div id="parent-of-first-input">
-        <label for="first-input">first input</label>
-        <input id="first-input" tabindex="1" />
-      </div>
-      <div id="parent-of-second-input">
-        <label for="second-input">second input</label>
-        <input id="second-input" tabindex="1" />
-      </div>
-      <div id="parent-of-textarea">
-        <label for="textarea">textarea</label>
-        <textarea id="textarea"></textarea>
-      </div>
-      <div id="parent-of-disabled-input">
-        <label for="disabled-input">disabled input</label>
-        <input id="disabled-input" disabled="disabled" />
-      </div>
-      <div id="parent-of-hidden-input">
-        <label for="hidden-input">hidden input</label>
-        <input id="hidden-input" class="hidden" />
-      </div>
-      <div id="parent-of-button">
-        <label></label>
-        <button id="button">button</button>
-      </div>
-      <div>
-        <h2>event log</h2>
-        <pre id="event-log"></pre>
-      </div>
-    </div>
-  </div></body>
   <script>initIndexJs()</script>
+  </body>
 </html>

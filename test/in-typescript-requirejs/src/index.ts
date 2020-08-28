@@ -18,7 +18,7 @@ export class Index {
     // const scripts = new Array() = Array.form(mainContent.querySelectorAll('script[src]'))
     //   .map((script) => script.src);
     // console.log('scripts');
-    this.navigateTo('event-check');
+    this.navigateTo('event-check.html');
   }
 
   private navigateTo(target: string) {

@@ -1,6 +1,6 @@
 {
   "name": "emulate-key-in-browser",
-  "version": "0.0.1-alpha.2",
+  "version": "1.0.0-rc.1",
   "description": "emulate browsers reactions on special keys",
   "scripts": {
     "test": "node test.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/e-hein/emulate-key-in-browser.git"
+    "url": "git+https://github.com/emulate-key/emulate-key-in-browser.git"
   },
   "keywords": [
     "emulate",
@@ -32,13 +32,14 @@
   "author": "Emanuel Hein",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/e-hein/emulate-key-in-browser/issues"
+    "url": "https://github.com/emulate-key/emulate-key-in-browser/issues"
   },
   "homepage": "https://emulate-key-in-browser.net-root.de/",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "chalk": "^4.1.0",
+    "debug": "^4.1.1",
     "rollup": "^2.18.0",
     "shelljs": "^0.8.4",
     "typescript": "^3.9.5",
@@ -49,7 +50,8 @@
   ],
   "main": "dist/emulate-key-in-browser.js",
   "types": "dist/emulate-key-in-browser.d.ts",
+  "module": "dist/bundles/emulate-key-in-browser.es.js",
   "dependencies": {
-    "emulate-tab": "^1.1.3"
+    "emulate-tab": "^1.2.0"
   }
 }

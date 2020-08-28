@@ -1,14 +1,78 @@
-<header>
-  <h1>Emulate keys in app with @angular/material components</h1>
-  <div tabindex="-1" id="emulate-key-in-browser-bar">
-    hover to emulate tab:<br />
-    <div color="primary" class="mat-raised-button material-icons" id="emulate-shift-tab-button" (mouseover)="emulateShiftTab()"><span>keyboard_tab</span></div><br />
-    <div color="primary" class="mat-raised-button material-icons" id="emulate-key-in-browser-button" (mouseover)="emulateTab()">keyboard_tab</div><br />
-  </div>
-</header>
+<h1>emulate key in angular with @angular/material components</h1>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" position="end" [ngClass]="{ shift: isShiftActive }" opened>
+    <h2>emulate key</h2>
+    hover to emulate trigger:<br />
+    <i><small>(click would change focus)</small></i><br />
+    <div (mouseenter)="emulateShift()" [attr.color]="isShiftActive ? 'accent' : 'primary'" class="mat-raised-button"><mat-icon>keyboard_capslock</mat-icon> shift</div>
+    <div (mouseenter)="emulateTab()" *ngIf="!isShiftActive" color="primary" class="mat-raised-button"><mat-icon>keyboard_tab</mat-icon><span>tab</span></div>
+    <div (mouseenter)="emulateShiftTab()" *ngIf="isShiftActive" color="primary" class="mat-raised-button"><mat-icon class="rotate">keyboard_tab</mat-icon><span>shift tab</span></div>
+    <div (mouseenter)="emulateBackspace()" *ngIf="!isShiftActive" color="primary" class="mat-raised-button"><mat-icon class="outlined">backspace</mat-icon><span>backspace</span></div>
+    <div (mouseenter)="emulateDelete()" *ngIf="isShiftActive" color="primary" class="mat-raised-button"><mat-icon class="outlined rotate">backspace</mat-icon><span>delete</span></div>
+    <div class="arrows">
+      <div (mouseenter)="emulateArrowUp()" class="mat-mini-fab" color="primary"><mat-icon>keyboard_arrow_up</mat-icon></div>
+      <div (mouseenter)="emulateArrowLeft()" class="mat-mini-fab" color="primary"><mat-icon>keyboard_arrow_left</mat-icon></div>
+      <div (mouseenter)="emulateArrowRight()" class="mat-mini-fab" color="primary"><mat-icon>keyboard_arrow_right</mat-icon></div>
+      <div (mouseenter)="emulateArrowDown()" class="mat-mini-fab" color="primary"><mat-icon>keyboard_arrow_down</mat-icon></div>
+    </div>
+    <div class="letters">
+      <div (mouseenter)="emulateWriteText('a')" color="primary" class="mat-raised-button">"a"</div>
+      <div (mouseenter)="emulateWriteText('b')" color="primary" class="mat-raised-button">"b"</div>
+      <div (mouseenter)="emulateWriteText('c')" color="primary" class="mat-raised-button">"c"</div>
+    </div>
+    <div (mouseenter)="emulateWriteText('Leeroy')" color="primary" class="mat-raised-button">"Leeroy"</div>
+    <div (mouseenter)="emulateWriteText('Jenkins')" color="primary" class="mat-raised-button">"Jenkins"</div>
+    <div (mouseenter)="emulateWriteText(loremIpsum)" color="primary" class="mat-raised-button">Lorem ipsum</div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <section>
+      <h2>demo form</h2>
+      <div class="demo-form-controls">
+        <mat-form-field><mat-label>first input</mat-label><input id="first-input" matInput tabindex="1" #firstInput /></mat-form-field>
+        <mat-form-field><mat-label>second input</mat-label><input id="second-input" matInput tabindex="1" #secondInput /></mat-form-field>
+        <mat-form-field><mat-label>textarea</mat-label><textarea id="textarea" matInput></textarea></mat-form-field>
+        <mat-form-field><mat-label>disabled input</mat-label><input id="disabled-input" matInput disabled="disabled" /></mat-form-field>
+        <mat-form-field><mat-label>prevent default</mat-label><input id="prevent-default" matInput tabindex="-1" (keydown)="$event.preventDefault()" /></mat-form-field>
+        <mat-form-field><mat-label>hidden input</mat-label><input id="hidden-input" matInput class="hidden" /></mat-form-field>
+        <button mat-raised-button id="button">button</button>
+      </div>
+      </section>
+    <section>
+      <h2>
+        event log
+        <div (mouseenter)="clearEventLog()" color="primary" class="mat-icon-button" title="hover to clear event log"><mat-icon>clear</mat-icon></div>
+        <div (mouseenter)="saveSample()" color="primary" class="mat-icon-button" title="hover to save sample"><mat-icon>save</mat-icon></div>
+      </h2>
+      <div class="table-container mat-elevation-z8">
+        <table mat-table [dataSource]="eventLog">
+          <thead>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          </thead>
 
-<mat-form-field><mat-label>first input</mat-label><input id="first-input" matInput tabindex="1" /></mat-form-field>
-<mat-form-field><mat-label>second input</mat-label><input id="second-input" matInput tabindex="1" /></mat-form-field>
-<mat-form-field><mat-label>textarea</mat-label><textarea id="textarea" matInput></textarea></mat-form-field>
-<mat-form-field><mat-label>disabled input</mat-label><input id="disabled-input" matInput disabled="disabled" /></mat-form-field>
-<button mat-raised-button id="button">button</button>
+          <tbody>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{
+              'match': row.match === true,
+              'failed': row.match === false
+            }"></tr>
+          </tbody>
+
+          <ng-container matColumnDef="recievedBy">
+            <th mat-header-cell *matHeaderCellDef>recieved by</th>
+            <td mat-cell *matCellDef="let element">{{element.recievedBy}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>type</th>
+            <td mat-cell *matCellDef="let element">{{element.event.type}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="target">
+            <th mat-header-cell *matHeaderCellDef>target</th>
+            <td mat-cell *matCellDef="let element">{{element.target}}</td>
+          </ng-container>
+        </table>
+        <mat-paginator [pageSize]="20"></mat-paginator>
+      </div>
+    </section>
+  </mat-sidenav-content>
+</mat-sidenav-container>

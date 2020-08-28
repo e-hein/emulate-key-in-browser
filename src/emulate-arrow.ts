@@ -56,14 +56,11 @@ function emulateArrowRight() {
       return noEventThatCouldGetCanceled;
     }
     
-    const valueLength = target.value && target.value.length || 0;
-    const selectionEnd = target.selectionEnd;
-    if (selectionEnd && selectionEnd < valueLength) {
+    const valueLength = valueLengthOf(target);
+    const selectionEnd = findSelectionEnd(target);
+    if (selectionEnd < valueLength) {
       setCursorOf(target, selectionEnd + 1);
-      return noEventThatCouldGetCanceled;
     }
-
-    setCursorOf(target, valueLength);
     return noEventThatCouldGetCanceled;
   });
 }
@@ -87,19 +84,10 @@ function emulateArrowLeft() {
     }
     
     const selectionStart = findSelectionStart(target);
-    if (selectionStart && selectionStart > 0) {
+    if (selectionStart > 0) {
       setCursorOf(target, selectionStart - 1);
-      return noEventThatCouldGetCanceled;
     }
-
-    const valueLength = valueLengthOf(target);
-    if (valueLength > 0) {
-      setCursorOf(target, valueLength - 1);
-      return noEventThatCouldGetCanceled;
-    }
-
-    setCursorOf(target, 0);
-    return true;
+    return noEventThatCouldGetCanceled;
   });
 }
 

@@ -1,5 +1,5 @@
 [![npm (tag)](https://img.shields.io/npm/v/emulate-key-in-browser/latest)](https://www.npmjs.com/package/emulate-key-in-browser)
-[![Travis (.org)](https://img.shields.io/travis/e-hein/emulate-key-in-browser?label=travis)](https://travis-ci.org/e-hein/emulate-key-in-browser)
+[![Travis (.org)](https://img.shields.io/travis/emulate-key/emulate-key-in-browser/master?label=travis)](https://travis-ci.org/emulate-key/emulate-key-in-browser)
 
 emulate key in browser
 ======================
@@ -12,7 +12,7 @@ Interactive demo: https://emulate-key-in-browser.net-root.de
 Installation
 ------------
 ```npm i emulate-key-in-browser```  
-or download unpackaged javascript files from our [releases](https://github.com/e-hein/emulate-key-in-browser/releases)
+or download unpackaged javascript files from our [releases](https://github.com/emulate-key/emulate-key-in-browser/releases)
 
 Usage
 -----
@@ -49,14 +49,25 @@ emulateKey.writeText('content');
 ```
 [-> complete plain html example project](test/in-plain-html-js/www/sample-form.html)
 
+Limitations
+-----------
+- selection in multiline inputs
+  - line navigation will use character count, not character offset width and position like browsers
+  - there are environmen specific behaviors when hitting the cursor with arrow down or up key.
+    (see [emulate-shift-arrows-spec](./test/in-angular-material/src/testing/emulate-shift-arrows.shared-spec.ts) for details)
+- tab to elements with scrollbars  
+  Firefox selects elements that are not selectable as soon as they get scrollbars (overflow: auto) - not decided yet how to handle that. Current behavior is to ignore them.
+
 Dependencies
 ------------
-none.
+[emulate-tab](https://www.npmjs.com/package/emulate-tab)
 
 Browser compatibility:
 ----------------------
-Automated tests for current Chrome and Firefox: 
-[![Travis (.org)](https://img.shields.io/travis/e-hein/emulate-key-in-browser?label=travis)](https://travis-ci.org/e-hein/emulate-key-in-browser)
+There are automated tests for emulating keys in Chrome and Firefox. There are also automated tests that check the behavior of Chrome is equal (except multi line arrow key selection) to the emulated behavior. There's more information in our [TESTING_CONCEPT.md](./test/TESTING_CONCEPT.md).
+
+Automated tests for the latestest emulate-key-in-browser version are currently: 
+[![Travis (.org)](https://img.shields.io/travis/emulate-key/emulate-key-in-browser/master?label=travis)](https://travis-ci.org/emulate-key/emulate-key-in-browser)
 
 License:
 --------
