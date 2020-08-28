@@ -70,7 +70,7 @@ jobs:
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/demo/dist/" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/demo"
     - stage: Update https://next.emulate-key-in-browser.net-root.de
       if: branch = develop
-      name: Update preview
+      name: Update next
       addons:
         chrome: stable
       script:
@@ -90,6 +90,18 @@ jobs:
           - dist/bundles/emulate-key-in-browser.min.js
         skip_cleanup: true
         draft: true
+    - stage: Update https://preview.emulate-key-in-browser.net-root.de
+      if: branch =~ /^release\//
+      name: Update preview
+      addons:
+        chrome: stable
+      script:
+        - node ./storage.js deploy update preview build-$TRAVIS_BUILD_NUMBER
+        - node test-demo-remote.js https://preview.emulate-key-in-browser.net-root.de
+      after_success:
+        - node ./storage.js deploy approve preview build-$TRAVIS_BUILD_NUMBER
+      after_failure:
+        - node ./storage.js deploy rollback preview build-$TRAVIS_BUILD_NUMBER
     - stage: Update https://www.emulate-key-in-browser.net-root.de
       if: branch = master
       name: Update preview
