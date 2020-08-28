@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/e-hein/emulate-key-in-browser.git"
+    "url": "git+https://github.com/emulate-key/emulate-key-in-browser.git"
   },
   "keywords": [
     "emulate",
@@ -32,7 +32,7 @@
   "author": "Emanuel Hein",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/e-hein/emulate-key-in-browser/issues"
+    "url": "https://github.com/emulate-key/emulate-key-in-browser/issues"
   },
   "homepage": "https://emulate-key-in-browser.net-root.de/",
   "devDependencies": {

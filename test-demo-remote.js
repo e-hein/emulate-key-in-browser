@@ -24,8 +24,8 @@ function run(cmd, options = {}) {
 
 Promise.resolve()
   .then(() => run('npm i', inDemo))
-  .then(() => run('node build.js', inDemo))
-  .then(() => run('npm run test', inDemo))
+  .then(() => run('npm run update-webdriver' + (process.argv[3] ? ' -- --versions.chrome ' + process.argv[3] : ''), inDemo))
+  .then(() => run(`npm run protractor:remote -- --baseUrl ${process.argv[2]}`, inDemo))
   .then(
     () => process.exit(0),
     (error) => process.exit(error.code)

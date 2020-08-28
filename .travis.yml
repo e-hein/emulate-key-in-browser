@@ -24,7 +24,7 @@ jobs:
       script: node test-in-angular.js
       after_failure:
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/"
-        - DEBUG=* node ./commit-spec-shot-branch.js
+        - node ./commit-spec-shot-branch.js test/in-angular-material
       after_success:
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/spec-shots" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/"
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-angular-material/dist/" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/angular"
@@ -49,9 +49,60 @@ jobs:
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/test/in-typescript-requirejs/www/" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/requirejs"
     - stage: Build demo
       name: Build demo
+      addons:
+        chrome: stable
       before_script:
         - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/html/" "$TRAVIS_BUILD_DIR/test/in-plain-html-js/www" 
         - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/angular/" "$TRAVIS_BUILD_DIR/test/in-angular-material/dist"
       script: node build-demo.js
+      after_failure:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/demo/spec-shots" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/"
+        - node ./commit-spec-shot-branch.js demo
       after_success:
+        - node ./storage.js upload "$TRAVIS_BUILD_DIR/demo/spec-shots" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/"
         - node ./storage.js upload "$TRAVIS_BUILD_DIR/demo/dist/" "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/demo"
+    - stage: Update https://next.emulate-key-in-browser.net-root.de
+      if: branch = develop
+      name: Update preview
+      addons:
+        chrome: stable
+      script:
+        - node ./storage.js update next build-$TRAVIS_BUILD_NUMBER
+        - node test-demo-remote.js https://next.emulate-key-in-browser.net-root.de
+      after_success:
+        - node ./storage.js approve next build-$TRAVIS_BUILD_NUMBER
+      after_failure:
+        - node ./storage.js rollback next build-$TRAVIS_BUILD_NUMBER
+      before_deploy:
+        - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/dist/bundles" "$TRAVIS_BUILD_DIR/dist/"
+      deploy:
+        provider: releases
+        api_key: $GITHUB_RELEASE_TOKEN
+        file:
+          - dist/bundles/emulate-key-in-browser.js
+          - dist/bundles/emulate-key-in-browser.min.js
+        skip_cleanup: true
+        draft: true
+    - stage: Update https://www.emulate-key-in-browser.net-root.de
+      if: branch = master
+      name: Update preview
+      addons:
+        chrome: stable
+      script:
+        - node ./storage.js update www build-$TRAVIS_BUILD_NUMBER
+        - node test-demo-remote.js https://www.emulate-key-in-browser.net-root.de
+      after_success:
+        - node ./storage.js approve www build-$TRAVIS_BUILD_NUMBER
+      after_failure:
+        - node ./storage.js rollback www build-$TRAVIS_BUILD_NUMBER
+      before_deploy:
+        - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/dist/bundles" "$TRAVIS_BUILD_DIR/dist/"
+      deploy:
+        provider: releases
+        api_key: $GITHUB_RELEASE_TOKEN
+        file:
+          - dist/bundles/emulate-key-in-browser.js
+          - dist/bundles/emulate-key-in-browser.min.js
+        skip_cleanup: true
+        draft: true
+  
