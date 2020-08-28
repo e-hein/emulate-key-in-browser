@@ -67,12 +67,12 @@ jobs:
       addons:
         chrome: stable
       script:
-        - node ./storage.js update next build-$TRAVIS_BUILD_NUMBER
+        - node ./storage.js deploy update next build-$TRAVIS_BUILD_NUMBER
         - node test-demo-remote.js https://next.emulate-key-in-browser.net-root.de
       after_success:
-        - node ./storage.js approve next build-$TRAVIS_BUILD_NUMBER
+        - node ./storage.js deploy approve next build-$TRAVIS_BUILD_NUMBER
       after_failure:
-        - node ./storage.js rollback next build-$TRAVIS_BUILD_NUMBER
+        - node ./storage.js deploy rollback next build-$TRAVIS_BUILD_NUMBER
       before_deploy:
         - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/dist/bundles" "$TRAVIS_BUILD_DIR/dist/"
       deploy:
@@ -89,12 +89,12 @@ jobs:
       addons:
         chrome: stable
       script:
-        - node ./storage.js update www build-$TRAVIS_BUILD_NUMBER
+        - node ./storage.js deploy update www build-$TRAVIS_BUILD_NUMBER
         - node test-demo-remote.js https://www.emulate-key-in-browser.net-root.de
       after_success:
-        - node ./storage.js approve www build-$TRAVIS_BUILD_NUMBER
+        - node ./storage.js deploy approve www build-$TRAVIS_BUILD_NUMBER
       after_failure:
-        - node ./storage.js rollback www build-$TRAVIS_BUILD_NUMBER
+        - node ./storage.js deploy rollback www build-$TRAVIS_BUILD_NUMBER
       before_deploy:
         - node ./storage.js download "~/emulate-key-in-browser/artifacts/build-$TRAVIS_BUILD_NUMBER/emulate-key-in-borwser/dist/bundles" "$TRAVIS_BUILD_DIR/dist/"
       deploy:

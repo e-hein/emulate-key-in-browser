@@ -185,6 +185,8 @@ if (process.argv[2] === 'upload') {
   stage = process.argv[4];
   src = process.argv[5];
   deploy(cmd, stage, src);
+} else {
+  throw new Error(`"${process.argv[2]}" is not a known storage command`);
 }
 
 

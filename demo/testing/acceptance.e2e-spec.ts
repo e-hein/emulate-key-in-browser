@@ -37,6 +37,7 @@ describe('accaptance', () => {
 
     it ('should show readme with shields', async () => {
       readme = await loader.getHarness(ReadmeHarness);
+      await Promise.resolve(browser.driver.wait(ExpectedConditions.elementToBeClickable(element.all(by.css('a[target=_blank]')).first())));
       const npmShield = await readme.getNpmShield();
       const npmShieldImage = await npmShield.getImage();
       await waitUntilImageLoaded(npmShieldImage);
