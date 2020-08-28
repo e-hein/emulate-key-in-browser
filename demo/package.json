@@ -10,6 +10,7 @@
     "test": "npm run protractor:local",
     "protractor:local": "protractor protractor/local.conf.js",
     "protractor:local_watch": "watch-npm protractor:local",
+    "protractor:remote": "protractor protractor/remote.conf.js",
     "protractor:preview": "protractor protractor/remote.conf.js --base-url https://next.emulate-key-in-browser.net-root.de/",
     "protractor:release": "protractor protractor/remote.conf.js --base-url https://www.emulate-key-in-browser.net-root.de/"
   },

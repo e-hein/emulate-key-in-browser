@@ -76,6 +76,20 @@ function download(from, to) {
   }
 }
 
+/**
+ * 
+ * @param {'update' | 'approve' | 'rollback' } cmd
+ * @param {string} stage 
+ * @param {string} src 
+ */
+function deploy(cmd, stage, src) {
+  if (!['update', 'approve', 'rollback'].includes(cmd)) {
+    throw new Error('unknown cmd: ' + cmd);
+  }
+  const result = authenticatedSsh(['travis@net-root.de', `"~/${cmd}.sh"`, 'emulate-key-in-browser', stage, src]);
+  console.log('update result:', result);
+}
+
 function auth(target) {
   console.log(`auth`, { target });
   try {
@@ -95,7 +109,7 @@ function authenticatedSsh(args) {
   console.log(`ssh`, args);
   writeAuthFiles();
   try {
-    const result = execSync(`${sshCmd} ` + args.join(' ')).toString();
+    const result = execSync(`${sshCmd} ` + args.join(' '));
     return result;
   } catch (e) {
     throw e;
@@ -166,6 +180,11 @@ if (process.argv[2] === 'upload') {
 } else if (process.argv[2] === 'ssh') {
   args = process.argv.slice(3);
   authenticatedSsh(args);
+} else if (process.argv[2] === 'deploy') {
+  cmd = process.argv[3];
+  stage = process.argv[4];
+  src = process.argv[5];
+  deploy(cmd, stage, src);
 }
 
 
